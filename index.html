@@ -2046,7 +2046,7 @@
 
         let currentImpactBadge = '<span style="color:var(--text-sub); font-size:11px;">0đ (Chưa tính điểm)</span>';
         if (pointsForCurrentMonth > 0) {
-          currentImpactBadge = `<span class="badge-kpi-star" style="font-size:12px;">⭐ +${pointsForCurrentMonth.toFixed(1).replace('.0','')} ĐIỂM</span>`;
+          currentImpactBadge = `<span class="badge-kpi-star" style="font-size:12px;">⭐ +${formatPoint(pointsForCurrentMonth)} ĐIỂM</span>`;
         }
 
         let exactCol19Badge = '<span class="status-badge badge-exact-nhan-viec">ĐÃ NHẬN VIỆC</span>';
@@ -2108,7 +2108,7 @@
           <td style="text-align: center; background: rgba(16, 185, 129, 0.05);">
             <input type="number" class="point-input green-point" 
                    id="input-point1-${c.id}"
-                   value="${state.points1}" step="0.5" min="0" max="10"
+                   value="${state.points1}" step="0.01" min="0" max="10"
                    placeholder="0.0"
                    onfocus="if(this.value==='0' || this.value==='0.0') this.select();"
                    oninput="handlePoint1Change('${c.id}', this.value)"
@@ -2127,7 +2127,7 @@
           <td style="text-align: center; background: rgba(139, 92, 246, 0.05);">
             <input type="number" class="point-input purple-point" 
                    id="input-point2-${c.id}"
-                   value="${state.points2}" step="0.5" min="0" max="10" 
+                   value="${state.points2}" step="0.01" min="0" max="10" 
                    placeholder="0.0"
                    onfocus="if(this.value==='0' || this.value==='0.0') this.select();"
                    oninput="handlePoint2Change('${c.id}', this.value)"
@@ -2140,7 +2140,7 @@
             ${currentImpactBadge}
           </td>
           <td id="total2-cell-${c.id}" style="text-align: center; font-weight:800; font-family:var(--font-mono); color:#f8fafc;">
-            ${total2Periods.toFixed(1).replace('.0','')} đ
+            ${formatPoint(total2Periods)} đ
           </td>
 
           <!-- Notes -->
@@ -2153,6 +2153,12 @@
       });
 
       calculateMonthlyTotals();
+    }
+
+    function formatPoint(num) {
+      if (num === undefined || num === null || isNaN(num)) return '0';
+      const val = parseFloat(num);
+      return (Math.round(val * 100) / 100).toFixed(2).replace(/\.?0+$/, '');
     }
 
     function updateMonthlyRowDisplay(candidateId) {
@@ -2176,13 +2182,13 @@
       const impactEl = document.getElementById(`impact-cell-${candidateId}`);
       if (impactEl) {
         impactEl.innerHTML = pointsForCurrentMonth > 0 ? 
-          `<span class="badge-kpi-star" style="font-size:12px;">⭐ +${pointsForCurrentMonth.toFixed(1).replace('.0','')} ĐIỂM</span>` :
+          `<span class="badge-kpi-star" style="font-size:12px;">⭐ +${formatPoint(pointsForCurrentMonth)} ĐIỂM</span>` :
           `<span style="color:var(--text-sub); font-size:11px;">0đ (Chưa tính điểm)</span>`;
       }
 
       const total2El = document.getElementById(`total2-cell-${candidateId}`);
       if (total2El) {
-        total2El.innerText = `${total2Periods.toFixed(1).replace('.0','')} đ`;
+        total2El.innerText = `${formatPoint(total2Periods)} đ`;
       }
 
       const rowEl = document.getElementById(`row-monthly-${candidateId}`);
@@ -2227,6 +2233,7 @@
     function handlePoint1Change(candidateId, val) {
       let num = parseFloat(val);
       if (isNaN(num) || num < 0) num = 0;
+      num = Math.round(num * 100) / 100;
       if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
       customKPIState[candidateId].points1 = num;
       saveKPIState();
@@ -2245,6 +2252,7 @@
     function handlePoint2Change(candidateId, val) {
       let num = parseFloat(val);
       if (isNaN(num) || num < 0) num = 0;
+      num = Math.round(num * 100) / 100;
       if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
       customKPIState[candidateId].points2 = num;
 
@@ -2369,8 +2377,8 @@
         }
       });
 
-      document.getElementById('monthly-total-kpi-points').innerText = totalPoints.toFixed(1).replace('.0', '');
-      document.getElementById('monthly-split-summary').innerText = `Kỳ 1: ${pointsMonth1.toFixed(1).replace('.0','')}đ (${countMonth1} lượt) | Kỳ 2: ${pointsMonth2.toFixed(1).replace('.0','')}đ (${countMonth2} lượt)`;
+      document.getElementById('monthly-total-kpi-points').innerText = formatPoint(totalPoints);
+      document.getElementById('monthly-split-summary').innerText = `Kỳ 1: ${formatPoint(pointsMonth1)}đ (${countMonth1} lượt) | Kỳ 2: ${formatPoint(pointsMonth2)}đ (${countMonth2} lượt)`;
       
       document.getElementById('monthly-selected-count').innerText = uniqueCandidatesInMonth.size;
       document.getElementById('monthly-ratio-tag').innerText = `${uniqueCandidatesInMonth.size} ứng viên hưởng điểm`;
@@ -2395,10 +2403,10 @@
         tr.innerHTML = `
           <td><strong>${rec}</strong></td>
           <td><strong style="color: #60a5fa;">${s.uniqueUV.size} UV</strong></td>
-          <td><span style="color: #34d399; font-weight:700;">${s.m1Points.toFixed(1).replace('.0','')} đ (${s.m1Count} UV)</span></td>
-          <td><span style="color: #c084fc; font-weight:700;">${s.m2Points.toFixed(1).replace('.0','')} đ (${s.m2Count} UV)</span></td>
-          <td><span class="badge-kpi-star" style="font-size: 13px;">⭐ ${s.totalPoints.toFixed(1).replace('.0', '')} ĐIỂM KPI</span></td>
-          <td><strong style="color: #c084fc;">${bonus.toLocaleString('vi-VN')} đ</strong></td>
+          <td><span style="color: #34d399; font-weight:700;">${formatPoint(s.m1Points)} đ (${s.m1Count} UV)</span></td>
+          <td><span style="color: #c084fc; font-weight:700;">${formatPoint(s.m2Points)} đ (${s.m2Count} UV)</span></td>
+          <td><span class="badge-kpi-star" style="font-size: 13px;">⭐ ${formatPoint(s.totalPoints)} ĐIỂM KPI</span></td>
+          <td><strong style="color: #c084fc;">${Math.round(bonus).toLocaleString('vi-VN')} đ</strong></td>
           <td>${evalBadge}</td>
         `;
         tbody.appendChild(tr);
