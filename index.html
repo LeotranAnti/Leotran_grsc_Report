@@ -6,7 +6,7 @@
   <meta http-equiv="Expires" content="0">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leotran_grsc_Report - ECL Recruitment KPI Intelligence</title>
+  <title>ECL Recruitment KPI Intelligence - Hệ Thống Quản Lý UV & Tính Điểm KPI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -833,222 +833,58 @@
     .detail-item { display: flex; flex-direction: column; gap: 4px; }
     .detail-item span:first-child { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
     .detail-item span:last-child { font-weight: 600; color: var(--text-main); }
-      .pill-btn {
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(30, 41, 59, 0.7);
+  
+    /* === BALANCED 3-COLUMN TOOLBAR GRID (NO HOLES, NO EMPTY SLOTS) === */
+    .unified-toolbar-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 992px) {
+      .unified-toolbar-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .unified-toolbar-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .form-group-clean {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group-clean label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       color: #94a3b8;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 6px;
     }
-    .pill-btn:hover {
-      background: rgba(59, 130, 246, 0.2);
-      border-color: rgba(59, 130, 246, 0.5);
-      color: #93c5fd;
-      transform: translateY(-1px);
-    }
-    .pill-btn.active {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.35) 0%, rgba(139, 92, 246, 0.35) 100%);
-      border-color: #3b82f6;
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(59, 130, 246, 0.35);
-    }
-      :root {
-      color-scheme: dark;
-    }
-    select, option, input, textarea {
-      color-scheme: dark;
-    }
-    select option {
-      background-color: #0f172a !important;
-      color: #f8fafc !important;
-    }
-
-    /* === MULTI-SELECT DROPDOWN STYLING === */
-    .custom-multiselect {
-      position: relative;
-      width: 100%;
-    }
-    .multiselect-toggle {
-      width: 100%;
-      padding: 9px 12px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+    .form-control-clean {
+      height: 42px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 8px;
       color: #f8fafc;
       font-size: 13px;
       font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      text-align: left;
+      padding: 0 12px;
+      outline: none;
       transition: all 0.2s ease;
-    }
-    .multiselect-toggle:hover {
-      border-color: #3b82f6;
-      background: rgba(30, 41, 59, 0.95);
-    }
-    .multiselect-toggle.active {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-      background: #0f172a;
-    }
-    .multiselect-arrow {
-      font-size: 10px;
-      color: #94a3b8;
-      transition: transform 0.2s ease;
-    }
-    .multiselect-toggle.active .multiselect-arrow {
-      transform: rotate(180deg);
-      color: #60a5fa;
-    }
-    .multiselect-menu {
-      position: absolute;
-      top: calc(100% + 5px);
-      left: 0;
       width: 100%;
-      min-width: 250px;
+    }
+    .form-control-clean:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
       background: #0f172a;
-      border: 1px solid rgba(59, 130, 246, 0.4);
-      border-radius: 10px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
-      z-index: 100;
-      display: none;
-      padding: 10px;
-    }
-    .multiselect-menu.open {
-      display: block;
-      animation: fadeInDown 0.15s ease-out;
-    }
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .multiselect-actions {
-      display: flex;
-      justify-content: space-between;
-      padding-bottom: 8px;
-      margin-bottom: 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .btn-text-action {
-      background: transparent;
-      border: none;
-      color: #60a5fa;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      padding: 3px 8px;
-      border-radius: 4px;
-      transition: all 0.15s;
-    }
-    .btn-text-action:hover {
-      background: rgba(59, 130, 246, 0.15);
-      color: #93c5fd;
-    }
-    .multiselect-options {
-      max-height: 220px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .multiselect-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 7px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-      color: #e2e8f0;
-      transition: background 0.15s ease;
-      user-select: none;
-    }
-    .multiselect-item:hover {
-      background: rgba(59, 130, 246, 0.15);
-      color: #ffffff;
-    }
-    .multiselect-item input[type="checkbox"] {
-      accent-color: #3b82f6;
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-      border-radius: 4px;
     }
 
-    /* === UNIFIED TABLE DARK THEME STYLING === */
-    .table-responsive {
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      background: #0b1120;
-    }
-    #monthly-table, #candidate-table {
-      background: #0b1120;
-      border-collapse: separate;
-      border-spacing: 0;
-    }
-    #monthly-table thead th, #candidate-table thead th {
-      background: #0f172a !important;
-      color: #94a3b8;
-      border-bottom: 2px solid rgba(59, 130, 246, 0.35);
-      padding: 12px 14px;
-      font-size: 11px;
-      font-weight: 800;
-    }
-    #monthly-table tbody td, #candidate-table tbody td {
-      background: #0b1120;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 11px 13px;
-      color: #f1f5f9;
-    }
-    #monthly-table tbody tr:nth-child(even) td, #candidate-table tbody tr:nth-child(even) td {
-      background: #0d1527;
-    }
-    #monthly-table tbody tr:hover td, #candidate-table tbody tr:hover td {
-      background: rgba(59, 130, 246, 0.16) !important;
-    }
-    #monthly-table tbody tr.row-selected td {
-      background: rgba(16, 185, 129, 0.1) !important;
-    }
-    #monthly-table tbody tr.row-active-month td {
-      background: rgba(59, 130, 246, 0.1) !important;
-    }
-
-    /* Cố định cột đồng bộ màu với dòng */
-    #monthly-table tbody tr:nth-child(odd) td:nth-child(-n+4),
-    #candidate-table tbody tr:nth-child(odd) td:nth-child(-n+3) {
-      background: #0b1120 !important;
-    }
-    #monthly-table tbody tr:nth-child(even) td:nth-child(-n+4),
-    #candidate-table tbody tr:nth-child(even) td:nth-child(-n+3) {
-      background: #0d1527 !important;
-    }
-    #monthly-table tbody tr:hover td:nth-child(-n+4),
-    #candidate-table tbody tr:hover td:nth-child(-n+3) {
-      background: #172554 !important;
-    }
-
-    /* Các dropdown & input trong bảng đồng nhất màu tối */
-    .table-select, .source-select, .note-input, .point-input {
-      background: #0f172a !important;
-      color: #f8fafc !important;
-      border: 1px solid rgba(255, 255, 255, 0.14) !important;
-      border-radius: 6px;
-    }
-    .table-select:focus, .source-select:focus, .note-input:focus, .point-input:focus {
-      border-color: #3b82f6 !important;
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25) !important;
-    }
-      /* === CHIP MULTI-SELECT STYLING === */
+    /* === MULTI-SELECT CHIPS & TAG CLOUD === */
     .filter-chip-group {
       background: rgba(15, 23, 42, 0.65);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1100,13 +936,27 @@
       color: #f3e8ff;
       box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
     }
-    .multiselect-chip.active.chip-amber {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(217, 119, 6, 0.25) 100%);
-      border-color: #f59e0b;
-      color: #fef3c7;
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+    .multiselect-chip.active.chip-blue {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(37, 99, 235, 0.25) 100%);
+      border-color: #3b82f6;
+      color: #dbeafe;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
     }
-      /* === UNIFIED SEAMLESS DARK TABLE PALETTE === */
+    .btn-text-action {
+      background: none;
+      border: none;
+      color: #60a5fa;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 2px 6px;
+    }
+    .btn-text-action:hover {
+      color: #93c5fd;
+    }
+
+    /* === UNIFIED SEAMLESS DARK TABLE PALETTE (NO PATCHY COLORS) === */
     #monthly-table, #candidate-table {
       background: #0b1120 !important;
       border-collapse: collapse;
@@ -1120,15 +970,17 @@
       font-size: 11px;
       font-weight: 800;
       white-space: nowrap;
+      text-align: center;
     }
     #monthly-table tbody td, #candidate-table tbody td {
       background: #0b1120 !important;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
       border-left: none !important;
       border-right: none !important;
-      padding: 11px 13px;
+      padding: 10px 12px;
       color: #f1f5f9;
       white-space: nowrap;
+      vertical-align: middle;
     }
     #monthly-table tbody tr:nth-child(even) td, #candidate-table tbody tr:nth-child(even) td {
       background: #0d1527 !important;
@@ -1156,103 +1008,57 @@
     #candidate-table tbody tr:hover td:nth-child(-n+3) {
       background: #172554 !important;
     }
-      /* === PRECISE TABLE COLUMN ALIGNMENT & SPACING === */
-    #monthly-table th, #monthly-table td {
-      vertical-align: middle !important;
-      padding: 10px 12px !important;
-    }
-    /* Centered columns */
-    #monthly-table th:nth-child(1), #monthly-table td:nth-child(1),
-    #monthly-table th:nth-child(2), #monthly-table td:nth-child(2),
-    #monthly-table th:nth-child(3), #monthly-table td:nth-child(3),
-    #monthly-table th:nth-child(5), #monthly-table td:nth-child(5),
-    #monthly-table th:nth-child(6), #monthly-table td:nth-child(6),
-    #monthly-table th:nth-child(8), #monthly-table td:nth-child(8),
-    #monthly-table th:nth-child(9), #monthly-table td:nth-child(9),
-    #monthly-table th:nth-child(10), #monthly-table td:nth-child(10),
-    #monthly-table th:nth-child(11), #monthly-table td:nth-child(11),
-    #monthly-table th:nth-child(12), #monthly-table td:nth-child(12),
-    #monthly-table th:nth-child(13), #monthly-table td:nth-child(13),
-    #monthly-table th:nth-child(14), #monthly-table td:nth-child(14),
-    #monthly-table th:nth-child(15), #monthly-table td:nth-child(15),
-    #monthly-table th:nth-child(16), #monthly-table td:nth-child(16) {
-      text-align: center !important;
-    }
-    /* Left-aligned text columns */
+
+    /* Column Alignments */
     #monthly-table th:nth-child(4), #monthly-table td:nth-child(4),
     #monthly-table th:nth-child(7), #monthly-table td:nth-child(7),
-    #monthly-table th:nth-child(17), #monthly-table td:nth-child(17) {
+    #monthly-table th:nth-child(17), #monthly-table td:nth-child(17),
+    #candidate-table th:nth-child(3), #candidate-table td:nth-child(3),
+    #candidate-table th:nth-child(6), #candidate-table td:nth-child(6) {
       text-align: left !important;
-    }
-
-    /* Standardized Form Control Sizing in Toolbar */
-    .unified-filter-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-    @media (max-width: 992px) {
-      .unified-filter-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    @media (max-width: 640px) {
-      .unified-filter-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    .form-group-clean {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .form-group-clean label {
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #94a3b8;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .form-control-clean {
-      height: 42px;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 8px;
-      color: #f8fafc;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 0 12px;
-      outline: none;
-      transition: all 0.2s ease;
-      width: 100%;
-    }
-    .form-control-clean:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
-      background: #0f172a;
     }
     .point-input {
       margin: 0 auto;
       display: block;
       text-align: center;
       height: 32px;
+      width: 70px;
       font-weight: 800;
       font-family: var(--font-mono);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      color: #ffffff;
+      outline: none;
+    }
+    .point-input:focus {
+      border-color: #3b82f6;
+      background: #1e293b;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
     }
     .table-select {
       margin: 0 auto;
       display: block;
       text-align: center;
       height: 32px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      color: #f8fafc;
+      font-size: 12px;
+      outline: none;
+      padding: 0 4px;
     }
     .source-select {
       margin: 0 auto;
       display: block;
       height: 32px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
     }
+
   </style>
 </head>
 <body>
@@ -1262,7 +1068,7 @@
       <div class="header-brand">
         <div class="brand-logo">⚡</div>
         <div class="header-title">
-          <h1>Leotran_grsc_Report</h1>
+          <h1>ECL RECRUITMENT KPI INTELLIGENCE</h1>
           <p>
             <span>Hệ Thống Theo Dõi UV Nhận Việc, Nguồn Data Thực Tế & Tính KPI Đa Kỳ</span>
             <span class="badge-live"><span class="pulse-dot"></span> LIVE DATA FINAL</span>
@@ -1308,11 +1114,214 @@
     <!-- ========================================== -->
     <div id="tab-overview" class="tab-content active">
       <!-- Bộ lọc Tab 1 -->
+      <div class="filter-card">
+        <div class="filter-grid">
+          <div class="form-group">
+            <label>Chuyên viên tuyển dụng</label>
+            <select id="filter-recruiter" class="form-control" onchange="applyFilters()">
+              <option value="ALL">Tất cả nhân sự (133 UV)</option>
+              <option value="TRẦN TUẤN ANH">TRẦN TUẤN ANH (130 UV)</option>
+              <option value="TRẦN HÙNG ANH">TRẦN HÙNG ANH (3 UV)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Dự án / Nhà máy</label>
+            <select id="filter-project" class="form-control" onchange="applyFilters()">
+              <option value="ALL">Tất cả dự án (4 nhà máy)</option>
+              <option value="NIP-BN">NIP-BN (56 UV - 29 Nhận việc)</option>
+              <option value="AVD-WH">AVD-WH (55 UV - 15 Nhận việc + Trần Thị Gấm)</option>
+              <option value="UNI-MB">UNI-MB (21 UV - 10 Nhận việc)</option>
+              <option value="LGE-HP">LGE-HP (1 UV)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Trạng thái nhận việc (Col 19)</label>
+            <select id="filter-work-status" class="form-control" onchange="applyFilters()">
+              <option value="ALL">Tất cả trạng thái nhận việc</option>
+              <option value="ĐÃ NHẬN VIỆC">ĐÃ NHẬN VIỆC (54 UV)</option>
+              <option value="ĐÃ NGHỈ VIỆC">ĐÃ NGHỈ VIỆC (9 UV - Có Trần Thị Gấm)</option>
+              <option value="HỦY NHẬN VIỆC">HỦY NHẬN VIỆC (29 UV)</option>
+              <option value="DỜI LỊCH NHẬN VIỆC">DỜI LỊCH NHẬN VIỆC (1 UV)</option>
+              <option value="PENDING">CHƯA CÓ TRẠNG THÁI / RỖNG (40 UV)</option>
+            </select>
+          </div>
+
+          <!-- LỌC NGUỒN DATA THỰC TẾ (MỚI) -->
+          <div class="form-group">
+            <label style="color: #c084fc; font-weight:800;">🎯 NGUỒN DATA THỰC TẾ</label>
+            <select id="filter-real-source" class="form-control" style="border-color: #8b5cf6;" onchange="applyFilters()">
+              <option value="ALL">Tất cả nguồn data thực tế</option>
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <div class="form-group" style="border: 1px solid rgba(59, 130, 246, 0.4); padding: 8px 12px; border-radius: 10px; background: rgba(59, 130, 246, 0.05);">
+            <label style="color: #60a5fa; font-weight: 800; font-size: 12px;">📅 KỲ BÁO CÁO (THÁNG TÍNH KPI)</label>
+            <select id="filter-month" class="form-control" style="font-weight: 800; border-color: #3b82f6;" onchange="applyFilters()">
+              <option value="2026-11" selected>Tháng 11/2026 (Kỳ Hiện Tại - 15 UV Nhận Việc)</option>
+              <option value="2026-10">Tháng 10/2026 (Kỳ T10-2026 - 50 UV Nhận Việc)</option>
+              <option value="2026-09">Tháng 09/2026 (Kỳ T9-2026 - 10 UV Onboard - Trần Thị Gấm)</option>
+              <option value="2026-12">Tháng 12/2026 (Kỳ T12-2026)</option>
+              <option value="ALL">Toàn Bộ Các Kỳ (Lũy Kế T9 - T11/2026 - 75 UV Nhận Việc)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Tìm kiếm thông minh</label>
+            <input type="text" id="filter-search" class="form-control" placeholder="Tên (Trần Thị Gấm...), SĐT, CCCD..." oninput="applyFilters()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Executive KPI Cards (Tính theo kỳ) -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+        <h3 id="tab1-kpi-period-title" style="color: #38bdf8; font-size: 16px; font-weight: 800;">📊 BÁO CÁO TỔNG HỢP SỐ LIỆU: KỲ THÁNG 10/2026 (T10-2026)</h3>
+        <span class="tag-badge tag-blue" id="tab1-kpi-period-badge">Chỉ tính số liệu ứng viên trong kỳ được chọn</span>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card highlight-green">
+          <div class="kpi-card-header">
+            <span class="kpi-title">ĐIỂM KPI OB1 (ĐANG LÀM VIỆC)</span>
+            <div class="kpi-icon icon-green">🏆</div>
+          </div>
+          <div class="kpi-value" id="kpi-net-ob">54</div>
+          <div class="kpi-sub">
+            <span class="tag-badge tag-green">ĐÃ NHẬN VIỆC</span>
+            <span>Trạng thái nguyên bản trên file</span>
+          </div>
+        </div>
+
+        <div class="kpi-card highlight-blue">
+          <div class="kpi-card-header">
+            <span class="kpi-title">LŨY KẾ ĐẠT OB 1 NGÀY (GROSS)</span>
+            <div class="kpi-icon icon-blue">📈</div>
+          </div>
+          <div class="kpi-value" id="kpi-gross-ob">63</div>
+          <div class="kpi-sub">
+            <span class="tag-badge tag-blue">TÍNH OB1 NGÀY</span>
+            <span>54 ĐÃ NHẬN VIỆC + 9 ĐÃ NGHỈ VIỆC</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <span class="kpi-title">ỨNG VIÊN PASS PHỎNG VẤN</span>
+            <div class="kpi-icon icon-purple">🎯</div>
+          </div>
+          <div class="kpi-value" id="kpi-pass-pv">93</div>
+          <div class="kpi-sub">
+            <span class="tag-badge tag-blue" id="kpi-rate-pass">94.9%</span>
+            <span>Tỷ lệ đỗ phỏng vấn</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <span class="kpi-title">TỶ LỆ CHỐT NV / PASS PV</span>
+            <div class="kpi-icon icon-green">⚡</div>
+          </div>
+          <div class="kpi-value" id="kpi-rate-nv-pass">58.1%</div>
+          <div class="kpi-sub">
+            <span class="tag-badge tag-green">HIỆU QUẢ CAO</span>
+            <span>54 người nhận việc / 93 đỗ PV</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bảng Thống Kê Nguồn Data Thực Tế (Mới) -->
+      <div class="table-card" style="border: 1px solid rgba(139, 92, 246, 0.35);">
+        <div class="chart-header">
+          <h3 style="color: #c084fc;" id="tab1-source-stats-title">🌐 BẢNG THỐNG KÊ HIỆU QUẢ NGUỒN DATA THỰC TẾ (KỲ THÁNG 10/2026)</h3>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <span class="tag-badge tag-purple" id="real-source-period-badge">Kỳ: Tháng 10/2026</span>
+            <button class="btn btn-amber" style="padding: 5px 12px; font-size: 12px;" onclick="promptAddNewCTV()">➕ Thêm CTV Mới</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Nguồn Data Thực Tế</th>
+                <th>Tổng Số Ứng Viên Tiếp Nhận</th>
+                <th>Số UV Pass Phỏng Vấn</th>
+                <th>SỐ UV ĐÃ NHẬN VIỆC (KPI)</th>
+                <th>SỐ UV ĐÃ NGHỈ VIỆC</th>
+                <th>HỦY NHẬN VIỆC</th>
+                <th>TỶ LỆ NHẬN VIỆC / TỔNG HỒ SƠ</th>
+                <th>ĐÁNH GIÁ CHẤT LƯỢNG NGUỒN</th>
+              </tr>
+            </thead>
+            <tbody id="real-source-stats-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BẢNG DANH SÁCH CỤ THỂ TOÀN BỘ ỨNG VIÊN (TAB TỔNG QUAN) -->
+      <div class="table-card" style="border: 1px solid rgba(59, 130, 246, 0.35);">
+        <div class="chart-header" style="flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 style="color: #60a5fa;">📋 DANH SÁCH CỤ THỂ TOÀN BỘ ỨNG VIÊN (<span id="table-record-count">0</span> hồ sơ)</h3>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+              💡 <em>Anh có thể chọn trực tiếp <strong>Nguồn Data Thực Tế</strong> (Tự tuyển, CTV Dương Thảo, CTV Hồng Ngọc, CTV Xuân Khánh, CTV Thanh Thanh...) cho từng bạn hoặc thêm CTV mới. Dữ liệu tự động lưu 100%!</em>
+            </p>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button class="btn btn-outline" style="padding: 6px 12px;" onclick="exportOverviewCSV()">📥 Xuất CSV Danh Sách</button>
+            <select id="page-size-select" class="form-control" style="width: auto; padding: 6px 12px;" onchange="changePageSize()">
+              <option value="15">15 dòng / trang</option>
+              <option value="30">30 dòng / trang</option>
+              <option value="50">50 dòng / trang</option>
+              <option value="1000">Tất cả ứng viên</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table id="candidate-table">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>ID (Cột A)</th>
+                <th>Họ & Tên</th>
+                <th style="color:#34d399; font-weight:800;">MÃ NV (CỘT AA)</th>
+                <th>Số Điện Thoại</th>
+                <th>Dự Án</th>
+                <th>Chuyên Viên Tuyển Dụng</th>
+                <th>Ngày OB</th>
+                <!-- Cột trạng thái đúng nguyên văn file -->
+                <th style="color:#fbbf24; font-weight:800;">TÌNH TRẠNG NHẬN VIỆC (COL 19)</th>
+                <th style="color:#60a5fa; font-weight:800;">TÌNH TRẠNG TỔNG HỢP (COL 21)</th>
+                
+                <!-- CỘT NGUỒN DATA THỰC TẾ (MỚI) -->
+                <th style="color: #c084fc; font-weight: 800;">NGUỒN DATA THỰC TẾ</th>
+
+                <th>Nguồn Gốc (File)</th>
+                <th>Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody id="candidate-tbody"></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div style="font-size: 13px; color: var(--text-muted);" id="page-info"></div>
+          <div class="pagination" id="pagination-controls"></div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TAB 2: TÍNH KPI THEO THÁNG & GHI NHẬN 2 KỲ -->
+    <!-- ========================================== -->
+    
+    <div id="tab-monthly" class="tab-content">
+      <!-- Toolbar & Cấu hình Tháng (Thiết kế chuẩn 3 cột đối xứng & Bộ lọc đa chọn trực tiếp) -->
       <div class="filter-card" style="border: 1px solid rgba(59, 130, 246, 0.35); background: linear-gradient(135deg, rgba(59, 130, 246, 0.06) 0%, rgba(17, 24, 39, 0.9) 100%);">
         
-        <!-- HÀNG 1 & HÀNG 2: CẤU HÌNH & BỘ LỌC CĂN CHỈNH 3 CỘT ĐỀU ĐẶN 100% -->
-        <div class="unified-filter-grid">
-          <!-- 1. Tháng tính KPI -->
+        <!-- HÀNG 1 & HÀNG 2: 6 HỘP CẤU HÌNH CÂN XỨNG TUYỆT ĐỐI (3 CỘT x 2 HÀNG = 6 Ô ĐẦY ĐỦ, KHÔNG CÓ Ô TRỐNG) -->
+        <div class="unified-toolbar-grid">
+          <!-- 1. Tháng tính & báo cáo KPI -->
           <div class="form-group-clean">
             <label style="color: #60a5fa;">📅 Tháng Báo Cáo KPI</label>
             <select id="monthly-select-month" class="form-control-clean" style="border-color: #3b82f6; font-weight: 800;" onchange="renderMonthlyTab()">
@@ -1324,7 +1333,7 @@
             </select>
           </div>
 
-          <!-- 2. Chế độ xem bảng -->
+          <!-- 2. Chế độ hiển thị danh sách -->
           <div class="form-group-clean">
             <label style="color: #34d399;">👁️ Chế Độ Hiển Thị Bảng</label>
             <select id="monthly-filter-view" class="form-control-clean" style="border-color: #10b981; font-weight: 800;" onchange="renderMonthlyTab()">
@@ -1333,7 +1342,7 @@
             </select>
           </div>
 
-          <!-- 3. Lọc theo điểm KPI -->
+          <!-- 3. Lọc theo tình trạng điểm -->
           <div class="form-group-clean">
             <label style="color: #fbbf24;">⭐ Lọc Theo Tình Trạng Điểm</label>
             <select id="monthly-filter-score-status" class="form-control-clean" style="border-color: #f59e0b; font-weight: 800;" onchange="renderMonthlyTab()">
@@ -1347,67 +1356,71 @@
           <div class="form-group-clean">
             <label>👥 Chuyên Viên Tuyển Dụng</label>
             <select id="monthly-select-recruiter" class="form-control-clean" onchange="renderMonthlyTab()">
-              <option value="ALL">Tất cả nhân sự (Trần Tuấn Anh, Trần Hùng Anh)</option>
+              <option value="ALL">Tất cả nhân sự tuyển dụng</option>
               <option value="TRẦN TUẤN ANH">TRẦN TUẤN ANH</option>
+              <option value="NGUYỄN VĂN TIẾN">NGUYỄN VĂN TIẾN</option>
+              <option value="VŨ MINH VƯỢNG">VŨ MINH VƯỢNG</option>
+              <option value="NGUYỄN VĂN TRANG">NGUYỄN VĂN TRANG</option>
+              <option value="PHẠM THỊ DUNG">PHẠM THỊ DUNG</option>
+              <option value="HOÀNG THỊ HOA">HOÀNG THỊ HOA</option>
               <option value="TRẦN HÙNG ANH">TRẦN HÙNG ANH</option>
             </select>
           </div>
 
-          <!-- 5. Gộp Trần Hùng Anh -->
+          <!-- 5. Quy đổi Trần Hùng Anh -->
           <div class="form-group-clean">
-            <label>⚙️ Quy Đổi Tuyển Dụng</label>
-            <select id="monthly-merge-recruiters" class="form-control-clean" onchange="renderMonthlyTab()">
-              <option value="YES" selected>Có - Gộp chung về Trần Tuấn Anh</option>
-              <option value="NO">Không - Tách riêng Trần Hùng Anh</option>
+            <label>🔄 Quy Đổi Tuyển Dụng</label>
+            <select id="monthly-select-merge-recruiter" class="form-control-clean" onchange="renderMonthlyTab()">
+              <option value="YES" selected>Có – Gộp Trần Hùng Anh về Tuấn Anh</option>
+              <option value="NO">Không – Tách riêng Trần Hùng Anh</option>
             </select>
           </div>
 
           <!-- 6. Đơn giá thưởng KPI -->
           <div class="form-group-clean">
-            <label style="color: #c084fc;">💰 Đơn Giá Thưởng KPI / Điểm</label>
-            <input type="number" id="monthly-kpi-unit-price" class="form-control-clean" value="200000" step="50000" oninput="calculateMonthlyTotals()">
+            <label>💰 Đơn Giá Thưởng KPI (VNĐ)</label>
+            <input type="number" id="monthly-unit-price" class="form-control-clean" value="200000" step="10000" min="0" oninput="renderMonthlyTab()">
           </div>
         </div>
 
-        <!-- HÀNG 3: TÌM KIẾM THÔNG MINH TRẢI RỘNG 100% -->
-        <div style="margin-top: 14px;">
-          <div class="form-group-clean">
-            <label style="color: #60a5fa;">🔍 Tìm Kiếm Thông Minh (Họ Tên, ID Cột A, Mã NV Cột AA, SĐT, CCCD...)</label>
-            <div style="display: flex; gap: 8px;">
-              <input type="text" id="monthly-filter-search" class="form-control-clean" 
-                     style="border-color: #3b82f6; font-size: 14px; background: rgba(15, 23, 42, 0.9);" 
-                     placeholder="Gõ tên ứng viên, ID cột A, Mã nhân viên (Cột AA), số điện thoại, CCCD, nhà máy..." 
-                     oninput="renderMonthlyTab()">
-              <button class="btn btn-outline" style="white-space: nowrap; height: 42px;" onclick="document.getElementById('monthly-filter-search').value=''; renderMonthlyTab();">Xóa tìm</button>
-            </div>
-          </div>
+        <!-- HÀNG 3: THANH TÌM KIẾM TOÀN DIỆN CHIỀU RỘNG 100% -->
+        <div style="margin-top: 14px; display: flex; gap: 10px; align-items: center;">
+          <input type="text" id="monthly-filter-search" class="form-control-clean" 
+                 placeholder="🔍 Tìm kiếm nhanh theo Họ tên, ID (Cột A), Mã NV (Cột AA), SĐT..." 
+                 oninput="renderMonthlyTab()" style="font-size: 14px;">
+          <button type="button" class="btn btn-outline" style="white-space: nowrap; height: 42px; padding: 0 16px;" 
+                  onclick="document.getElementById('monthly-filter-search').value=''; renderMonthlyTab();">Xóa tìm</button>
         </div>
 
-        <!-- HÀNG 4: BỘ CHỌN NHIỀU NGUỒN DATA THỰC TẾ TRỰC TIẾP (CHIPS MULTI-SELECT) -->
-        <div class="filter-chip-group" style="border-left: 3px solid #c084fc; margin-top: 14px;">
+        <!-- HÀNG 4: BỘ CHỌN NHIỀU NGUỒN DATA THỰC TẾ (CLICK TRỰC TIẾP CHỌN ĐƯỢC NHIỀU NGUỒN) -->
+        <div class="filter-chip-group" style="border-left: 3px solid #c084fc;">
           <div class="filter-chip-header">
-            <span style="color: #c084fc; font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase;">🎯 Lọc Nguồn Data Thực Tế (Bấm chọn nhiều nguồn cùng lúc):</span>
-            <div style="display: flex; gap: 8px;">
-              <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('sources', true)">✓ Chọn tất cả</button>
+            <span style="color: #c084fc; font-weight: 800; font-size: 13px;">🎯 NGUỒN DATA THỰC TẾ (Bấm trực tiếp để chọn/bỏ chọn nhiều nguồn cùng lúc):</span>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('sources', true)">✓ Chọn tất cả nguồn</button>
               <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('sources', false)">✗ Bỏ chọn tất cả</button>
             </div>
           </div>
-          <div class="filter-chip-container" id="chip-container-sources"></div>
+          <div class="filter-chip-container" id="chip-container-sources">
+            <!-- Chips render dynamically here -->
+          </div>
         </div>
 
-        <!-- HÀNG 5: BỘ CHỌN NHIỀU DỰ ÁN / NHÀ MÁY (CHIPS MULTI-SELECT) -->
-        <div class="filter-chip-group" style="border-left: 3px solid #3b82f6; margin-top: 10px;">
+        <!-- HÀNG 5: BỘ CHỌN NHIỀU DỰ ÁN / NHÀ MÁY (CLICK TRỰC TIẾP CHỌN ĐƯỢC NHIỀU DỰ ÁN) -->
+        <div class="filter-chip-group" style="border-left: 3px solid #3b82f6;">
           <div class="filter-chip-header">
-            <span style="color: #60a5fa; font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase;">🏭 Lọc Dự Án / Nhà Máy (Bấm chọn nhiều dự án cùng lúc):</span>
-            <div style="display: flex; gap: 8px;">
-              <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('projects', true)">✓ Chọn tất cả</button>
+            <span style="color: #60a5fa; font-weight: 800; font-size: 13px;">🏭 DỰ ÁN / NHÀ MÁY (Bấm trực tiếp để chọn/bỏ chọn nhiều dự án cùng lúc):</span>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('projects', true)">✓ Chọn tất cả dự án</button>
               <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('projects', false)">✗ Bỏ chọn tất cả</button>
             </div>
           </div>
-          <div class="filter-chip-container" id="chip-container-projects"></div>
+          <div class="filter-chip-container" id="chip-container-projects">
+            <!-- Chips render dynamically here -->
+          </div>
         </div>
 
-        <!-- HÀNG 6: THANH NÚT LỌC NHANH KÈM SỐ ĐẾM -->
+        <!-- HÀNG 6: THANH FILTER NHANH (QUICK FILTER PILLS) -->
         <div style="display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap; align-items: center;">
           <span style="font-size: 12px; color: var(--text-sub); font-weight: 700; margin-right: 4px;">⚡ Lọc nhanh:</span>
           <button id="pill-filter-all" class="pill-btn active" onclick="setMonthlyQuickFilter('ALL')">📋 Tất cả (<span id="count-pill-all">0</span>)</button>
@@ -1417,21 +1430,22 @@
           <button id="pill-filter-ctv" class="pill-btn" onclick="setMonthlyQuickFilter('CTV')">🟢 Nguồn CTV (<span id="count-pill-ctv">0</span>)</button>
         </div>
 
-        <!-- HÀNG 7: NÚT THAO TÁC HÀNH ĐỘNG -->
-        <div style="display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+        <!-- HÀNG 7: CÁC NÚT THAO TÁC HÀNG LOẠT & KHÔI PHỤC ĐIỂM -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap; gap: 10px;">
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button class="btn btn-blue" onclick="selectAllMonthly(true)">✅ Chọn Tất Cả UV</button>
+            <button class="btn btn-outline" onclick="selectAllMonthly(true)">✅ Chọn Tất Cả Tính KPI</button>
             <button class="btn btn-outline" onclick="selectAllMonthly(false)">❌ Bỏ Chọn Tất Cả</button>
-            <button class="btn btn-blue" onclick="restoreFromBackupKeys()" title="Khôi phục lại toàn bộ dữ liệu điểm anh đã điền">📥 Khôi Phục Toàn Bộ Điểm Đã Điền</button>
-            <button class="btn btn-outline" onclick="resetDefaultMultiPoints()">🔄 Đặt Lại Điểm Mặc Định (Về 0đ)</button>
-            <button class="btn btn-purple" onclick="autoSplitAllToNextMonth()">⚡ Tự Động Gán & Điền Điểm Kỳ 2 Sang Tháng Sau (+1.0đ)</button>
+            <button class="btn btn-blue" onclick="restoreFromBackupKeys()" title="Khôi phục lại toàn bộ dữ liệu điểm anh đã điền từ bộ nhớ">📥 Khôi Phục Toàn Bộ Điểm Đã Điền</button>
+            <button class="btn btn-outline" onclick="resetDefaultMultiPoints()" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.4);">🔄 Đặt Lại Về 0đ</button>
+            <button class="btn btn-outline" onclick="autoAssignPeriod2()" title="Tự động gán Kỳ 2 sau 1 tháng cho ứng viên có điểm Kỳ 1">⚡ Tự Động Gán Kỳ 2</button>
           </div>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn btn-primary" onclick="exportMonthlyKPIReport()">📥 Xuất Báo Cáo KPI Tháng (CSV)</button>
+          <div>
+            <button class="btn btn-green" onclick="exportMonthlyKPItoCSV()">📥 Xuất Báo Cáo KPI Sang CSV</button>
           </div>
         </div>
-      </div>
 
+      </div>
+      
       <!-- BÁO CÁO TỔNG KẾT KPI Ở TRÊN CÙNG CỦA TAB -->
       <div class="kpi-grid">
         <div class="kpi-card highlight-green" style="border: 2px solid #10b981;">
@@ -1607,7 +1621,6 @@
     let customKPIState = {};
 
     function loadAndRestoreKPIState() {
-      // 1. First load from V6 if exists
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
@@ -1616,20 +1629,19 @@
         }
       } catch(e) {}
 
-      // 2. Scan ALL historical keys to recover any filled points, notes, months from V5/V4/etc.
+      // Scan all historical storage keys to recover user-entered points
       ALL_BACKUP_KEYS.forEach(k => {
         try {
-          const oldRaw = localStorage.getItem(k);
-          if (!oldRaw) return;
-          const oldData = JSON.parse(oldRaw);
-          if (!oldData || typeof oldData !== 'object') return;
-          for (const id in oldData) {
-            const item = oldData[id];
+          const raw = localStorage.getItem(k);
+          if (!raw) return;
+          const data = JSON.parse(raw);
+          if (!data || typeof data !== 'object') return;
+          for (const id in data) {
+            const item = data[id];
             if (!item) continue;
             if (!customKPIState[id]) {
               customKPIState[id] = { ...item };
             } else {
-              // Restore points if user had entered points in old key
               if (item.points1 !== undefined && (customKPIState[id].points1 === undefined || customKPIState[id].points1 === 0)) {
                 customKPIState[id].points1 = item.points1;
               }
@@ -1647,14 +1659,176 @@
         } catch(e) {}
       });
 
-      // Synchronize across both V6 and V5 so neither is ever lost
+      // Synchronize back to both V6 and V5
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(customKPIState));
         localStorage.setItem(BACKUP_STORAGE_KEY, JSON.stringify(customKPIState));
       } catch(e) {}
     }
 
-    loadAndRestoreKPIState();
+    function saveKPIState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(customKPIState));
+        localStorage.setItem(BACKUP_STORAGE_KEY, JSON.stringify(customKPIState));
+      } catch(e) { console.error('Error saving KPI storage', e); }
+    }
+
+    function restoreFromBackupKeys() {
+      loadAndRestoreKPIState();
+      renderMonthlyTab();
+      alert('Đã khôi phục thành công toàn bộ điểm số KPI anh đã điền!');
+    }
+
+
+    // === MULTI-SELECT MANAGER (HỖ TRỢ CHỌN NHIỀU NGUỒN DATA & NHIỀU DỰ ÁN CÙNG LÚC) ===
+    const MultiSelectManager = {
+      selectedSources: new Set(),
+      selectedProjects: new Set(),
+      allSources: [],
+      allProjects: [],
+
+      init() {
+        // Collect all distinct sources
+        const sources = new Set(['Tự tuyển']);
+        RAW_CANDIDATES.forEach(c => {
+          const s = getCandidateRealSource(c.id);
+          if (s) sources.add(s);
+        });
+        customSourcesList.forEach(s => sources.add(s));
+        this.allSources = Array.from(sources).sort();
+
+        // Collect all distinct projects
+        const projects = new Set();
+        RAW_CANDIDATES.forEach(c => {
+          if (c.project) projects.add(c.project);
+        });
+        this.allProjects = Array.from(projects).sort();
+
+        this.renderChips('sources');
+        this.renderChips('projects');
+      },
+
+      toggleItem(type, item) {
+        const set = type === 'sources' ? this.selectedSources : this.selectedProjects;
+        if (set.has(item)) {
+          set.delete(item);
+        } else {
+          set.add(item);
+        }
+        this.renderChips(type);
+        renderMonthlyTab();
+      },
+
+      selectAll(type, selectAllState) {
+        const set = type === 'sources' ? this.selectedSources : this.selectedProjects;
+        const all = type === 'sources' ? this.allSources : this.allProjects;
+        set.clear();
+        if (selectAllState) {
+          all.forEach(item => set.add(item));
+        }
+        this.renderChips(type);
+        renderMonthlyTab();
+      },
+
+      renderChips(type) {
+        const container = document.getElementById(`chip-container-${type}`);
+        if (!container) return;
+        container.innerHTML = '';
+        const set = type === 'sources' ? this.selectedSources : this.selectedProjects;
+        const all = type === 'sources' ? this.allSources : this.allProjects;
+        const isAllSelected = (set.size === 0 || set.size === all.length);
+        const chipColorClass = type === 'sources' ? 'chip-purple' : 'chip-blue';
+
+        all.forEach(item => {
+          const isSelected = isAllSelected || set.has(item);
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = `multiselect-chip ${chipColorClass} ${isSelected ? 'active' : ''}`;
+          chip.innerHTML = `${isSelected ? '✓' : '+'} ${item}`;
+          chip.onclick = () => {
+            // If currently all selected, clicking an item starts isolating
+            if (set.size === 0) {
+              all.forEach(x => set.add(x));
+              set.delete(item);
+            } else {
+              if (set.has(item)) set.delete(item);
+              else set.add(item);
+            }
+            MultiSelectManager.renderChips(type);
+            renderMonthlyTab();
+          };
+          container.appendChild(chip);
+        });
+      },
+
+      matches(c) {
+        // Source match
+        const cSrc = getCandidateRealSource(c.id);
+        if (this.selectedSources.size > 0 && !this.selectedSources.has(cSrc)) {
+          return false;
+        }
+        // Project match
+        if (this.selectedProjects.size > 0 && !this.selectedProjects.has(c.project)) {
+          return false;
+        }
+        return true;
+      }
+    };
+
+    // Helper format points with 0.01 precision
+    function formatPoint(num) {
+      if (num === undefined || num === null || isNaN(num)) return '0.0';
+      const parsed = parseFloat(num);
+      return Number.isInteger(parsed) ? parsed.toFixed(1) : parseFloat(parsed.toFixed(2)).toString();
+    }
+
+    // Update row display without rerendering entire table (seamless input typing)
+    function updateMonthlyRowDisplay(candidateId) {
+      const state = customKPIState[candidateId];
+      if (!state) return;
+      const selectedMonth = document.getElementById('monthly-select-month') ? document.getElementById('monthly-select-month').value : '2026-11';
+
+      let ptsThisMonth = 0;
+      let badgeHtml = '';
+      if (selectedMonth === 'ALL') {
+        ptsThisMonth = (state.points1 || 0) + (state.month2 && state.month2 !== 'NONE' ? (state.points2 || 0) : 0);
+        badgeHtml = `<span class="tag-badge tag-blue" style="font-size:12px; font-weight:800;">${formatPoint(ptsThisMonth)}đ</span>`;
+      } else {
+        let isK1 = (state.month1 === selectedMonth);
+        let isK2 = (state.month2 === selectedMonth);
+        if (isK1) ptsThisMonth += (state.points1 || 0);
+        if (isK2) ptsThisMonth += (state.points2 || 0);
+
+        if (isK1 && isK2) {
+          badgeHtml = `<span class="tag-badge tag-purple" style="font-size:11px; font-weight:800;">K1+K2: ${formatPoint(ptsThisMonth)}đ</span>`;
+        } else if (isK1) {
+          badgeHtml = `<span class="tag-badge tag-green" style="font-size:11px; font-weight:800;">Kỳ 1: ${formatPoint(ptsThisMonth)}đ</span>`;
+        } else if (isK2) {
+          badgeHtml = `<span class="tag-badge tag-purple" style="font-size:11px; font-weight:800;">Kỳ 2: ${formatPoint(ptsThisMonth)}đ</span>`;
+        } else {
+          badgeHtml = `<span class="tag-badge" style="background:rgba(255,255,255,0.05); color:#64748b; font-size:10px;">0đ (Kỳ khác)</span>`;
+        }
+      }
+
+      const impactCell = document.getElementById(`impact-cell-${candidateId}`);
+      if (impactCell) impactCell.innerHTML = badgeHtml;
+
+      const totalCell = document.getElementById(`total-cell-${candidateId}`);
+      if (totalCell) {
+        const total2P = (state.points1 || 0) + (state.month2 && state.month2 !== 'NONE' ? (state.points2 || 0) : 0);
+        totalCell.innerHTML = `<span class="tag-badge tag-blue" style="font-size:11px; font-weight:800;">${formatPoint(total2P)}đ</span>`;
+      }
+
+      const bonusCell = document.getElementById(`bonus-cell-${candidateId}`);
+      if (bonusCell) {
+        const unitPrice = parseFloat(document.getElementById('monthly-unit-price') ? document.getElementById('monthly-unit-price').value : 200000) || 200000;
+        const bonus = ptsThisMonth * unitPrice;
+        bonusCell.innerHTML = `<span style="color:#10b981; font-weight:800; font-family:var(--font-mono); font-size:12px;">${formatVND(bonus)}</span>`;
+      }
+
+      calculateMonthlyTotals();
+    }
+
 
     let filteredCandidates = [...RAW_CANDIDATES];
     let currentPage = 1;
@@ -1671,14 +1845,7 @@
     function saveKPIState() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(customKPIState));
-        localStorage.setItem(BACKUP_STORAGE_KEY, JSON.stringify(customKPIState));
       } catch(e) { console.error('Error saving KPI storage', e); }
-    }
-
-    function restoreFromBackupKeys() {
-      loadAndRestoreKPIState();
-      renderMonthlyTab();
-      alert('✅ Đã quét và khôi phục toàn bộ dữ liệu điểm anh đã điền từ các phiên lưu trước!');
     }
 
     // Add new CTV dynamically
@@ -1703,28 +1870,13 @@
     }
 
     function populateRealSourceFilter() {
-      if (typeof MultiSelectManager !== 'undefined' && MultiSelectManager.render) {
-        MultiSelectManager.render('sources');
-      }
-      const select1 = document.getElementById('filter-real-source');
-      if (select1) {
-        const currentVal = select1.value;
-        select1.innerHTML = '<option value="ALL">Tất cả nguồn data thực tế</option>';
-        customSourcesList.forEach(s => {
-          select1.innerHTML += `<option value="${s}">${s}</option>`;
-        });
-        select1.value = currentVal || 'ALL';
-      }
-
-      const select2 = document.getElementById('monthly-filter-source');
-      if (select2) {
-        const currentVal2 = select2.value;
-        select2.innerHTML = '<option value="ALL">Tất cả nguồn data (Tự tuyển, CTV...)</option>';
-        customSourcesList.forEach(s => {
-          select2.innerHTML += `<option value="${s}">${s}</option>`;
-        });
-        select2.value = currentVal2 || 'ALL';
-      }
+      const select = document.getElementById('filter-real-source');
+      const currentVal = select.value;
+      select.innerHTML = '<option value="ALL">Tất cả nguồn data thực tế</option>';
+      customSourcesList.forEach(s => {
+        select.innerHTML += `<option value="${s}">${s}</option>`;
+      });
+      select.value = currentVal || 'ALL';
     }
 
     function handleSourceChange(candidateId, newSource) {
@@ -1910,7 +2062,7 @@
             statusText.innerHTML = '🟡 Đang hiển thị bản dữ liệu gần nhất';
           }
           if (!isSilent && !autoSyncTimer) {
-            console.warn("Sync notice:", err.message);
+            alert();
           }
         });
     }
@@ -2258,176 +2410,10 @@
       return recruiterName;
     }
 
-            // ==========================================
-    // MULTI-SELECT FILTER MANAGER
-    // ==========================================
-    const MultiSelectManager = {
-      state: {
-        sources: [],
-        projects: [],
-        workStatuses: []
-      },
-
-      toggle(type) {
-        const menu = document.getElementById(`multiselect-menu-${type}`);
-        const toggle = document.getElementById(`multiselect-btn-${type}`);
-        if (!menu || !toggle) return;
-        const isOpen = menu.classList.contains('open');
-
-        document.querySelectorAll('.multiselect-menu').forEach(m => m.classList.remove('open'));
-        document.querySelectorAll('.multiselect-toggle').forEach(t => t.classList.remove('active'));
-
-        if (!isOpen) {
-          menu.classList.add('open');
-          toggle.classList.add('active');
-        }
-      },
-
-      selectAll(type, isSelectAll) {
-        let items = [];
-        if (type === 'sources') items = [...customSourcesList];
-        else if (type === 'projects') items = ['NIP-BN', 'AVD-WH', 'UNI-MB', 'LGE-HP'];
-        else if (type === 'workStatuses') items = ['ĐÃ NHẬN VIỆC', 'ĐÃ NGHỈ VIỆC'];
-
-        if (isSelectAll) {
-          this.state[type] = [...items];
-        } else {
-          this.state[type] = [];
-        }
-        this.render(type);
-        renderMonthlyTab();
-      },
-
-      toggleItem(type, val) {
-        let items = [];
-        if (type === 'sources') items = [...customSourcesList];
-        else if (type === 'projects') items = ['NIP-BN', 'AVD-WH', 'UNI-MB', 'LGE-HP'];
-        else if (type === 'workStatuses') items = ['ĐÃ NHẬN VIỆC', 'ĐÃ NGHỈ VIỆC'];
-
-        // If previously in "all" state (empty array), initialize with all items then toggle
-        if (this.state[type].length === 0) {
-          this.state[type] = [...items];
-        }
-
-        const idx = this.state[type].indexOf(val);
-        if (idx > -1) {
-          this.state[type].splice(idx, 1);
-        } else {
-          this.state[type].push(val);
-        }
-        this.render(type);
-        renderMonthlyTab();
-      },
-
-      render(type) {
-        const container = document.getElementById(`multiselect-options-${type}`);
-        const labelEl = document.getElementById(`multiselect-label-${type}`);
-        if (!container || !labelEl) return;
-
-        let items = [];
-        let prefix = '';
-        if (type === 'sources') {
-          items = [...customSourcesList];
-          prefix = '🎯 Nguồn';
-        } else if (type === 'projects') {
-          items = ['NIP-BN', 'AVD-WH', 'UNI-MB', 'LGE-HP'];
-          prefix = '🏭 Dự án';
-        } else if (type === 'workStatuses') {
-          items = ['ĐÃ NHẬN VIỆC', 'ĐÃ NGHỈ VIỆC'];
-          prefix = '📋 Trạng thái';
-        }
-
-        const selected = this.state[type];
-
-        if (selected.length === 0 || selected.length === items.length) {
-          labelEl.innerHTML = `${prefix}: <strong>Tất cả (${items.length})</strong>`;
-        } else if (selected.length === 1) {
-          labelEl.innerHTML = `${prefix}: <strong style="color:#60a5fa;">${selected[0]}</strong>`;
-        } else {
-          labelEl.innerHTML = `${prefix}: <strong style="color:#60a5fa;">Đã chọn ${selected.length}/${items.length}</strong>`;
-        }
-
-        container.innerHTML = '';
-        items.forEach(item => {
-          const isChecked = selected.length === 0 || selected.includes(item);
-          const row = document.createElement('label');
-          row.className = 'multiselect-item';
-          row.innerHTML = `
-            <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="MultiSelectManager.toggleItem('${type}', '${item.replace(/'/g, "\\'")}')">
-            <span>${item}</span>
-          `;
-          container.appendChild(row);
-        });
-
-        // Also render direct clickable chips on screen!
-        const chipContainer = document.getElementById(`chip-container-${type}`);
-        if (chipContainer) {
-          chipContainer.innerHTML = '';
-          const chipColorClass = type === 'sources' ? 'chip-purple' : 'chip-blue';
-          items.forEach(item => {
-            const isChecked = selected.length === 0 || selected.includes(item);
-            const chip = document.createElement('button');
-            chip.type = 'button';
-            chip.className = `multiselect-chip ${chipColorClass} ${isChecked ? 'active' : ''}`;
-            chip.innerHTML = `${isChecked ? '✓' : '+'} ${item}`;
-            chip.onclick = () => MultiSelectManager.toggleItem(type, item);
-            chipContainer.appendChild(chip);
-          });
-        }
-      },
-
-      init() {
-        this.state.sources = [];
-        this.state.projects = [];
-        this.state.workStatuses = [];
-        this.render('sources');
-        this.render('projects');
-        this.render('workStatuses');
-      }
-    };
-
-    // Close multi-select dropdowns when clicking outside
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.custom-multiselect')) {
-        document.querySelectorAll('.multiselect-menu').forEach(m => m.classList.remove('open'));
-        document.querySelectorAll('.multiselect-toggle').forEach(t => t.classList.remove('active'));
-      }
-    });
-
-    let currentMonthlyQuickFilter = 'ALL';
-    function setMonthlyQuickFilter(type) {
-      currentMonthlyQuickFilter = type;
-      document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.getElementById(`pill-filter-${type.toLowerCase()}`);
-      if (activeBtn) activeBtn.classList.add('active');
-
-      const scEl = document.getElementById('monthly-filter-score-status');
-      const srcEl = document.getElementById('monthly-filter-source');
-
-      if (type === 'ALL') {
-        if (scEl) scEl.value = 'ALL';
-        MultiSelectManager.state.sources = [];
-        MultiSelectManager.render('sources');
-      } else if (type === 'SCORED') {
-        if (scEl) scEl.value = 'HAS_POINTS';
-      } else if (type === 'UNSCORED') {
-        if (scEl) scEl.value = 'ZERO_POINTS';
-      } else if (type === 'TU_TUYEN') {
-        if (scEl) scEl.value = 'ALL';
-        MultiSelectManager.state.sources = ['Tự tuyển'];
-        MultiSelectManager.render('sources');
-      } else if (type === 'CTV') {
-        if (scEl) scEl.value = 'ALL';
-        MultiSelectManager.state.sources = customSourcesList.filter(s => s !== 'Tự tuyển');
-        MultiSelectManager.render('sources');
-      }
-      renderMonthlyTab();
-    }
-
     function renderMonthlyTab() {
       const selectedMonth = document.getElementById('monthly-select-month').value;
       const selectedRec = document.getElementById('monthly-select-recruiter').value;
-      const selectedProj = document.getElementById('monthly-select-project')?.value || 'ALL';
+      const selectedProj = document.getElementById('monthly-select-project').value;
 
       const monthNames = {
         '2026-10': 'Tháng 10/2026',
@@ -2441,14 +2427,7 @@
       document.getElementById('label-kpi-month-title').innerText = `🌟 TỔNG ĐIỂM KPI GHI NHẬN (${displayMonthTitle.toUpperCase()})`;
       document.getElementById('monthly-rec-summary-label').innerText = `Đang xem báo cáo KPI: ${displayMonthTitle}`;
 
-      const search = (document.getElementById('monthly-filter-search')?.value || '').toLowerCase().trim();
-      const filterScore = document.getElementById('monthly-filter-score-status')?.value || 'ALL';
-
-      const selSources = MultiSelectManager.state.sources;
-      const selProjects = MultiSelectManager.state.projects;
-      const selWorkStatuses = MultiSelectManager.state.workStatuses;
-
-      // Candidates qualifying for onboarding: ĐÃ NHẬN VIỆC + ĐÃ NGHỈ VIỆC SAU OB
+      // Candidates qualifying for onboarding: 54 ĐÃ NHẬN VIỆC + 9 ĐÃ NGHỈ VIỆC SAU OB = 63 candidates
       monthlyCandidatesList = RAW_CANDIDATES.filter(c => {
         const hasOBDate = !!c.ob_date;
         const isNhanViec = c.work_status === 'ĐÃ NHẬN VIỆC';
@@ -2457,25 +2436,7 @@
 
         const effectiveRec = getEffectiveRecruiter(c.recruiter);
         if (selectedRec !== 'ALL' && effectiveRec !== selectedRec && c.recruiter !== selectedRec) return false;
-
-        // Lọc Multi-Select: Dự Án
-        if (selProjects.length > 0 && !selProjects.includes(c.project)) return false;
-
-        // Lọc Multi-Select: Trạng thái Col 19
-        if (selWorkStatuses.length > 0 && !selWorkStatuses.includes(c.work_status)) return false;
-
-        // Lọc Multi-Select: Nguồn Data Thực Tế
-        const realSrc = getCandidateRealSource(c.id);
-        if (selSources.length > 0 && !selSources.includes(realSrc)) return false;
-
-        // Lọc CTV nếu chọn pill CTV
-        if (currentMonthlyQuickFilter === 'CTV' && realSrc === 'Tự tuyển') return false;
-
-        // Tìm kiếm thông minh: Tên, CCCD, SĐT, Mã NV (Col AA), ID (Col A), Dự án, Nguồn Data
-        if (search) {
-          const haystack = `${c.name} ${c.cccd || ''} ${c.phone || ''} ${c.booking_code || ''} ${c.id} ${c.mnv || ''} ${c.project} ${realSrc}`.toLowerCase();
-          if (!haystack.includes(search)) return false;
-        }
+        if (selectedProj !== 'ALL' && c.project !== selectedProj) return false;
 
         return true;
       });
@@ -2492,7 +2453,7 @@
           customKPIState[c.id] = {
             selected: true,
             month1: defaultMonth1,
-            points1: 0.0,
+            points1: 1.0,
             month2: 'NONE',
             points2: 0.0,
             note: ''
@@ -2500,7 +2461,7 @@
         }
         const state = customKPIState[c.id];
         if (!state.month1) state.month1 = defaultMonth1;
-        if (state.points1 === undefined) state.points1 = 0.0;
+        if (state.points1 === undefined) state.points1 = 1.0;
         if (state.month2 === undefined) state.month2 = 'NONE';
         if (state.points2 === undefined) state.points2 = 0.0;
 
@@ -2521,44 +2482,7 @@
         }
       });
 
-      let baseList = (filterViewMode === 'ACTIVE' && selectedMonth !== 'ALL') ? activeCandidatesInMonth : monthlyCandidatesList;
-
-      // Cập nhật số liệu trên các nút Lọc Nhanh (Quick Filter Pills)
-      let countAll = baseList.length;
-      let countScored = 0;
-      let countUnscored = 0;
-      let countTuTuyen = 0;
-      let countCTV = 0;
-
-      baseList.forEach(c => {
-        const state = customKPIState[c.id];
-        const p1 = state ? (parseFloat(state.points1) || 0) : 0;
-        const p2 = state ? (parseFloat(state.points2) || 0) : 0;
-        if ((p1 + p2) > 0) countScored++;
-        else countUnscored++;
-
-        const src = getCandidateRealSource(c.id);
-        if (src === 'Tự tuyển') countTuTuyen++;
-        else countCTV++;
-      });
-
-      if (document.getElementById('count-pill-all')) document.getElementById('count-pill-all').innerText = countAll;
-      if (document.getElementById('count-pill-scored')) document.getElementById('count-pill-scored').innerText = countScored;
-      if (document.getElementById('count-pill-unscored')) document.getElementById('count-pill-unscored').innerText = countUnscored;
-      if (document.getElementById('count-pill-tu-tuyen')) document.getElementById('count-pill-tu-tuyen').innerText = countTuTuyen;
-      if (document.getElementById('count-pill-ctv')) document.getElementById('count-pill-ctv').innerText = countCTV;
-
-      // Áp dụng bộ lọc Điểm KPI nếu chọn
-      let listToDisplay = baseList.filter(c => {
-        const state = customKPIState[c.id];
-        const p1 = state ? (parseFloat(state.points1) || 0) : 0;
-        const p2 = state ? (parseFloat(state.points2) || 0) : 0;
-        const total = p1 + p2;
-
-        if (filterScore === 'HAS_POINTS' && total <= 0) return false;
-        if (filterScore === 'ZERO_POINTS' && total > 0) return false;
-        return true;
-      });
+      const listToDisplay = (filterViewMode === 'ACTIVE' && selectedMonth !== 'ALL') ? activeCandidatesInMonth : monthlyCandidatesList;
 
       document.getElementById('monthly-list-badge').innerText = `Hiển thị: ${listToDisplay.length} ứng viên (${filterViewMode === 'ACTIVE' ? 'Chỉ ứng viên có điểm trong kỳ ' + displayMonthTitle : 'Toàn bộ ứng viên'})`;
 
@@ -2572,7 +2496,7 @@
           customKPIState[c.id] = {
             selected: true,
             month1: defaultMonth1,
-            points1: 0.0,
+            points1: 1.0,
             month2: 'NONE',
             points2: 0.0,
             note: ''
@@ -2580,7 +2504,7 @@
         }
         const state = customKPIState[c.id];
         if (!state.month1) state.month1 = defaultMonth1;
-        if (state.points1 === undefined) state.points1 = 0.0;
+        if (state.points1 === undefined) state.points1 = 1.0;
         if (state.month2 === undefined) state.month2 = 'NONE';
         if (state.points2 === undefined) state.points2 = 0.0;
 
@@ -2613,9 +2537,9 @@
           m2Options += `<option value="${m}" ${state.month2 === m ? 'selected' : ''}>${m}</option>`;
         });
 
-        let currentImpactBadge = '<span style="color:var(--text-sub); font-size:11px;">0đ (Chưa tính điểm)</span>';
+        let currentImpactBadge = '<span style="color:var(--text-sub); font-size:11px;">0đ (Không tính vào tháng này)</span>';
         if (pointsForCurrentMonth > 0) {
-          currentImpactBadge = `<span class="badge-kpi-star" style="font-size:12px;">⭐ +${formatPoint(pointsForCurrentMonth)} ĐIỂM</span>`;
+          currentImpactBadge = `<span class="badge-kpi-star" style="font-size:12px;">⭐ +${pointsForCurrentMonth.toFixed(1).replace('.0','')} ĐIỂM</span>`;
         }
 
         let exactCol19Badge = '<span class="status-badge badge-exact-nhan-viec">ĐÃ NHẬN VIỆC</span>';
@@ -2660,56 +2584,47 @@
           <td>${exactCol19Badge}</td>
           
           <!-- Nguồn Data Thực Tế -->
-          <td>
+          <td style="background: rgba(139, 92, 246, 0.05); border-left: 2px solid rgba(139, 92, 246, 0.4);">
             <select class="source-select ${srcClass}" style="padding: 4px 8px; font-size: 11px;" onchange="handleSourceChange('${c.id}', this.value)">
               ${sourceOptions}
             </select>
           </td>
 
           <!-- KỲ 1 -->
-          <td>
+          <td style="background: rgba(16, 185, 129, 0.05); border-left: 2px solid rgba(16, 185, 129, 0.4);">
             <select class="table-select" style="border-color:#10b981; color:#34d399;" 
-                    id="select-month1-${c.id}"
                     onchange="handleMonth1Change('${c.id}', this.value)" ${state.selected ? '' : 'disabled'}>
               ${m1Options}
             </select>
           </td>
-          <td style="text-align: center;">
-            <input type="number" class="point-input green-point" 
-                   id="input-point1-${c.id}"
-                   value="${state.points1}" step="0.01" min="0" max="10"
-                   placeholder="0.0"
-                   onfocus="if(this.value==='0' || this.value==='0.0') this.select();"
-                   oninput="handlePoint1Change('${c.id}', this.value)"
+          <td style="text-align: center; background: rgba(16, 185, 129, 0.05);">
+            <input type="number" class="point-input green-point" value="${state.points1}" step="0.01" min="0" max="10" onfocus="this.select()"
                    onchange="handlePoint1Change('${c.id}', this.value)" ${state.selected ? '' : 'disabled'}>
           </td>
 
           <!-- KỲ 2 -->
-          <td>
+          <td style="background: rgba(139, 92, 246, 0.05); border-left: 2px solid rgba(139, 92, 246, 0.4);">
             <select class="table-select" style="border-color:#8b5cf6; color:#c084fc;" 
-                    id="select-month2-${c.id}"
                     onchange="handleMonth2Change('${c.id}', this.value)" 
                     ${state.selected ? '' : 'disabled'}>
               ${m2Options}
             </select>
           </td>
-          <td style="text-align: center;">
+          <td style="text-align: center; background: rgba(139, 92, 246, 0.05);">
             <input type="number" class="point-input purple-point" 
                    id="input-point2-${c.id}"
-                   value="${state.points2}" step="0.01" min="0" max="10" 
+                   value="${state.points2}" step="0.01" min="0" max="10" onfocus="this.select()" 
                    placeholder="0.0"
-                   onfocus="if(this.value==='0' || this.value==='0.0') this.select();"
-                   oninput="handlePoint2Change('${c.id}', this.value)"
                    onchange="handlePoint2Change('${c.id}', this.value)" 
                    ${state.selected ? '' : 'disabled'}>
           </td>
 
           <!-- Impact on current selected month & Total 2 Periods -->
-          <td id="impact-cell-${c.id}" style="text-align: center;">
+          <td style="text-align: center; background: rgba(59, 130, 246, 0.05); border-left: 2px solid rgba(59, 130, 246, 0.4);">
             ${currentImpactBadge}
           </td>
-          <td id="total2-cell-${c.id}" style="text-align: center; font-weight:800; font-family:var(--font-mono); color:#f8fafc;">
-            ${formatPoint(total2Periods)} đ
+          <td style="text-align: center; font-weight:800; font-family:var(--font-mono); color:#f8fafc;">
+            ${total2Periods.toFixed(1).replace('.0','')} đ
           </td>
 
           <!-- Notes -->
@@ -2724,89 +2639,26 @@
       calculateMonthlyTotals();
     }
 
-    function formatPoint(num) {
-      if (num === undefined || num === null || isNaN(num)) return '0';
-      const val = parseFloat(num);
-      return (Math.round(val * 100) / 100).toFixed(2).replace(/\.?0+$/, '');
-    }
-
-    function updateMonthlyRowDisplay(candidateId) {
-      const state = customKPIState[candidateId];
-      if (!state) return;
-      const selectMonthEl = document.getElementById('monthly-select-month');
-      const selectedMonth = selectMonthEl ? selectMonthEl.value : 'ALL';
-      const hasActivePeriod2 = (state.month2 !== 'NONE' && state.month2 !== '') && (parseFloat(state.points2) > 0);
-
-      let pointsForCurrentMonth = 0;
-      if (state.selected) {
-        if (selectedMonth === 'ALL') {
-          pointsForCurrentMonth = (parseFloat(state.points1) || 0) + (hasActivePeriod2 ? (parseFloat(state.points2) || 0) : 0);
-        } else {
-          if (state.month1 === selectedMonth) pointsForCurrentMonth += (parseFloat(state.points1) || 0);
-          if (hasActivePeriod2 && state.month2 === selectedMonth) pointsForCurrentMonth += (parseFloat(state.points2) || 0);
-        }
-      }
-      const total2Periods = (parseFloat(state.points1) || 0) + (hasActivePeriod2 ? (parseFloat(state.points2) || 0) : 0);
-
-      const impactEl = document.getElementById(`impact-cell-${candidateId}`);
-      if (impactEl) {
-        impactEl.innerHTML = pointsForCurrentMonth > 0 ? 
-          `<span class="badge-kpi-star" style="font-size:12px;">⭐ +${formatPoint(pointsForCurrentMonth)} ĐIỂM</span>` :
-          `<span style="color:var(--text-sub); font-size:11px;">0đ (Chưa tính điểm)</span>`;
-      }
-
-      const total2El = document.getElementById(`total2-cell-${candidateId}`);
-      if (total2El) {
-        total2El.innerText = `${formatPoint(total2Periods)} đ`;
-      }
-
-      const rowEl = document.getElementById(`row-monthly-${candidateId}`);
-      if (rowEl) {
-        if (pointsForCurrentMonth > 0) {
-          rowEl.classList.add('row-active-month');
-        } else {
-          rowEl.classList.remove('row-active-month');
-        }
-      }
-    }
-
     function handleCandidateToggle(candidateId, isChecked) {
       if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
       customKPIState[candidateId].selected = isChecked;
       saveKPIState();
-      const p1 = document.getElementById(`input-point1-${candidateId}`);
-      const p2 = document.getElementById(`input-point2-${candidateId}`);
-      const m1 = document.getElementById(`select-month1-${candidateId}`);
-      const m2 = document.getElementById(`select-month2-${candidateId}`);
-      if (p1) p1.disabled = !isChecked;
-      if (p2) p2.disabled = !isChecked;
-      if (m1) m1.disabled = !isChecked;
-      if (m2) m2.disabled = !isChecked;
-      const row = document.getElementById(`row-monthly-${candidateId}`);
-      if (row) {
-        if (isChecked) row.classList.add('row-selected');
-        else row.classList.remove('row-selected');
-      }
-      updateMonthlyRowDisplay(candidateId);
-      calculateMonthlyTotals();
+      renderMonthlyTab();
     }
 
     function handleMonth1Change(candidateId, monthVal) {
       if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
       customKPIState[candidateId].month1 = monthVal;
       saveKPIState();
-      updateMonthlyRowDisplay(candidateId);
-      calculateMonthlyTotals();
+      renderMonthlyTab();
     }
 
     function handlePoint1Change(candidateId, val) {
       let num = parseFloat(val);
       if (isNaN(num) || num < 0) num = 0;
-      num = Math.round(num * 100) / 100;
       if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
       customKPIState[candidateId].points1 = num;
       saveKPIState();
-      updateMonthlyRowDisplay(candidateId);
       calculateMonthlyTotals();
     }
 
@@ -2814,26 +2666,20 @@
       if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
       customKPIState[candidateId].month2 = monthVal;
       saveKPIState();
-      updateMonthlyRowDisplay(candidateId);
-      calculateMonthlyTotals();
+      renderMonthlyTab();
     }
 
     function handlePoint2Change(candidateId, val) {
       let num = parseFloat(val);
       if (isNaN(num) || num < 0) num = 0;
-      num = Math.round(num * 100) / 100;
       if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
       customKPIState[candidateId].points2 = num;
 
       if (num > 0 && (!customKPIState[candidateId].month2 || customKPIState[candidateId].month2 === 'NONE')) {
-        const nextM = getNextMonth(customKPIState[candidateId].month1 || '2026-10');
-        customKPIState[candidateId].month2 = nextM;
-        const m2Select = document.getElementById(`select-month2-${candidateId}`);
-        if (m2Select) m2Select.value = nextM;
+        customKPIState[candidateId].month2 = getNextMonth(customKPIState[candidateId].month1 || '2026-10');
       }
       saveKPIState();
-      updateMonthlyRowDisplay(candidateId);
-      calculateMonthlyTotals();
+      renderMonthlyTab();
     }
 
     function handleNoteChange(candidateId, val) {
@@ -2856,15 +2702,12 @@
     }
 
     function resetDefaultMultiPoints() {
-      if (!confirm('⚠️ CẢNH BÁO: Anh có chắc chắn muốn đặt lại toàn bộ điểm KPI về mặc định 0đ không? Mọi điểm số anh đã tự chỉnh sửa sẽ bị hoàn tác!')) {
-        return;
-      }
       monthlyCandidatesList.forEach(c => {
         const defM = getMonthLabel(c.ob_date);
         customKPIState[c.id] = {
           selected: true,
           month1: defM,
-          points1: 0.0,
+          points1: 1.0,
           month2: 'NONE',
           points2: 0.0,
           note: ''
@@ -2875,20 +2718,14 @@
     }
 
     function autoSplitAllToNextMonth() {
-      if (!confirm('Anh có muốn tự động gán Kỳ 2 (+1.0đ sang tháng sau) cho các bạn CHƯA CÓ Kỳ 2 không? (Hệ thống sẽ giữ nguyên 100% các bạn anh đã tự chấm điểm trước đó, không ghi đè)')) {
-        return;
-      }
       monthlyCandidatesList.forEach(c => {
         if (!customKPIState[c.id]) customKPIState[c.id] = {};
         const state = customKPIState[c.id];
         state.selected = true;
         if (!state.month1) state.month1 = getMonthLabel(c.ob_date);
-        if (state.points1 === undefined) state.points1 = 0.0;
-        // Chỉ gán nếu người dùng chưa điền điểm kỳ 2
-        if (!state.points2 || state.points2 === 0 || state.month2 === 'NONE') {
-          state.month2 = getNextMonth(state.month1);
-          state.points2 = 1.0;
-        }
+        if (state.points1 === undefined) state.points1 = 1.0;
+        state.month2 = getNextMonth(state.month1);
+        state.points2 = 1.0;
       });
       saveKPIState();
       renderMonthlyTab();
@@ -2909,7 +2746,7 @@
       const recStats = {};
 
       monthlyCandidatesList.forEach(c => {
-        const state = customKPIState[c.id] || { selected: true, month1: getMonthLabel(c.ob_date), points1: 0.0, month2: 'NONE', points2: 0.0 };
+        const state = customKPIState[c.id] || { selected: true, month1: getMonthLabel(c.ob_date), points1: 1.0, month2: 'NONE', points2: 0.0 };
         const rec = getEffectiveRecruiter(c.recruiter);
 
         if (!recStats[rec]) {
@@ -2946,8 +2783,8 @@
         }
       });
 
-      document.getElementById('monthly-total-kpi-points').innerText = formatPoint(totalPoints);
-      document.getElementById('monthly-split-summary').innerText = `Kỳ 1: ${formatPoint(pointsMonth1)}đ (${countMonth1} lượt) | Kỳ 2: ${formatPoint(pointsMonth2)}đ (${countMonth2} lượt)`;
+      document.getElementById('monthly-total-kpi-points').innerText = totalPoints.toFixed(1).replace('.0', '');
+      document.getElementById('monthly-split-summary').innerText = `Kỳ 1: ${pointsMonth1.toFixed(1).replace('.0','')}đ (${countMonth1} lượt) | Kỳ 2: ${pointsMonth2.toFixed(1).replace('.0','')}đ (${countMonth2} lượt)`;
       
       document.getElementById('monthly-selected-count').innerText = uniqueCandidatesInMonth.size;
       document.getElementById('monthly-ratio-tag').innerText = `${uniqueCandidatesInMonth.size} ứng viên hưởng điểm`;
@@ -2972,10 +2809,10 @@
         tr.innerHTML = `
           <td><strong>${rec}</strong></td>
           <td><strong style="color: #60a5fa;">${s.uniqueUV.size} UV</strong></td>
-          <td><span style="color: #34d399; font-weight:700;">${formatPoint(s.m1Points)} đ (${s.m1Count} UV)</span></td>
-          <td><span style="color: #c084fc; font-weight:700;">${formatPoint(s.m2Points)} đ (${s.m2Count} UV)</span></td>
-          <td><span class="badge-kpi-star" style="font-size: 13px;">⭐ ${formatPoint(s.totalPoints)} ĐIỂM KPI</span></td>
-          <td><strong style="color: #c084fc;">${Math.round(bonus).toLocaleString('vi-VN')} đ</strong></td>
+          <td><span style="color: #34d399; font-weight:700;">${s.m1Points.toFixed(1).replace('.0','')} đ (${s.m1Count} UV)</span></td>
+          <td><span style="color: #c084fc; font-weight:700;">${s.m2Points.toFixed(1).replace('.0','')} đ (${s.m2Count} UV)</span></td>
+          <td><span class="badge-kpi-star" style="font-size: 13px;">⭐ ${s.totalPoints.toFixed(1).replace('.0', '')} ĐIỂM KPI</span></td>
+          <td><strong style="color: #c084fc;">${bonus.toLocaleString('vi-VN')} đ</strong></td>
           <td>${evalBadge}</td>
         `;
         tbody.appendChild(tr);
@@ -2990,7 +2827,7 @@
       
       let idx = 1;
       monthlyCandidatesList.forEach(c => {
-        const state = customKPIState[c.id] || { selected: true, month1: getMonthLabel(c.ob_date), points1: 0.0, month2: 'NONE', points2: 0.0, note: '' };
+        const state = customKPIState[c.id] || { selected: true, month1: getMonthLabel(c.ob_date), points1: 1.0, month2: 'NONE', points2: 0.0, note: '' };
         const hasActivePeriod2 = (state.month2 !== 'NONE' && state.month2 !== '') && (parseFloat(state.points2) > 0);
         const realSrc = getCandidateRealSource(c.id);
 
@@ -3019,11 +2856,10 @@
 
     window.onload = function() {
       loadAndRestoreKPIState();
-      MultiSelectManager.init();
       populateRealSourceFilter();
+      MultiSelectManager.init();
       applyFilters();
       renderMonthlyTab();
-      // Tự động bật chế độ Live Sync theo thời gian thực ngay khi mở trang!
       toggleAutoSync(true);
     };
   </script>
