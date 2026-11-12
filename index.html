@@ -856,6 +856,195 @@
       color: #ffffff;
       box-shadow: 0 0 12px rgba(59, 130, 246, 0.35);
     }
+      :root {
+      color-scheme: dark;
+    }
+    select, option, input, textarea {
+      color-scheme: dark;
+    }
+    select option {
+      background-color: #0f172a !important;
+      color: #f8fafc !important;
+    }
+
+    /* === MULTI-SELECT DROPDOWN STYLING === */
+    .custom-multiselect {
+      position: relative;
+      width: 100%;
+    }
+    .multiselect-toggle {
+      width: 100%;
+      padding: 9px 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: #f8fafc;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+    .multiselect-toggle:hover {
+      border-color: #3b82f6;
+      background: rgba(30, 41, 59, 0.95);
+    }
+    .multiselect-toggle.active {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+      background: #0f172a;
+    }
+    .multiselect-arrow {
+      font-size: 10px;
+      color: #94a3b8;
+      transition: transform 0.2s ease;
+    }
+    .multiselect-toggle.active .multiselect-arrow {
+      transform: rotate(180deg);
+      color: #60a5fa;
+    }
+    .multiselect-menu {
+      position: absolute;
+      top: calc(100% + 5px);
+      left: 0;
+      width: 100%;
+      min-width: 250px;
+      background: #0f172a;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: 10px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      z-index: 100;
+      display: none;
+      padding: 10px;
+    }
+    .multiselect-menu.open {
+      display: block;
+      animation: fadeInDown 0.15s ease-out;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .multiselect-actions {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .btn-text-action {
+      background: transparent;
+      border: none;
+      color: #60a5fa;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 3px 8px;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+    .btn-text-action:hover {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+    }
+    .multiselect-options {
+      max-height: 220px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .multiselect-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      color: #e2e8f0;
+      transition: background 0.15s ease;
+      user-select: none;
+    }
+    .multiselect-item:hover {
+      background: rgba(59, 130, 246, 0.15);
+      color: #ffffff;
+    }
+    .multiselect-item input[type="checkbox"] {
+      accent-color: #3b82f6;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    /* === UNIFIED TABLE DARK THEME STYLING === */
+    .table-responsive {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      background: #0b1120;
+    }
+    #monthly-table, #candidate-table {
+      background: #0b1120;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    #monthly-table thead th, #candidate-table thead th {
+      background: #0f172a !important;
+      color: #94a3b8;
+      border-bottom: 2px solid rgba(59, 130, 246, 0.35);
+      padding: 12px 14px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    #monthly-table tbody td, #candidate-table tbody td {
+      background: #0b1120;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 11px 13px;
+      color: #f1f5f9;
+    }
+    #monthly-table tbody tr:nth-child(even) td, #candidate-table tbody tr:nth-child(even) td {
+      background: #0d1527;
+    }
+    #monthly-table tbody tr:hover td, #candidate-table tbody tr:hover td {
+      background: rgba(59, 130, 246, 0.16) !important;
+    }
+    #monthly-table tbody tr.row-selected td {
+      background: rgba(16, 185, 129, 0.1) !important;
+    }
+    #monthly-table tbody tr.row-active-month td {
+      background: rgba(59, 130, 246, 0.1) !important;
+    }
+
+    /* Cố định cột đồng bộ màu với dòng */
+    #monthly-table tbody tr:nth-child(odd) td:nth-child(-n+4),
+    #candidate-table tbody tr:nth-child(odd) td:nth-child(-n+3) {
+      background: #0b1120 !important;
+    }
+    #monthly-table tbody tr:nth-child(even) td:nth-child(-n+4),
+    #candidate-table tbody tr:nth-child(even) td:nth-child(-n+3) {
+      background: #0d1527 !important;
+    }
+    #monthly-table tbody tr:hover td:nth-child(-n+4),
+    #candidate-table tbody tr:hover td:nth-child(-n+3) {
+      background: #172554 !important;
+    }
+
+    /* Các dropdown & input trong bảng đồng nhất màu tối */
+    .table-select, .source-select, .note-input, .point-input {
+      background: #0f172a !important;
+      color: #f8fafc !important;
+      border: 1px solid rgba(255, 255, 255, 0.14) !important;
+      border-radius: 6px;
+    }
+    .table-select:focus, .source-select:focus, .note-input:focus, .point-input:focus {
+      border-color: #3b82f6 !important;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25) !important;
+    }
   </style>
 </head>
 <body>
@@ -1137,32 +1326,58 @@
             </select>
           </div>
 
+          <!-- MULTI-SELECT: DỰ ÁN / NHÀ MÁY -->
           <div class="form-group">
-            <label>Lọc Dự Án / Nhà Máy</label>
-            <select id="monthly-select-project" class="form-control" onchange="renderMonthlyTab()">
-              <option value="ALL">Tất cả dự án</option>
-              <option value="NIP-BN">NIP-BN</option>
-              <option value="AVD-WH">AVD-WH</option>
-              <option value="UNI-MB">UNI-MB</option>
-            </select>
+            <label>Lọc Dự Án / Nhà Máy (Chọn nhiều)</label>
+            <div class="custom-multiselect" id="multiselect-projects">
+              <button type="button" class="multiselect-toggle" id="multiselect-btn-projects" onclick="MultiSelectManager.toggle('projects')">
+                <span class="multiselect-label" id="multiselect-label-projects">🏭 Dự án: Tất cả</span>
+                <span class="multiselect-arrow">▾</span>
+              </button>
+              <div class="multiselect-menu" id="multiselect-menu-projects">
+                <div class="multiselect-actions">
+                  <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('projects', true)">Chọn tất cả</button>
+                  <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('projects', false)">Bỏ chọn</button>
+                </div>
+                <div class="multiselect-options" id="multiselect-options-projects"></div>
+              </div>
+            </div>
           </div>
 
-          <!-- LỌC NGUỒN DATA THỰC TẾ TAB 2 -->
+          <!-- MULTI-SELECT: NGUỒN DATA THỰC TẾ (CHỌN ĐƯỢC NHIỀU GIÁ TRỊ) -->
           <div class="form-group">
-            <label style="color: #c084fc; font-weight:800;">🎯 NGUỒN DATA THỰC TẾ</label>
-            <select id="monthly-filter-source" class="form-control" style="border-color: #8b5cf6;" onchange="renderMonthlyTab()">
-              <option value="ALL">Tất cả nguồn data</option>
-            </select>
+            <label style="color: #c084fc; font-weight:800;">🎯 NGUỒN DATA THỰC TẾ (Chọn nhiều)</label>
+            <div class="custom-multiselect" id="multiselect-sources">
+              <button type="button" class="multiselect-toggle" id="multiselect-btn-sources" style="border-color: rgba(139, 92, 246, 0.5);" onclick="MultiSelectManager.toggle('sources')">
+                <span class="multiselect-label" id="multiselect-label-sources" style="color: #c084fc;">🎯 Nguồn: Tất cả nguồn data</span>
+                <span class="multiselect-arrow">▾</span>
+              </button>
+              <div class="multiselect-menu" id="multiselect-menu-sources">
+                <div class="multiselect-actions">
+                  <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('sources', true)">Chọn tất cả</button>
+                  <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('sources', false)">Bỏ chọn</button>
+                </div>
+                <div class="multiselect-options" id="multiselect-options-sources"></div>
+              </div>
+            </div>
           </div>
 
-          <!-- LỌC TRẠNG THÁI NHẬN VIỆC (COL 19) TAB 2 -->
+          <!-- MULTI-SELECT: TRẠNG THÁI (COL 19) -->
           <div class="form-group">
-            <label style="color: #fbbf24; font-weight:800;">📋 TRẠNG THÁI (COL 19)</label>
-            <select id="monthly-filter-work-status" class="form-control" style="border-color: #f59e0b;" onchange="renderMonthlyTab()">
-              <option value="ALL">Tất cả trạng thái Col 19</option>
-              <option value="ĐÃ NHẬN VIỆC">ĐÃ NHẬN VIỆC</option>
-              <option value="ĐÃ NGHỈ VIỆC">ĐÃ NGHỈ VIỆC (Sau OB)</option>
-            </select>
+            <label style="color: #fbbf24; font-weight:800;">📋 TRẠNG THÁI (COL 19) (Chọn nhiều)</label>
+            <div class="custom-multiselect" id="multiselect-workStatuses">
+              <button type="button" class="multiselect-toggle" id="multiselect-btn-workStatuses" style="border-color: rgba(245, 158, 11, 0.5);" onclick="MultiSelectManager.toggle('workStatuses')">
+                <span class="multiselect-label" id="multiselect-label-workStatuses" style="color: #fbbf24;">📋 Trạng thái: Tất cả</span>
+                <span class="multiselect-arrow">▾</span>
+              </button>
+              <div class="multiselect-menu" id="multiselect-menu-workStatuses">
+                <div class="multiselect-actions">
+                  <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('workStatuses', true)">Chọn tất cả</button>
+                  <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('workStatuses', false)">Bỏ chọn</button>
+                </div>
+                <div class="multiselect-options" id="multiselect-options-workStatuses"></div>
+              </div>
+            </div>
           </div>
 
           <!-- LỌC ĐIỂM KPI -->
@@ -1516,6 +1731,9 @@
     }
 
     function populateRealSourceFilter() {
+      if (typeof MultiSelectManager !== 'undefined' && MultiSelectManager.render) {
+        MultiSelectManager.render('sources');
+      }
       const select1 = document.getElementById('filter-real-source');
       if (select1) {
         const currentVal = select1.value;
@@ -2068,7 +2286,127 @@
       return recruiterName;
     }
 
-        let currentMonthlyQuickFilter = 'ALL';
+            // ==========================================
+    // MULTI-SELECT FILTER MANAGER
+    // ==========================================
+    const MultiSelectManager = {
+      state: {
+        sources: [],
+        projects: [],
+        workStatuses: []
+      },
+
+      toggle(type) {
+        const menu = document.getElementById(`multiselect-menu-${type}`);
+        const toggle = document.getElementById(`multiselect-btn-${type}`);
+        if (!menu || !toggle) return;
+        const isOpen = menu.classList.contains('open');
+
+        document.querySelectorAll('.multiselect-menu').forEach(m => m.classList.remove('open'));
+        document.querySelectorAll('.multiselect-toggle').forEach(t => t.classList.remove('active'));
+
+        if (!isOpen) {
+          menu.classList.add('open');
+          toggle.classList.add('active');
+        }
+      },
+
+      selectAll(type, isSelectAll) {
+        let items = [];
+        if (type === 'sources') items = [...customSourcesList];
+        else if (type === 'projects') items = ['NIP-BN', 'AVD-WH', 'UNI-MB', 'LGE-HP'];
+        else if (type === 'workStatuses') items = ['ĐÃ NHẬN VIỆC', 'ĐÃ NGHỈ VIỆC'];
+
+        if (isSelectAll) {
+          this.state[type] = [...items];
+        } else {
+          this.state[type] = [];
+        }
+        this.render(type);
+        renderMonthlyTab();
+      },
+
+      toggleItem(type, val) {
+        let items = [];
+        if (type === 'sources') items = [...customSourcesList];
+        else if (type === 'projects') items = ['NIP-BN', 'AVD-WH', 'UNI-MB', 'LGE-HP'];
+        else if (type === 'workStatuses') items = ['ĐÃ NHẬN VIỆC', 'ĐÃ NGHỈ VIỆC'];
+
+        // If previously in "all" state (empty array), initialize with all items then toggle
+        if (this.state[type].length === 0) {
+          this.state[type] = [...items];
+        }
+
+        const idx = this.state[type].indexOf(val);
+        if (idx > -1) {
+          this.state[type].splice(idx, 1);
+        } else {
+          this.state[type].push(val);
+        }
+        this.render(type);
+        renderMonthlyTab();
+      },
+
+      render(type) {
+        const container = document.getElementById(`multiselect-options-${type}`);
+        const labelEl = document.getElementById(`multiselect-label-${type}`);
+        if (!container || !labelEl) return;
+
+        let items = [];
+        let prefix = '';
+        if (type === 'sources') {
+          items = [...customSourcesList];
+          prefix = '🎯 Nguồn';
+        } else if (type === 'projects') {
+          items = ['NIP-BN', 'AVD-WH', 'UNI-MB', 'LGE-HP'];
+          prefix = '🏭 Dự án';
+        } else if (type === 'workStatuses') {
+          items = ['ĐÃ NHẬN VIỆC', 'ĐÃ NGHỈ VIỆC'];
+          prefix = '📋 Trạng thái';
+        }
+
+        const selected = this.state[type];
+
+        if (selected.length === 0 || selected.length === items.length) {
+          labelEl.innerHTML = `${prefix}: <strong>Tất cả (${items.length})</strong>`;
+        } else if (selected.length === 1) {
+          labelEl.innerHTML = `${prefix}: <strong style="color:#60a5fa;">${selected[0]}</strong>`;
+        } else {
+          labelEl.innerHTML = `${prefix}: <strong style="color:#60a5fa;">Đã chọn ${selected.length}/${items.length}</strong>`;
+        }
+
+        container.innerHTML = '';
+        items.forEach(item => {
+          const isChecked = selected.length === 0 || selected.includes(item);
+          const row = document.createElement('label');
+          row.className = 'multiselect-item';
+          row.innerHTML = `
+            <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="MultiSelectManager.toggleItem('${type}', '${item.replace(/'/g, "\\'")}')">
+            <span>${item}</span>
+          `;
+          container.appendChild(row);
+        });
+      },
+
+      init() {
+        this.state.sources = [];
+        this.state.projects = [];
+        this.state.workStatuses = [];
+        this.render('sources');
+        this.render('projects');
+        this.render('workStatuses');
+      }
+    };
+
+    // Close multi-select dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.custom-multiselect')) {
+        document.querySelectorAll('.multiselect-menu').forEach(m => m.classList.remove('open'));
+        document.querySelectorAll('.multiselect-toggle').forEach(t => t.classList.remove('active'));
+      }
+    });
+
+    let currentMonthlyQuickFilter = 'ALL';
     function setMonthlyQuickFilter(type) {
       currentMonthlyQuickFilter = type;
       document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
@@ -2080,19 +2418,20 @@
 
       if (type === 'ALL') {
         if (scEl) scEl.value = 'ALL';
-        if (srcEl) srcEl.value = 'ALL';
+        MultiSelectManager.state.sources = [];
+        MultiSelectManager.render('sources');
       } else if (type === 'SCORED') {
         if (scEl) scEl.value = 'HAS_POINTS';
-        if (srcEl) srcEl.value = 'ALL';
       } else if (type === 'UNSCORED') {
         if (scEl) scEl.value = 'ZERO_POINTS';
-        if (srcEl) srcEl.value = 'ALL';
       } else if (type === 'TU_TUYEN') {
         if (scEl) scEl.value = 'ALL';
-        if (srcEl) srcEl.value = 'Tự tuyển';
+        MultiSelectManager.state.sources = ['Tự tuyển'];
+        MultiSelectManager.render('sources');
       } else if (type === 'CTV') {
         if (scEl) scEl.value = 'ALL';
-        if (srcEl) srcEl.value = 'ALL';
+        MultiSelectManager.state.sources = customSourcesList.filter(s => s !== 'Tự tuyển');
+        MultiSelectManager.render('sources');
       }
       renderMonthlyTab();
     }
@@ -2100,7 +2439,7 @@
     function renderMonthlyTab() {
       const selectedMonth = document.getElementById('monthly-select-month').value;
       const selectedRec = document.getElementById('monthly-select-recruiter').value;
-      const selectedProj = document.getElementById('monthly-select-project').value;
+      const selectedProj = document.getElementById('monthly-select-project')?.value || 'ALL';
 
       const monthNames = {
         '2026-10': 'Tháng 10/2026',
@@ -2115,9 +2454,11 @@
       document.getElementById('monthly-rec-summary-label').innerText = `Đang xem báo cáo KPI: ${displayMonthTitle}`;
 
       const search = (document.getElementById('monthly-filter-search')?.value || '').toLowerCase().trim();
-      const filterSource = document.getElementById('monthly-filter-source')?.value || 'ALL';
-      const filterWorkSt = document.getElementById('monthly-filter-work-status')?.value || 'ALL';
       const filterScore = document.getElementById('monthly-filter-score-status')?.value || 'ALL';
+
+      const selSources = MultiSelectManager.state.sources;
+      const selProjects = MultiSelectManager.state.projects;
+      const selWorkStatuses = MultiSelectManager.state.workStatuses;
 
       // Candidates qualifying for onboarding: ĐÃ NHẬN VIỆC + ĐÃ NGHỈ VIỆC SAU OB
       monthlyCandidatesList = RAW_CANDIDATES.filter(c => {
@@ -2128,14 +2469,16 @@
 
         const effectiveRec = getEffectiveRecruiter(c.recruiter);
         if (selectedRec !== 'ALL' && effectiveRec !== selectedRec && c.recruiter !== selectedRec) return false;
-        if (selectedProj !== 'ALL' && c.project !== selectedProj) return false;
 
-        // Lọc theo Trạng thái nhận việc Col 19
-        if (filterWorkSt !== 'ALL' && c.work_status !== filterWorkSt) return false;
+        // Lọc Multi-Select: Dự Án
+        if (selProjects.length > 0 && !selProjects.includes(c.project)) return false;
 
-        // Lọc theo Nguồn Data Thực Tế
+        // Lọc Multi-Select: Trạng thái Col 19
+        if (selWorkStatuses.length > 0 && !selWorkStatuses.includes(c.work_status)) return false;
+
+        // Lọc Multi-Select: Nguồn Data Thực Tế
         const realSrc = getCandidateRealSource(c.id);
-        if (filterSource !== 'ALL' && realSrc !== filterSource) return false;
+        if (selSources.length > 0 && !selSources.includes(realSrc)) return false;
 
         // Lọc CTV nếu chọn pill CTV
         if (currentMonthlyQuickFilter === 'CTV' && realSrc === 'Tự tuyển') return false;
@@ -2688,6 +3031,7 @@
 
     window.onload = function() {
       loadAndRestoreKPIState();
+      MultiSelectManager.init();
       populateRealSourceFilter();
       applyFilters();
       renderMonthlyTab();
