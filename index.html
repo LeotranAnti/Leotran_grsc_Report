@@ -1053,8 +1053,9 @@
             <thead>
               <tr>
                 <th>STT</th>
-                <th>Mã UV</th>
+                <th>ID (Cột A)</th>
                 <th>Họ & Tên</th>
+                <th style="color:#34d399; font-weight:800;">MÃ NV (CỘT AA)</th>
                 <th>Số Điện Thoại</th>
                 <th>Dự Án</th>
                 <th>Chuyên Viên Tuyển Dụng</th>
@@ -1251,8 +1252,9 @@
                   <input type="checkbox" id="monthly-check-all" class="custom-checkbox" onchange="toggleCheckAllMonthly(this.checked)" checked title="Bật / Tắt tính điểm">
                 </th>
                 <th>STT</th>
-                <th>Mã UV</th>
+                <th>ID (Cột A)</th>
                 <th>Họ & Tên Ứng Viên</th>
+                <th style="color:#34d399; font-weight:800;">MÃ NV (CỘT AA)</th>
                 <th>Dự Án</th>
                 <th>Chuyên Viên</th>
                 <th>Ngày OB</th>
@@ -1735,8 +1737,12 @@
 
         const isTranThiGam = c.name.includes('Trần Thị Gấm');
         const nameDisplay = isTranThiGam ? 
-          `<strong style="color: #34d399;">🌟 ${c.name}</strong> <span class="tag-badge tag-green" style="font-size:10px;">MNV: ${c.mnv || 'T257-00982'}</span>` : 
+          `<strong style="color: #34d399;">🌟 ${c.name}</strong>` : 
           `<strong>${c.name}</strong>`;
+
+        const mnvDisplay = c.mnv ? 
+          `<span class="tag-badge tag-green" style="font-family:var(--font-mono); font-size:11px; font-weight:700;">${c.mnv}</span>` : 
+          `<span style="color:var(--text-sub); font-size:11px;">-</span>`;
 
         const srcClass = currentSrc === 'Tự tuyển' ? 'tu-tuyen-selected' : 'ctv-selected';
 
@@ -1744,6 +1750,7 @@
           <td>${start + idx + 1}</td>
           <td><code>${c.id || '-'}</code></td>
           <td>${nameDisplay}</td>
+          <td>${mnvDisplay}</td>
           <td>${c.phone || '-'}</td>
           <td><strong>${c.project}</strong></td>
           <td>${c.recruiter}</td>
@@ -1823,6 +1830,8 @@
       const content = document.getElementById('modal-detail-content');
       content.innerHTML = `
         <div class="detail-item"><span>Họ và Tên</span><span>${c.name}</span></div>
+        <div class="detail-item"><span>ID Hồ Sơ (Cột A)</span><span><code>${c.id || '-'}</code></span></div>
+        <div class="detail-item"><span>Mã Nhân Viên (Cột AA)</span><span><strong style="color:#34d399;">${c.mnv || 'Chưa cập nhật'}</strong></span></div>
         <div class="detail-item"><span>Số CCCD</span><span>${c.cccd || 'Chưa cập nhật'}</span></div>
         <div class="detail-item"><span>Ngày Sinh / Giới Tính</span><span>${c.dob || '-'} | ${c.gender || '-'}</span></div>
         <div class="detail-item"><span>Số Điện Thoại</span><span>${c.phone || '-'}</span></div>
@@ -1831,7 +1840,6 @@
         <div class="detail-item"><span>Chuyên Viên Tuyển Dụng</span><span><strong>${c.recruiter}</strong></span></div>
         <div class="detail-item"><span>Mã Booking</span><span><code>${c.booking_code || '-'}</code></span></div>
         <div class="detail-item"><span>Ngày Onboarding (OB)</span><span><strong>${c.ob_date || '-'}</strong></span></div>
-        <div class="detail-item"><span>Mã Nhân Viên (MNV)</span><span>${c.mnv || '-'}</span></div>
         <div class="detail-item"><span>Tình Trạng Nhận Việc (Col 19)</span><span><strong>${c.work_status || '-'}</strong></span></div>
         <div class="detail-item"><span>Tình Trạng Tổng Hợp (Col 21)</span><span><strong>${c.overall_status || '-'}</strong></span></div>
         <div class="detail-item"><span>NGUỒN DATA THỰC TẾ</span><span><strong style="color:#c084fc;">${realSrc}</strong></span></div>
@@ -1846,10 +1854,10 @@
     }
 
     function exportOverviewCSV() {
-      let csv = 'STT,Ma UV,Ho va Ten,Gioi Tinh,SDT,Du An,Chuyen Vien Tuyen Dung,Ma Booking,Ngay OB,Tinh Trang Nhan Viec (Col 19),Tinh Trang Tong Hop (Col 21),Nguon Data Thuc Te,Nguon Goc File\n';
+      let csv = 'STT,ID (Cot A),Ho va Ten,Ma Nhan Vien (Cot AA),Gioi Tinh,SDT,Du An,Chuyen Vien Tuyen Dung,Ma Booking,Ngay OB,Tinh Trang Nhan Viec (Col 19),Tinh Trang Tong Hop (Col 21),Nguon Data Thuc Te,Nguon Goc File\n';
       filteredCandidates.forEach((c, idx) => {
         const realSrc = getCandidateRealSource(c.id);
-        csv += `"${idx + 1}","${c.id}","${c.name}","${c.gender}","${c.phone}","${c.project}","${c.recruiter}","${c.booking_code}","${c.ob_date}","${c.work_status || ''}","${c.overall_status || ''}","${realSrc}","${c.source}"\n`;
+        csv += `"${idx + 1}","${c.id}","${c.name}","${c.mnv || ""}","${c.gender}","${c.phone}","${c.project}","${c.recruiter}","${c.booking_code}","${c.ob_date}","${c.work_status || ''}","${c.overall_status || ''}","${realSrc}","${c.source}"\n`;
       });
 
       const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' });
@@ -2048,8 +2056,12 @@
 
         const isTranThiGam = c.name.includes('Trần Thị Gấm');
         const nameDisplay = isTranThiGam ? 
-          `<strong style="color: #34d399;">🌟 ${c.name}</strong> <span class="tag-badge tag-green" style="font-size:10px;">MNV: ${c.mnv || 'T257-00982'}</span>` : 
+          `<strong style="color: #34d399;">🌟 ${c.name}</strong>` : 
           `<strong>${c.name}</strong>`;
+
+        const mnvDisplay = c.mnv ? 
+          `<span class="tag-badge tag-green" style="font-family:var(--font-mono); font-size:11px; font-weight:700;">${c.mnv}</span>` : 
+          `<span style="color:var(--text-sub); font-size:11px;">-</span>`;
 
         const displayRec = c.recruiter === 'TRẦN HÙNG ANH' ? 
           `<span>TRẦN HÙNG ANH <span style="font-size:10px; color:#f59e0b;">(Quy về Tuấn Anh)</span></span>` : 
@@ -2072,6 +2084,7 @@
           <td>${idx + 1}</td>
           <td><code>${c.id}</code></td>
           <td>${nameDisplay}</td>
+          <td>${mnvDisplay}</td>
           <td><strong>${c.project}</strong></td>
           <td>${displayRec}</td>
           <td><span style="font-family:var(--font-mono); font-size:12px;">${c.ob_date || '-'}</span></td>
@@ -2199,9 +2212,7 @@
     }
 
     function resetDefaultMultiPoints() {
-      if (!confirm('⚠️ CẢNH BÁO: Anh có chắc chắn muốn đặt lại toàn bộ điểm KPI về mặc định 1.0 không?
-
-Mọi điểm số và tháng ghi nhận anh đã tự chỉnh sửa sẽ bị hoàn tác!')) {
+      if (!confirm('⚠️ CẢNH BÁO: Anh có chắc chắn muốn đặt lại toàn bộ điểm KPI về mặc định 1.0 không? Mọi điểm số anh đã tự chỉnh sửa sẽ bị hoàn tác!')) {
         return;
       }
       monthlyCandidatesList.forEach(c => {
@@ -2220,8 +2231,7 @@ Mọi điểm số và tháng ghi nhận anh đã tự chỉnh sửa sẽ bị h
     }
 
     function autoSplitAllToNextMonth() {
-      if (!confirm('Anh có muốn tự động gán Kỳ 2 (+1.0đ sang tháng sau) cho các bạn CHƯA CÓ Kỳ 2 không?
-(Hệ thống sẽ giữ nguyên 100% các bạn anh đã tự chấm điểm trước đó, không ghi đè)')) {
+      if (!confirm('Anh có muốn tự động gán Kỳ 2 (+1.0đ sang tháng sau) cho các bạn CHƯA CÓ Kỳ 2 không? (Hệ thống sẽ giữ nguyên 100% các bạn anh đã tự chấm điểm trước đó, không ghi đè)')) {
         return;
       }
       monthlyCandidatesList.forEach(c => {
@@ -2332,7 +2342,7 @@ Mọi điểm số và tháng ghi nhận anh đã tự chỉnh sửa sẽ bị h
       const selectedMonth = document.getElementById('monthly-select-month').value;
       const unitPrice = parseFloat(document.getElementById('monthly-kpi-unit-price').value) || 0;
 
-      let csv = 'STT,Ma UV,Ho va Ten,Du An,Chuyen Vien Tuyen Dung,Ngay OB Goc,Tinh Trang Nhan Viec (Col 19),Nguon Data Thuc Te,Thang Ghi Nhan Ky 1,Diem Ky 1,Thang Ghi Nhan Ky 2,Diem Ky 2,Diem Tinh Vao Thang Chon,Tien Thuong (VND),Ghi Chu\n';
+      let csv = 'STT,ID (Cot A),Ho va Ten,Ma Nhan Vien (Cot AA),Du An,Chuyen Vien Tuyen Dung,Ngay OB Goc,Tinh Trang Nhan Viec (Col 19),Nguon Data Thuc Te,Thang Ghi Nhan Ky 1,Diem Ky 1,Thang Ghi Nhan Ky 2,Diem Ky 2,Diem Tinh Vao Thang Chon,Tien Thuong (VND),Ghi Chu\n';
       
       let idx = 1;
       monthlyCandidatesList.forEach(c => {
@@ -2351,7 +2361,7 @@ Mọi điểm số và tháng ghi nhận anh đã tự chỉnh sửa sẽ bị h
         }
         const bonus = ptsThisMonth * unitPrice;
 
-        csv += `"${idx++}","${c.id}","${c.name}","${c.project}","${getEffectiveRecruiter(c.recruiter)}","${c.ob_date}","${c.work_status || ''}","${realSrc}","${state.month1}","${state.points1}","${hasActivePeriod2 ? state.month2 : 'KHONG'}","${hasActivePeriod2 ? state.points2 : 0}","${ptsThisMonth}","${bonus}","${state.note || ''}"\n`;
+        csv += `"${idx++}","${c.id}","${c.name}","${c.mnv || ""}","${c.project}","${getEffectiveRecruiter(c.recruiter)}","${c.ob_date}","${c.work_status || ''}","${realSrc}","${state.month1}","${state.points1}","${hasActivePeriod2 ? state.month2 : 'KHONG'}","${hasActivePeriod2 ? state.points2 : 0}","${ptsThisMonth}","${bonus}","${state.note || ''}"\n`;
       });
 
       const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' });
