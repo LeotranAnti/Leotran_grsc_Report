@@ -2199,6 +2199,11 @@
     }
 
     function resetDefaultMultiPoints() {
+      if (!confirm('⚠️ CẢNH BÁO: Anh có chắc chắn muốn đặt lại toàn bộ điểm KPI về mặc định 1.0 không?
+
+Mọi điểm số và tháng ghi nhận anh đã tự chỉnh sửa sẽ bị hoàn tác!')) {
+        return;
+      }
       monthlyCandidatesList.forEach(c => {
         const defM = getMonthLabel(c.ob_date);
         customKPIState[c.id] = {
@@ -2215,14 +2220,21 @@
     }
 
     function autoSplitAllToNextMonth() {
+      if (!confirm('Anh có muốn tự động gán Kỳ 2 (+1.0đ sang tháng sau) cho các bạn CHƯA CÓ Kỳ 2 không?
+(Hệ thống sẽ giữ nguyên 100% các bạn anh đã tự chấm điểm trước đó, không ghi đè)')) {
+        return;
+      }
       monthlyCandidatesList.forEach(c => {
         if (!customKPIState[c.id]) customKPIState[c.id] = {};
         const state = customKPIState[c.id];
         state.selected = true;
         if (!state.month1) state.month1 = getMonthLabel(c.ob_date);
         if (state.points1 === undefined) state.points1 = 1.0;
-        state.month2 = getNextMonth(state.month1);
-        state.points2 = 1.0;
+        // Chỉ gán nếu người dùng chưa điền điểm kỳ 2
+        if (!state.points2 || state.points2 === 0 || state.month2 === 'NONE') {
+          state.month2 = getNextMonth(state.month1);
+          state.points2 = 1.0;
+        }
       });
       saveKPIState();
       renderMonthlyTab();
