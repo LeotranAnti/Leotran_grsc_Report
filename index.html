@@ -1147,7 +1147,7 @@
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button class="btn btn-blue" onclick="selectAllMonthly(true)">✅ Chọn Tất Cả UV</button>
             <button class="btn btn-outline" onclick="selectAllMonthly(false)">❌ Bỏ Chọn Tất Cả</button>
-            <button class="btn btn-outline" onclick="resetDefaultMultiPoints()">🔄 Đặt Lại Điểm Mặc Định (Kỳ 1: 1.0đ)</button>
+            <button class="btn btn-outline" onclick="resetDefaultMultiPoints()">🔄 Đặt Lại Điểm Mặc Định (Về 0đ)</button>
             <button class="btn btn-purple" onclick="autoSplitAllToNextMonth()">⚡ Tự Động Gán & Điền Điểm Kỳ 2 Sang Tháng Sau (+1.0đ)</button>
           </div>
           <div style="display: flex; gap: 8px;">
@@ -1330,7 +1330,7 @@
     } catch(e) { console.error('Error loading assigned sources', e); }
 
     // Persistent Multi-Month KPI Storage
-    const STORAGE_KEY = 'ECL_KPI_MULTI_MONTH_POINTS_V5';
+    const STORAGE_KEY = 'ECL_KPI_MULTI_MONTH_POINTS_V6';
     let customKPIState = {};
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -1960,7 +1960,7 @@
           customKPIState[c.id] = {
             selected: true,
             month1: defaultMonth1,
-            points1: 1.0,
+            points1: 0.0,
             month2: 'NONE',
             points2: 0.0,
             note: ''
@@ -1968,7 +1968,7 @@
         }
         const state = customKPIState[c.id];
         if (!state.month1) state.month1 = defaultMonth1;
-        if (state.points1 === undefined) state.points1 = 1.0;
+        if (state.points1 === undefined) state.points1 = 0.0;
         if (state.month2 === undefined) state.month2 = 'NONE';
         if (state.points2 === undefined) state.points2 = 0.0;
 
@@ -2003,7 +2003,7 @@
           customKPIState[c.id] = {
             selected: true,
             month1: defaultMonth1,
-            points1: 1.0,
+            points1: 0.0,
             month2: 'NONE',
             points2: 0.0,
             note: ''
@@ -2011,7 +2011,7 @@
         }
         const state = customKPIState[c.id];
         if (!state.month1) state.month1 = defaultMonth1;
-        if (state.points1 === undefined) state.points1 = 1.0;
+        if (state.points1 === undefined) state.points1 = 0.0;
         if (state.month2 === undefined) state.month2 = 'NONE';
         if (state.points2 === undefined) state.points2 = 0.0;
 
@@ -2044,7 +2044,7 @@
           m2Options += `<option value="${m}" ${state.month2 === m ? 'selected' : ''}>${m}</option>`;
         });
 
-        let currentImpactBadge = '<span style="color:var(--text-sub); font-size:11px;">0đ (Không tính vào tháng này)</span>';
+        let currentImpactBadge = '<span style="color:var(--text-sub); font-size:11px;">0đ (Chưa tính điểm)</span>';
         if (pointsForCurrentMonth > 0) {
           currentImpactBadge = `<span class="badge-kpi-star" style="font-size:12px;">⭐ +${pointsForCurrentMonth.toFixed(1).replace('.0','')} ĐIỂM</span>`;
         }
@@ -2106,12 +2106,15 @@
           </td>
           <td style="text-align: center; background: rgba(16, 185, 129, 0.05);">
             <input type="number" class="point-input green-point" value="${state.points1}" step="0.5" min="0" max="10"
+                   placeholder="0.0"
+                   oninput="handlePoint1Change('${c.id}', this.value)"
                    onchange="handlePoint1Change('${c.id}', this.value)" ${state.selected ? '' : 'disabled'}>
           </td>
 
           <!-- KỲ 2 -->
           <td style="background: rgba(139, 92, 246, 0.05); border-left: 2px solid rgba(139, 92, 246, 0.4);">
             <select class="table-select" style="border-color:#8b5cf6; color:#c084fc;" 
+                    id="select-month2-${c.id}"
                     onchange="handleMonth2Change('${c.id}', this.value)" 
                     ${state.selected ? '' : 'disabled'}>
               ${m2Options}
@@ -2122,15 +2125,16 @@
                    id="input-point2-${c.id}"
                    value="${state.points2}" step="0.5" min="0" max="10" 
                    placeholder="0.0"
+                   oninput="handlePoint2Change('${c.id}', this.value)"
                    onchange="handlePoint2Change('${c.id}', this.value)" 
                    ${state.selected ? '' : 'disabled'}>
           </td>
 
           <!-- Impact on current selected month & Total 2 Periods -->
-          <td style="text-align: center; background: rgba(59, 130, 246, 0.05); border-left: 2px solid rgba(59, 130, 246, 0.4);">
+          <td id="impact-cell-${c.id}" style="text-align: center; background: rgba(59, 130, 246, 0.05); border-left: 2px solid rgba(59, 130, 246, 0.4);">
             ${currentImpactBadge}
           </td>
-          <td style="text-align: center; font-weight:800; font-family:var(--font-mono); color:#f8fafc;">
+          <td id="total2-cell-${c.id}" style="text-align: center; font-weight:800; font-family:var(--font-mono); color:#f8fafc;">
             ${total2Periods.toFixed(1).replace('.0','')} đ
           </td>
 
@@ -2172,9 +2176,6 @@
     function handleMonth2Change(candidateId, monthVal) {
       if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
       customKPIState[candidateId].month2 = monthVal;
-      if (monthVal !== 'NONE' && (!customKPIState[candidateId].points2 || customKPIState[candidateId].points2 === 0)) {
-        customKPIState[candidateId].points2 = 1.0;
-      }
       saveKPIState();
       renderMonthlyTab();
     }
@@ -2212,7 +2213,7 @@
     }
 
     function resetDefaultMultiPoints() {
-      if (!confirm('⚠️ CẢNH BÁO: Anh có chắc chắn muốn đặt lại toàn bộ điểm KPI về mặc định 1.0 không? Mọi điểm số anh đã tự chỉnh sửa sẽ bị hoàn tác!')) {
+      if (!confirm('⚠️ CẢNH BÁO: Anh có chắc chắn muốn đặt lại toàn bộ điểm KPI về mặc định 0đ không? Mọi điểm số anh đã tự chỉnh sửa sẽ bị hoàn tác!')) {
         return;
       }
       monthlyCandidatesList.forEach(c => {
@@ -2220,7 +2221,7 @@
         customKPIState[c.id] = {
           selected: true,
           month1: defM,
-          points1: 1.0,
+          points1: 0.0,
           month2: 'NONE',
           points2: 0.0,
           note: ''
@@ -2239,7 +2240,7 @@
         const state = customKPIState[c.id];
         state.selected = true;
         if (!state.month1) state.month1 = getMonthLabel(c.ob_date);
-        if (state.points1 === undefined) state.points1 = 1.0;
+        if (state.points1 === undefined) state.points1 = 0.0;
         // Chỉ gán nếu người dùng chưa điền điểm kỳ 2
         if (!state.points2 || state.points2 === 0 || state.month2 === 'NONE') {
           state.month2 = getNextMonth(state.month1);
@@ -2265,7 +2266,7 @@
       const recStats = {};
 
       monthlyCandidatesList.forEach(c => {
-        const state = customKPIState[c.id] || { selected: true, month1: getMonthLabel(c.ob_date), points1: 1.0, month2: 'NONE', points2: 0.0 };
+        const state = customKPIState[c.id] || { selected: true, month1: getMonthLabel(c.ob_date), points1: 0.0, month2: 'NONE', points2: 0.0 };
         const rec = getEffectiveRecruiter(c.recruiter);
 
         if (!recStats[rec]) {
@@ -2346,7 +2347,7 @@
       
       let idx = 1;
       monthlyCandidatesList.forEach(c => {
-        const state = customKPIState[c.id] || { selected: true, month1: getMonthLabel(c.ob_date), points1: 1.0, month2: 'NONE', points2: 0.0, note: '' };
+        const state = customKPIState[c.id] || { selected: true, month1: getMonthLabel(c.ob_date), points1: 0.0, month2: 'NONE', points2: 0.0, note: '' };
         const hasActivePeriod2 = (state.month2 !== 'NONE' && state.month2 !== '') && (parseFloat(state.points2) > 0);
         const realSrc = getCandidateRealSource(c.id);
 
