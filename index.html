@@ -1,0 +1,2363 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leotran_grsc_Report - ECL Recruitment KPI Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #111827;
+      --bg-card: rgba(17, 24, 39, 0.82);
+      --bg-card-hover: rgba(30, 41, 59, 0.92);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(59, 130, 246, 0.35);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #64748b;
+      --accent-green: #10b981;
+      --accent-green-glow: rgba(16, 185, 129, 0.25);
+      --accent-blue: #3b82f6;
+      --accent-blue-glow: rgba(59, 130, 246, 0.25);
+      --accent-purple: #8b5cf6;
+      --accent-purple-glow: rgba(139, 92, 246, 0.25);
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f1f5f9;
+      --bg-secondary: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.92);
+      --bg-card-hover: #f8fafc;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-accent: rgba(59, 130, 246, 0.2);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-sub: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 1780px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    header {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 18px 26px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 50%, #8b5cf6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+    }
+
+    .header-title h1 {
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #ffffff 30%, #a7f3d0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2px;
+    }
+
+    [data-theme="light"] .header-title h1 {
+      background: linear-gradient(90deg, #0f172a 30%, #059669 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-title p {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 8px 15px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      border: none;
+      font-family: var(--font-main);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45); }
+
+    .btn-blue {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+    }
+    .btn-blue:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45); }
+
+    .btn-purple {
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+    }
+    .btn-purple:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.45); }
+
+    .btn-amber {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+    }
+
+    .btn-outline {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+    .btn-outline:hover { background: var(--bg-card-hover); border-color: var(--border-accent); }
+
+    /* Main Navigation Tabs */
+    .tab-nav {
+      display: flex;
+      gap: 8px;
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 6px;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 700;
+      font-family: var(--font-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+    }
+    .tab-btn:hover { color: var(--text-main); background: var(--bg-card-hover); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+    }
+    .tab-btn.active.blue-tab {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Filter Cards */
+    .filter-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 18px 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 9px 13px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-family: var(--font-main);
+      outline: none;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+    [data-theme="light"] .form-control { background: #f8fafc; }
+    .form-control:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Alert Banner */
+    .alert-banner {
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 14px;
+      padding: 12px 18px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-accent);
+      box-shadow: 0 12px 30px -10px rgba(0,0,0,0.3);
+    }
+
+    .kpi-card.highlight-green {
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(17, 24, 39, 0.8) 100%);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+    }
+    .kpi-card.highlight-blue {
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(17, 24, 39, 0.8) 100%);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+    }
+    .kpi-card.highlight-purple {
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(17, 24, 39, 0.8) 100%);
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+    }
+
+    .kpi-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .kpi-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .kpi-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+    .icon-green { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    .icon-blue { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+    .icon-purple { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
+    .icon-amber { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+    .icon-red { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+    .kpi-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+      margin-bottom: 6px;
+      font-family: var(--font-mono);
+    }
+
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+    .tag-green { background: rgba(16, 185, 129, 0.18); color: #34d399; }
+    .tag-blue { background: rgba(59, 130, 246, 0.18); color: #60a5fa; }
+    .tag-purple { background: rgba(139, 92, 246, 0.18); color: #c084fc; }
+    .tag-red { background: rgba(239, 68, 68, 0.18); color: #f87171; }
+    .tag-amber { background: rgba(245, 158, 11, 0.18); color: #fbbf24; }
+
+    /* Tables */
+    .table-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    /* CỐ ĐỊNH DÒNG TIÊU ĐỀ & CỐ ĐỊNH CÁC CỘT TỚI HỌ TÊN (STICKY HEADER & FROZEN COLUMNS) */
+    .table-responsive {
+      overflow: auto;
+      max-height: 68vh;
+      margin-top: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      position: relative;
+      background: #0b1120;
+    }
+    [data-theme="light"] .table-responsive {
+      background: #ffffff;
+    }
+
+    .table-responsive::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .table-responsive::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 4px;
+    }
+    .table-responsive::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.45);
+      border-radius: 4px;
+    }
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.7);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #0f172a;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 14px;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+    [data-theme="light"] thead th {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    tbody td {
+      padding: 11px 13px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      white-space: nowrap;
+      background: #0b1120;
+    }
+    [data-theme="light"] tbody td {
+      background: #ffffff;
+    }
+
+    tbody tr:hover td {
+      background: #1e293b !important;
+    }
+    [data-theme="light"] tbody tr:hover td {
+      background: #f1f5f9 !important;
+    }
+
+    tbody tr.row-selected td {
+      background: rgba(16, 185, 129, 0.12) !important;
+    }
+    [data-theme="light"] tbody tr.row-selected td {
+      background: #ecfdf5 !important;
+    }
+
+    tbody tr.row-active-month td {
+      background: rgba(59, 130, 246, 0.12) !important;
+    }
+    [data-theme="light"] tbody tr.row-active-month td {
+      background: #eff6ff !important;
+    }
+
+    /* === TAB 1: CỐ ĐỊNH CỘT CHO BẢNG CANDIDATE TABLE (Col 1: STT, Col 2: Mã UV, Col 3: Họ & Tên) === */
+    #candidate-table thead th:nth-child(1),
+    #candidate-table tbody td:nth-child(1) {
+      position: sticky;
+      left: 0px;
+      width: 55px;
+      min-width: 55px;
+      max-width: 55px;
+      text-align: center;
+    }
+    #candidate-table thead th:nth-child(1) { z-index: 35; background: #0f172a; }
+    #candidate-table tbody td:nth-child(1) { z-index: 15; background: #0b1120; }
+
+    #candidate-table thead th:nth-child(2),
+    #candidate-table tbody td:nth-child(2) {
+      position: sticky;
+      left: 55px;
+      width: 110px;
+      min-width: 110px;
+      max-width: 110px;
+    }
+    #candidate-table thead th:nth-child(2) { z-index: 35; background: #0f172a; }
+    #candidate-table tbody td:nth-child(2) { z-index: 15; background: #0b1120; }
+
+    #candidate-table thead th:nth-child(3),
+    #candidate-table tbody td:nth-child(3) {
+      position: sticky;
+      left: 165px;
+      width: 195px;
+      min-width: 195px;
+      max-width: 220px;
+      border-right: 2px solid #3b82f6 !important;
+      box-shadow: 4px 0 8px rgba(0, 0, 0, 0.35);
+    }
+    #candidate-table thead th:nth-child(3) { z-index: 35; background: #0f172a; }
+    #candidate-table tbody td:nth-child(3) { z-index: 15; background: #0b1120; }
+
+    [data-theme="light"] #candidate-table thead th:nth-child(1),
+    [data-theme="light"] #candidate-table thead th:nth-child(2),
+    [data-theme="light"] #candidate-table thead th:nth-child(3) {
+      background: #e2e8f0;
+    }
+    [data-theme="light"] #candidate-table tbody td:nth-child(1),
+    [data-theme="light"] #candidate-table tbody td:nth-child(2),
+    [data-theme="light"] #candidate-table tbody td:nth-child(3) {
+      background: #ffffff;
+    }
+
+    /* === TAB 2: CỐ ĐỊNH CỘT CHO BẢNG MONTHLY TABLE (Col 1: Checkbox, Col 2: STT, Col 3: Mã UV, Col 4: Họ & Tên) === */
+    #monthly-table thead th:nth-child(1),
+    #monthly-table tbody td:nth-child(1) {
+      position: sticky;
+      left: 0px;
+      width: 46px;
+      min-width: 46px;
+      max-width: 46px;
+      text-align: center;
+    }
+    #monthly-table thead th:nth-child(1) { z-index: 35; background: #0f172a; }
+    #monthly-table tbody td:nth-child(1) { z-index: 15; background: #0b1120; }
+
+    #monthly-table thead th:nth-child(2),
+    #monthly-table tbody td:nth-child(2) {
+      position: sticky;
+      left: 46px;
+      width: 50px;
+      min-width: 50px;
+      max-width: 50px;
+      text-align: center;
+    }
+    #monthly-table thead th:nth-child(2) { z-index: 35; background: #0f172a; }
+    #monthly-table tbody td:nth-child(2) { z-index: 15; background: #0b1120; }
+
+    #monthly-table thead th:nth-child(3),
+    #monthly-table tbody td:nth-child(3) {
+      position: sticky;
+      left: 96px;
+      width: 110px;
+      min-width: 110px;
+      max-width: 110px;
+    }
+    #monthly-table thead th:nth-child(3) { z-index: 35; background: #0f172a; }
+    #monthly-table tbody td:nth-child(3) { z-index: 15; background: #0b1120; }
+
+    #monthly-table thead th:nth-child(4),
+    #monthly-table tbody td:nth-child(4) {
+      position: sticky;
+      left: 206px;
+      width: 195px;
+      min-width: 195px;
+      max-width: 220px;
+      border-right: 2px solid #10b981 !important;
+      box-shadow: 4px 0 8px rgba(0, 0, 0, 0.35);
+    }
+    #monthly-table thead th:nth-child(4) { z-index: 35; background: #0f172a; }
+    #monthly-table tbody td:nth-child(4) { z-index: 15; background: #0b1120; }
+
+    [data-theme="light"] #monthly-table thead th:nth-child(1),
+    [data-theme="light"] #monthly-table thead th:nth-child(2),
+    [data-theme="light"] #monthly-table thead th:nth-child(3),
+    [data-theme="light"] #monthly-table thead th:nth-child(4) {
+      background: #e2e8f0;
+    }
+    [data-theme="light"] #monthly-table tbody td:nth-child(1),
+    [data-theme="light"] #monthly-table tbody td:nth-child(2),
+    [data-theme="light"] #monthly-table tbody td:nth-child(3),
+    [data-theme="light"] #monthly-table tbody td:nth-child(4) {
+      background: #ffffff;
+    }
+
+    /* Hiệu ứng hover & active cho các cột cố định */
+    #candidate-table tbody tr:hover td:nth-child(1),
+    #candidate-table tbody tr:hover td:nth-child(2),
+    #candidate-table tbody tr:hover td:nth-child(3),
+    #monthly-table tbody tr:hover td:nth-child(1),
+    #monthly-table tbody tr:hover td:nth-child(2),
+    #monthly-table tbody tr:hover td:nth-child(3),
+    #monthly-table tbody tr:hover td:nth-child(4) {
+      background: #1e293b !important;
+    }
+    [data-theme="light"] #candidate-table tbody tr:hover td:nth-child(1),
+    [data-theme="light"] #candidate-table tbody tr:hover td:nth-child(2),
+    [data-theme="light"] #candidate-table tbody tr:hover td:nth-child(3),
+    [data-theme="light"] #monthly-table tbody tr:hover td:nth-child(1),
+    [data-theme="light"] #monthly-table tbody tr:hover td:nth-child(2),
+    [data-theme="light"] #monthly-table tbody tr:hover td:nth-child(3),
+    [data-theme="light"] #monthly-table tbody tr:hover td:nth-child(4) {
+      background: #f1f5f9 !important;
+    }
+
+    #monthly-table tbody tr.row-selected td:nth-child(1),
+    #monthly-table tbody tr.row-selected td:nth-child(2),
+    #monthly-table tbody tr.row-selected td:nth-child(3),
+    #monthly-table tbody tr.row-selected td:nth-child(4) {
+      background: #0f2b24 !important;
+    }
+    #monthly-table tbody tr.row-active-month td:nth-child(1),
+    #monthly-table tbody tr.row-active-month td:nth-child(2),
+    #monthly-table tbody tr.row-active-month td:nth-child(3),
+    #monthly-table tbody tr.row-active-month td:nth-child(4) {
+      background: #0f2742 !important;
+    }
+
+    /* Select elements in table */
+    .table-select {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      outline: none;
+      cursor: pointer;
+    }
+    .table-select:focus { border-color: var(--accent-blue); }
+
+    .source-select {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #60a5fa;
+      font-weight: 700;
+      font-family: var(--font-main);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      outline: none;
+    }
+    .source-select.ctv-selected {
+      color: #c084fc;
+      border-color: rgba(139, 92, 246, 0.5);
+      background: rgba(139, 92, 246, 0.12);
+    }
+    .source-select.tu-tuyen-selected {
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.5);
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .point-input {
+      width: 76px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.85);
+      color: #34d399;
+      font-weight: 800;
+      font-size: 14px;
+      font-family: var(--font-mono);
+      text-align: center;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .point-input.purple-point {
+      color: #c084fc;
+      border-color: rgba(139, 92, 246, 0.5);
+      background: rgba(139, 92, 246, 0.1);
+    }
+    .point-input.green-point {
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.5);
+      background: rgba(16, 185, 129, 0.1);
+    }
+    .point-input:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25); }
+    .point-input:disabled { opacity: 0.3; color: var(--text-muted); cursor: not-allowed; }
+
+    .custom-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: #10b981; }
+
+    .note-input {
+      width: 130px;
+      padding: 5px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.5);
+      color: var(--text-main);
+      font-size: 12px;
+      font-family: var(--font-main);
+      outline: none;
+    }
+    .note-input:focus { border-color: var(--accent-blue); }
+
+    /* Exact Status Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+    .badge-exact-nhan-viec { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-exact-nghi-viec { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge-exact-huy-nhan-viec { background: rgba(239, 68, 68, 0.18); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .badge-exact-doi-lich { background: rgba(139, 92, 246, 0.18); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.4); }
+
+    .badge-kpi-star {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Pagination */
+    .table-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pagination {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .page-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .page-btn.active { background: var(--accent-blue); border-color: var(--accent-blue); color: #fff; }
+    .page-btn:hover:not(.active):not(:disabled) { background: var(--bg-card-hover); border-color: var(--border-accent); }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px;
+      max-width: 650px; width: 100%; padding: 26px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+      padding-bottom: 12px; border-bottom: 1px solid var(--border-color);
+    }
+    .modal-close { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 13px; }
+    .detail-item { display: flex; flex-direction: column; gap: 4px; }
+    .detail-item span:first-child { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+    .detail-item span:last-child { font-weight: 600; color: var(--text-main); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="header-brand">
+        <div class="brand-logo">⚡</div>
+        <div class="header-title">
+          <h1>Leotran_grsc_Report</h1>
+          <p>
+            <span>Hệ Thống Theo Dõi UV Nhận Việc, Nguồn Data Thực Tế & Tính KPI Đa Kỳ</span>
+            <span class="badge-live"><span class="pulse-dot"></span> LIVE DATA FINAL</span>
+            <span style="font-family: var(--font-mono); font-size: 11px;">Mã Sheet: 1o9pUUKB3NXUmbZv6cIuV50a6Mszo8</span>
+          </p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-blue" onclick="triggerRealtimeSync()" id="btn-sync-live">🔄 Đồng Bộ Google Sheets</button>
+        <button class="btn btn-amber" onclick="promptAddNewCTV()">➕ Thêm CTV Mới</button>
+        <button class="btn btn-outline" id="btn-auto-sync" onclick="toggleAutoSync()">⚡ Tự Động Live (Tắt)</button>
+        <button class="btn btn-outline" id="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
+        <button class="btn btn-primary" onclick="window.print()">🖨️ In Báo Cáo / PDF</button>
+      </div>
+    </header>
+
+    <!-- Real-time Sync Alert -->
+    <div class="alert-banner" id="sync-banner">
+      <div>
+        <strong>💡 Về việc Cập Nhật Thời Gian Thực:</strong> 
+        Dashboard đã được tích hợp sẵn API gọi trực tiếp dữ liệu mới nhất từ Google Sheet. 
+        Khi anh chuyển quyền chia sẻ của file Google Sheet sang <em>"Bất kỳ ai có đường liên kết đều có thể xem"</em> hoặc cấp quyền cho email <code>antigravity@helical-history-499813-s0.iam.gserviceaccount.com</code>, Dashboard sẽ tự động cập nhật thời gian thực từng giây mỗi khi có ai chỉnh sửa trên file!
+      </div>
+      <div style="display:flex; gap: 8px; align-items:center;">
+        <span class="badge-live" style="background:rgba(59,130,246,0.15); color:#60a5fa; border-color:rgba(59,130,246,0.3);">
+          ⚡ Trạng thái: <span id="sync-status-text">Đã tải bản mới nhất</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Main Navigation Tabs -->
+    <div class="tab-nav">
+      <button class="tab-btn active" id="btn-tab-overview" onclick="switchTab('tab-overview')">
+        📊 TAB 1: TỔNG QUAN KPI & DANH SÁCH CHI TIẾT (NGUỒN DATA THỰC TẾ)
+      </button>
+      <button class="tab-btn blue-tab" id="btn-tab-monthly" onclick="switchTab('tab-monthly')">
+        ⚙️ TAB 2: TÍNH KPI THEO THÁNG & CHỌN THÁNG GHI NHẬN (CÓ Ô ĐIỀN ĐIỂM CẢ 2 KỲ)
+      </button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 1: TỔNG QUAN & DANH SÁCH CỤ THỂ        -->
+    <!-- ========================================== -->
+    <div id="tab-overview" class="tab-content active">
+      <!-- Bộ lọc Tab 1 -->
+      <div class="filter-card">
+        <div class="filter-grid">
+          <div class="form-group">
+            <label>Chuyên viên tuyển dụng</label>
+            <select id="filter-recruiter" class="form-control" onchange="applyFilters()">
+              <option value="ALL">Tất cả nhân sự (133 UV)</option>
+              <option value="TRẦN TUẤN ANH">TRẦN TUẤN ANH (130 UV)</option>
+              <option value="TRẦN HÙNG ANH">TRẦN HÙNG ANH (3 UV)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Dự án / Nhà máy</label>
+            <select id="filter-project" class="form-control" onchange="applyFilters()">
+              <option value="ALL">Tất cả dự án (4 nhà máy)</option>
+              <option value="NIP-BN">NIP-BN (56 UV - 29 Nhận việc)</option>
+              <option value="AVD-WH">AVD-WH (55 UV - 15 Nhận việc + Trần Thị Gấm)</option>
+              <option value="UNI-MB">UNI-MB (21 UV - 10 Nhận việc)</option>
+              <option value="LGE-HP">LGE-HP (1 UV)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Trạng thái nhận việc (Col 19)</label>
+            <select id="filter-work-status" class="form-control" onchange="applyFilters()">
+              <option value="ALL">Tất cả trạng thái nhận việc</option>
+              <option value="ĐÃ NHẬN VIỆC">ĐÃ NHẬN VIỆC (54 UV)</option>
+              <option value="ĐÃ NGHỈ VIỆC">ĐÃ NGHỈ VIỆC (9 UV - Có Trần Thị Gấm)</option>
+              <option value="HỦY NHẬN VIỆC">HỦY NHẬN VIỆC (29 UV)</option>
+              <option value="DỜI LỊCH NHẬN VIỆC">DỜI LỊCH NHẬN VIỆC (1 UV)</option>
+              <option value="PENDING">CHƯA CÓ TRẠNG THÁI / RỖNG (40 UV)</option>
+            </select>
+          </div>
+
+          <!-- LỌC NGUỒN DATA THỰC TẾ (MỚI) -->
+          <div class="form-group">
+            <label style="color: #c084fc; font-weight:800;">🎯 NGUỒN DATA THỰC TẾ</label>
+            <select id="filter-real-source" class="form-control" style="border-color: #8b5cf6;" onchange="applyFilters()">
+              <option value="ALL">Tất cả nguồn data thực tế</option>
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <div class="form-group" style="border: 1px solid rgba(59, 130, 246, 0.4); padding: 8px 12px; border-radius: 10px; background: rgba(59, 130, 246, 0.05);">
+            <label style="color: #60a5fa; font-weight: 800; font-size: 12px;">📅 KỲ BÁO CÁO (THÁNG TÍNH KPI)</label>
+            <select id="filter-month" class="form-control" style="font-weight: 800; border-color: #3b82f6;" onchange="applyFilters()">
+              <option value="2026-11" selected>Tháng 11/2026 (Kỳ Hiện Tại - 15 UV Nhận Việc)</option>
+              <option value="2026-10">Tháng 10/2026 (Kỳ T10-2026 - 50 UV Nhận Việc)</option>
+              <option value="2026-09">Tháng 09/2026 (Kỳ T9-2026 - 10 UV Onboard - Trần Thị Gấm)</option>
+              <option value="2026-12">Tháng 12/2026 (Kỳ T12-2026)</option>
+              <option value="ALL">Toàn Bộ Các Kỳ (Lũy Kế T9 - T11/2026 - 75 UV Nhận Việc)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Tìm kiếm thông minh</label>
+            <input type="text" id="filter-search" class="form-control" placeholder="Tên (Trần Thị Gấm...), SĐT, CCCD..." oninput="applyFilters()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Executive KPI Cards (Tính theo kỳ) -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+        <h3 id="tab1-kpi-period-title" style="color: #38bdf8; font-size: 16px; font-weight: 800;">📊 BÁO CÁO TỔNG HỢP SỐ LIỆU: KỲ THÁNG 10/2026 (T10-2026)</h3>
+        <span class="tag-badge tag-blue" id="tab1-kpi-period-badge">Chỉ tính số liệu ứng viên trong kỳ được chọn</span>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card highlight-green">
+          <div class="kpi-card-header">
+            <span class="kpi-title">ĐIỂM KPI OB1 (ĐANG LÀM VIỆC)</span>
+            <div class="kpi-icon icon-green">🏆</div>
+          </div>
+          <div class="kpi-value" id="kpi-net-ob">54</div>
+          <div class="kpi-sub">
+            <span class="tag-badge tag-green">ĐÃ NHẬN VIỆC</span>
+            <span>Trạng thái nguyên bản trên file</span>
+          </div>
+        </div>
+
+        <div class="kpi-card highlight-blue">
+          <div class="kpi-card-header">
+            <span class="kpi-title">LŨY KẾ ĐẠT OB 1 NGÀY (GROSS)</span>
+            <div class="kpi-icon icon-blue">📈</div>
+          </div>
+          <div class="kpi-value" id="kpi-gross-ob">63</div>
+          <div class="kpi-sub">
+            <span class="tag-badge tag-blue">TÍNH OB1 NGÀY</span>
+            <span>54 ĐÃ NHẬN VIỆC + 9 ĐÃ NGHỈ VIỆC</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <span class="kpi-title">ỨNG VIÊN PASS PHỎNG VẤN</span>
+            <div class="kpi-icon icon-purple">🎯</div>
+          </div>
+          <div class="kpi-value" id="kpi-pass-pv">93</div>
+          <div class="kpi-sub">
+            <span class="tag-badge tag-blue" id="kpi-rate-pass">94.9%</span>
+            <span>Tỷ lệ đỗ phỏng vấn</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <span class="kpi-title">TỶ LỆ CHỐT NV / PASS PV</span>
+            <div class="kpi-icon icon-green">⚡</div>
+          </div>
+          <div class="kpi-value" id="kpi-rate-nv-pass">58.1%</div>
+          <div class="kpi-sub">
+            <span class="tag-badge tag-green">HIỆU QUẢ CAO</span>
+            <span>54 người nhận việc / 93 đỗ PV</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bảng Thống Kê Nguồn Data Thực Tế (Mới) -->
+      <div class="table-card" style="border: 1px solid rgba(139, 92, 246, 0.35);">
+        <div class="chart-header">
+          <h3 style="color: #c084fc;" id="tab1-source-stats-title">🌐 BẢNG THỐNG KÊ HIỆU QUẢ NGUỒN DATA THỰC TẾ (KỲ THÁNG 10/2026)</h3>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <span class="tag-badge tag-purple" id="real-source-period-badge">Kỳ: Tháng 10/2026</span>
+            <button class="btn btn-amber" style="padding: 5px 12px; font-size: 12px;" onclick="promptAddNewCTV()">➕ Thêm CTV Mới</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Nguồn Data Thực Tế</th>
+                <th>Tổng Số Ứng Viên Tiếp Nhận</th>
+                <th>Số UV Pass Phỏng Vấn</th>
+                <th>SỐ UV ĐÃ NHẬN VIỆC (KPI)</th>
+                <th>SỐ UV ĐÃ NGHỈ VIỆC</th>
+                <th>HỦY NHẬN VIỆC</th>
+                <th>TỶ LỆ NHẬN VIỆC / TỔNG HỒ SƠ</th>
+                <th>ĐÁNH GIÁ CHẤT LƯỢNG NGUỒN</th>
+              </tr>
+            </thead>
+            <tbody id="real-source-stats-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BẢNG DANH SÁCH CỤ THỂ TOÀN BỘ ỨNG VIÊN (TAB TỔNG QUAN) -->
+      <div class="table-card" style="border: 1px solid rgba(59, 130, 246, 0.35);">
+        <div class="chart-header" style="flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 style="color: #60a5fa;">📋 DANH SÁCH CỤ THỂ TOÀN BỘ ỨNG VIÊN (<span id="table-record-count">0</span> hồ sơ)</h3>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+              💡 <em>Anh có thể chọn trực tiếp <strong>Nguồn Data Thực Tế</strong> (Tự tuyển, CTV Dương Thảo, CTV Hồng Ngọc, CTV Xuân Khánh, CTV Thanh Thanh...) cho từng bạn hoặc thêm CTV mới. Dữ liệu tự động lưu 100%!</em>
+            </p>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button class="btn btn-outline" style="padding: 6px 12px;" onclick="exportOverviewCSV()">📥 Xuất CSV Danh Sách</button>
+            <select id="page-size-select" class="form-control" style="width: auto; padding: 6px 12px;" onchange="changePageSize()">
+              <option value="15">15 dòng / trang</option>
+              <option value="30">30 dòng / trang</option>
+              <option value="50">50 dòng / trang</option>
+              <option value="1000">Tất cả ứng viên</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table id="candidate-table">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Mã UV</th>
+                <th>Họ & Tên</th>
+                <th>Số Điện Thoại</th>
+                <th>Dự Án</th>
+                <th>Chuyên Viên Tuyển Dụng</th>
+                <th>Ngày OB</th>
+                <!-- Cột trạng thái đúng nguyên văn file -->
+                <th style="color:#fbbf24; font-weight:800;">TÌNH TRẠNG NHẬN VIỆC (COL 19)</th>
+                <th style="color:#60a5fa; font-weight:800;">TÌNH TRẠNG TỔNG HỢP (COL 21)</th>
+                
+                <!-- CỘT NGUỒN DATA THỰC TẾ (MỚI) -->
+                <th style="background: rgba(139, 92, 246, 0.2); color: #c084fc; font-weight: 800; border-left: 2px solid #8b5cf6;">
+                  NGUỒN DATA THỰC TẾ
+                </th>
+
+                <th>Nguồn Gốc (File)</th>
+                <th>Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody id="candidate-tbody"></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div style="font-size: 13px; color: var(--text-muted);" id="page-info"></div>
+          <div class="pagination" id="pagination-controls"></div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TAB 2: TÍNH KPI THEO THÁNG & GHI NHẬN 2 KỲ -->
+    <!-- ========================================== -->
+    <div id="tab-monthly" class="tab-content">
+      <!-- Toolbar & Cấu hình Tháng -->
+      <div class="filter-card" style="border: 1px solid rgba(59, 130, 246, 0.4); background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(17, 24, 39, 0.85) 100%);">
+        <div class="filter-grid" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));">
+          <div class="form-group">
+            <label style="color: #60a5fa; font-weight:800; font-size:12px;">📅 THÁNG TÍNH & BÁO CÁO KPI</label>
+            <select id="monthly-select-month" class="form-control" style="border-color: #3b82f6; font-weight:800; font-size: 14px;" onchange="renderMonthlyTab()">
+              <option value="2026-11" selected>Tháng 11/2026 (Kỳ Hiện Tại - 15 UV Nhận Việc)</option>
+              <option value="2026-10">Tháng 10/2026 (Kỳ T10-2026 - 50 UV Nhận Việc)</option>
+              <option value="2026-09">Tháng 09/2026 (Kỳ T9-2026 - 10 UV Onboard - Trần Thị Gấm)</option>
+              <option value="2026-12">Tháng 12/2026</option>
+              <option value="ALL">Toàn Bộ Các Tháng (Tổng Hợp Cả 2 Kỳ - 76 UV)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Lọc Chuyên Viên Tuyển Dụng</label>
+            <select id="monthly-select-recruiter" class="form-control" onchange="renderMonthlyTab()">
+              <option value="ALL">Tất cả nhân sự</option>
+              <option value="TRẦN TUẤN ANH">TRẦN TUẤN ANH</option>
+              <option value="TRẦN HÙNG ANH">TRẦN HÙNG ANH</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Lọc Dự Án / Nhà Máy</label>
+            <select id="monthly-select-project" class="form-control" onchange="renderMonthlyTab()">
+              <option value="ALL">Tất cả dự án</option>
+              <option value="NIP-BN">NIP-BN</option>
+              <option value="AVD-WH">AVD-WH</option>
+              <option value="UNI-MB">UNI-MB</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Gộp Trần Hùng Anh vào Trần Tuấn Anh?</label>
+            <select id="monthly-merge-recruiters" class="form-control" onchange="renderMonthlyTab()">
+              <option value="YES" selected>Có - Gộp chung về Trần Tuấn Anh</option>
+              <option value="NO">Không - Tách riêng Trần Hùng Anh</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Đơn Giá Thưởng KPI / Điểm (VNĐ)</label>
+            <input type="number" id="monthly-kpi-unit-price" class="form-control" value="200000" step="50000" oninput="calculateMonthlyTotals()">
+          </div>
+
+          <div class="form-group" style="border: 1px solid rgba(16, 185, 129, 0.4); padding: 8px 12px; border-radius: 10px; background: rgba(16, 185, 129, 0.05);">
+            <label style="color: #34d399; font-weight: 800; font-size: 12px;">👁️ BỘ LỌC DANH SÁCH BẢNG</label>
+            <select id="monthly-filter-view" class="form-control" style="font-weight: 800; border-color: #10b981;" onchange="renderMonthlyTab()">
+              <option value="ACTIVE" selected>🎯 Chỉ hiện UV có điểm trong kỳ này (Khuyên dùng)</option>
+              <option value="ALL">📋 Hiện toàn bộ UV đã nhận việc để phân bổ</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-blue" onclick="selectAllMonthly(true)">✅ Chọn Tất Cả UV</button>
+            <button class="btn btn-outline" onclick="selectAllMonthly(false)">❌ Bỏ Chọn Tất Cả</button>
+            <button class="btn btn-outline" onclick="resetDefaultMultiPoints()">🔄 Đặt Lại Điểm Mặc Định (Kỳ 1: 1.0đ)</button>
+            <button class="btn btn-purple" onclick="autoSplitAllToNextMonth()">⚡ Tự Động Gán & Điền Điểm Kỳ 2 Sang Tháng Sau (+1.0đ)</button>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary" onclick="exportMonthlyKPIReport()">📥 Xuất Báo Cáo KPI Tháng (CSV)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BÁO CÁO TỔNG KẾT KPI Ở TRÊN CÙNG CỦA TAB -->
+      <div class="kpi-grid">
+        <div class="kpi-card highlight-green" style="border: 2px solid #10b981;">
+          <div class="kpi-card-header">
+            <span class="kpi-title" style="color: #34d399; font-weight:800;" id="label-kpi-month-title">🌟 TỔNG ĐIỂM KPI GHI NHẬN (THÁNG 10/2026)</span>
+            <div class="kpi-icon icon-green">🏆</div>
+          </div>
+          <div class="kpi-value" id="monthly-total-kpi-points" style="color: #34d399; font-size: 38px;">0.0</div>
+          <div class="kpi-sub">
+            <span class="tag-badge tag-green" id="monthly-split-summary">Kỳ 1: 0đ | Kỳ 2: 0đ</span>
+            <span>Tổng điểm chốt trong tháng này</span>
+          </div>
+        </div>
+
+        <div class="kpi-card highlight-blue">
+          <div class="kpi-card-header">
+            <span class="kpi-title">SỐ ỨNG VIÊN ĐƯỢC CHẤM ĐIỂM</span>
+            <div class="kpi-icon icon-blue">👥</div>
+          </div>
+          <div class="kpi-value" id="monthly-selected-count">0</div>
+          <div class="kpi-sub">
+            <span class="tag-badge tag-blue" id="monthly-ratio-tag">0 UV</span>
+            <span>Được tính điểm vào tháng đang chọn</span>
+          </div>
+        </div>
+
+        <div class="kpi-card highlight-purple">
+          <div class="kpi-card-header">
+            <span class="kpi-title">ƯỚC TÍNH QUỸ THƯỞNG KPI</span>
+            <div class="kpi-icon icon-purple">💰</div>
+          </div>
+          <div class="kpi-value" id="monthly-total-bonus" style="font-size: 26px; color: #c084fc;">0 đ</div>
+          <div class="kpi-sub">
+            <span class="tag-badge tag-purple" id="monthly-unit-badge">200.000 đ / Điểm</span>
+            <span>Tổng thưởng KPI trong tháng</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <span class="kpi-title">SỐ UV ĐÃ ĐƯỢC ĐIỀN ĐIỂM KỲ 2</span>
+            <div class="kpi-icon icon-amber">🔄</div>
+          </div>
+          <div class="kpi-value" id="monthly-multi-month-count">0</div>
+          <div class="kpi-sub">
+            <span class="tag-badge tag-amber">KỲ 2 HOẠT ĐỘNG</span>
+            <span>Ứng viên có điểm ở kỳ thứ hai</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bảng Tổng Kết Điểm KPI Tháng Theo Chuyên Viên -->
+      <div class="table-card">
+        <div class="chart-header">
+          <h3>🏆 BẢNG TỔNG KẾT ĐIỂM KPI THÁNG THEO CHUYÊN VIÊN TUYỂN DỤNG</h3>
+          <span style="font-size: 13px; font-weight:700; color: #38bdf8;" id="monthly-rec-summary-label">Đang xem báo cáo: Tháng 10/2026</span>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Họ & Tên Chuyên Viên</th>
+                <th>Số UV Được Ghi Nhận Trong Tháng</th>
+                <th>Điểm Ghi Nhận Đợt 1</th>
+                <th>Điểm Ghi Nhận Đợt 2</th>
+                <th>TỔNG ĐIỂM KPI CHỐT THÁNG NÀY</th>
+                <th>ƯỚC TÍNH THƯỞNG KPI (VNĐ)</th>
+                <th>ĐÁNH GIÁ THÁNG</th>
+              </tr>
+            </thead>
+            <tbody id="monthly-recruiter-summary-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BẢNG DANH SÁCH ỨNG VIÊN ĐÃ NHẬN VIỆC - TAB 2 -->
+      <div class="table-card" style="border: 1px solid rgba(16, 185, 129, 0.35);">
+        <div class="chart-header" style="flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 style="color: #34d399;">📋 DANH SÁCH ỨNG VIÊN ĐÃ NHẬN VIỆC & ĐẠT CHUẨN OB1</h3>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+              ⭐ Cột <strong>NGUỒN DATA THỰC TẾ</strong> đồng bộ tức thời với Tab Tổng quan. Cả Kỳ 1 và Kỳ 2 đều có ô điền điểm độc lập!
+            </p>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;"><span class="tag-badge tag-green" style="font-size:11px;">📌 Đã cố định dòng tiêu đề & các cột tới Họ tên</span> <div style="font-family: var(--font-mono); font-size: 13px; font-weight:700; color:#34d399;" id="monthly-list-badge">
+            Hiển thị: 63 ứng viên
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table id="monthly-table">
+            <thead>
+              <tr>
+                <th style="width: 40px; text-align: center;">
+                  <input type="checkbox" id="monthly-check-all" class="custom-checkbox" onchange="toggleCheckAllMonthly(this.checked)" checked title="Bật / Tắt tính điểm">
+                </th>
+                <th>STT</th>
+                <th>Mã UV</th>
+                <th>Họ & Tên Ứng Viên</th>
+                <th>Dự Án</th>
+                <th>Chuyên Viên</th>
+                <th>Ngày OB</th>
+                <th style="color:#fbbf24; font-weight:800;">TÌNH TRẠNG NHẬN VIỆC (COL 19)</th>
+                
+                <!-- CỘT NGUỒN DATA THỰC TẾ TRONG TAB 2 -->
+                <th style="background: rgba(139, 92, 246, 0.18); color: #c084fc; font-weight: 800;">
+                  NGUỒN DATA THỰC TẾ
+                </th>
+
+                <!-- Nhóm Cột Kỳ 1 (Đợt 1) -->
+                <th style="background: rgba(16, 185, 129, 0.18); color: #34d399; font-weight: 800; border-left: 2px solid #10b981;">
+                  THÁNG GHI NHẬN (KỲ 1)
+                </th>
+                <th style="background: rgba(16, 185, 129, 0.18); color: #34d399; font-weight: 800; text-align: center;">
+                  SỐ ĐIỂM KỲ 1
+                </th>
+
+                <!-- Nhóm Cột Kỳ 2 (Đợt 2) -->
+                <th style="background: rgba(139, 92, 246, 0.18); color: #c084fc; font-weight: 800; border-left: 2px solid #8b5cf6;">
+                  THÁNG GHI NHẬN (KỲ 2)
+                </th>
+                <th style="background: rgba(139, 92, 246, 0.18); color: #c084fc; font-weight: 800; text-align: center;">
+                  SỐ ĐIỂM KỲ 2 (ĐIỀN ĐIỂM)
+                </th>
+
+                <th style="background: rgba(59, 130, 246, 0.18); color: #60a5fa; font-weight: 800; text-align: center; border-left: 2px solid #3b82f6;">
+                  ĐIỂM VÀO THÁNG ĐANG XEM
+                </th>
+                <th style="text-align: center;">TỔNG 2 KỲ</th>
+                <th>Ghi Chú</th>
+              </tr>
+            </thead>
+            <tbody id="monthly-candidates-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="detail-modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 style="font-size: 18px; font-weight: 800; color: var(--text-main);" id="modal-candidate-name">Chi Tiết Hồ Sơ Ứng Viên</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="detail-grid" id="modal-detail-content"></div>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script>
+    let RAW_CANDIDATES = [{"id": "171873", "cccd": "027193003823", "name": "Trần Thị Gấm", "dob": "13/1/1993", "gender": "Nữ", "address": "Thôn Yên Vĩ, Hoả Tiến, Yên Phong Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0363360613", "created_time": "16/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.IXJV17", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Miễn phí )", "pv_date": "16/9", "ob_date": "16/9/2026", "mnv": "T257-00982"}, {"id": "507737", "cccd": "019194011220", "name": "Dương Thị Trang", "dob": "28/10/1994", "gender": "Nữ", "address": "Thôn Mai Trung, Mai Đình, Hiệp Hoà, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0969474807", "created_time": "18/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.9QZE75", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Miễn phí )", "pv_date": "19/9", "ob_date": "21/9/2026", "mnv": "T257-00984"}, {"id": "227388", "cccd": "017199005849", "name": "Lò Thị Khánh Linh", "dob": "4/10/1999", "gender": "Nữ", "address": "Xóm Chiềng Hạ, Mai Hạ, Mai Châu, Phú Thọ", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0325434131", "created_time": "21/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.MTVE72", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Miễn phí )", "pv_date": "22/9", "ob_date": "22/9/2026", "mnv": ""}, {"id": "358370", "cccd": "038207015229", "name": "Mai Quốc Tuấn", "dob": "13/8/2007", "gender": "Nam", "address": "Yên Định, Định Tân, Yên Định, Thanh Hóa", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0362044182", "created_time": "16/09/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.IXJV17", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Miễn phí )", "pv_date": "16/9", "ob_date": "", "mnv": ""}, {"id": "199037", "cccd": "024189011165", "name": "Khương Thị Hoa", "dob": "9/10/1989", "gender": "Nữ", "address": "Cẩm Trang, Mai Trung, Hiệp Hòa, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0866534998", "created_time": "16/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.IXJV17", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Miễn phí )", "pv_date": "17/9", "ob_date": "17/9/2026", "mnv": ""}, {"id": "657610", "cccd": "027302009421", "name": "Lưu Thị Hường", "dob": "2/9/2002", "gender": "Nữ", "address": "Thôn Đông Phù, Phú Lâm, Tiên Du, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0862122352", "created_time": "24/09/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.MTVE72", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Miễn phí )", "pv_date": "25/9", "ob_date": "", "mnv": ""}, {"id": "194311", "cccd": "027204007911", "name": "Nguyễn Thế Đạt", "dob": "5/10/2004", "gender": "Nam", "address": "Thôn Nghĩa Lập, Phù Khê, Từ Sơn, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0943643987", "created_time": "24/09/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.9QZE75", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Miễn phí )", "pv_date": "25/9", "ob_date": "", "mnv": ""}, {"id": "300378", "cccd": "001307040563", "name": "Nguyễn Thị Thu Uyên", "dob": "18/9/2007", "gender": "Nữ", "address": "Hà Khê, Văn Hà, Đông Anh, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0348258815", "created_time": "22/09/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.9QZE75", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Miễn phí )", "pv_date": "25/9", "ob_date": "", "mnv": ""}, {"id": "769532", "cccd": "037188003709", "name": "Trần Thị Nga", "dob": "14/4/1988", "gender": "Nữ", "address": "Xóm 6 Khánh Thịnh Yên Mô Ninh Bình", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0862863214", "created_time": "24/09/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.9QZE75", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Miễn phí )", "pv_date": "25/9", "ob_date": "", "mnv": ""}, {"id": "980780", "cccd": "027191015542", "name": "Nguyễn Thị Hậu", "dob": "15/3/1991", "gender": "Nữ", "address": "Thôn Đông Mai, Trung Nghĩa, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0335107858", "created_time": "25/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.9QZE75", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Tuyển Offline (Phát tờ rơi, standee,... )", "pv_date": "28/9", "ob_date": "28/9/2026", "mnv": ""}, {"id": "822772", "cccd": "027202004522", "name": "Dương Văn Minh", "dob": "30/12/2002", "gender": "Nam", "address": "Thôn Lạc Trung, Dũng Liệt, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0369871500", "created_time": "26/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.9QZE75", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Miễn phí )", "pv_date": "28/9", "ob_date": "29/9/2026", "mnv": ""}, {"id": "690066", "cccd": "027206000338", "name": "Tống Quang Hoàn", "dob": "4/4/2006", "gender": "Nam", "address": "Thượng Đồng, Vạn An Tp Bắc Ninh , Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0868379251", "created_time": "27/09/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.9QZE75", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Miễn phí )", "pv_date": "28/9", "ob_date": "", "mnv": ""}, {"id": "556588", "cccd": "040195006047", "name": "Hà Thị Trung", "dob": "2/6/1995", "gender": "Nữ", "address": "Nghệ An", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0357544375", "created_time": "27/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.9QZE75", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Miễn phí )", "pv_date": "28/9", "ob_date": "29/9/2026", "mnv": "T257-00987"}, {"id": "928686", "cccd": "040304015448", "name": "Vi Thùy Như", "dob": "13/9/2004", "gender": "Nữ", "address": "Nghệ An", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0862053987", "created_time": "27/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.9QZE75", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Miễn phí )", "pv_date": "28/9", "ob_date": "29/9/2026", "mnv": "T257-00988"}, {"id": "426768", "cccd": "024191013798", "name": "Trần Thị Thu Hương", "dob": "12/11/1991", "gender": "Nữ", "address": "TDP 1, Thị Trấn Thắng, Hiệp Hoà, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0966685912", "created_time": "27/09/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.9QZE75", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Miễn phí )", "pv_date": "28/9", "ob_date": "", "mnv": ""}, {"id": "423816", "cccd": "027089004530", "name": "Đàm Đức Tuyền", "dob": "28/8/1989", "gender": "Nam", "address": "Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0901507998", "created_time": "27/09/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.CRKC42", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Miễn phí )", "pv_date": "1/10", "ob_date": "", "mnv": ""}, {"id": "638407", "cccd": "067302000927", "name": "Trần Thị Lan Anh", "dob": "12/7/2002", "gender": "Nữ", "address": "Thôn Ô Cách, Yên Phong, , Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0328638778", "created_time": "27/09/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.9QZE75", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Miễn phí )", "pv_date": "29/9", "ob_date": "", "mnv": ""}, {"id": "843843", "cccd": "024076007432", "name": "Lê Văn Huyên", "dob": "22/5/1976", "gender": "Nam", "address": "Tiên Sơn, Hương Lâm, Hiệp Hoà, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0985295175", "created_time": "27/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.CRKC42", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Miễn phí )", "pv_date": "30/9", "ob_date": "", "mnv": ""}, {"id": "189539", "cccd": "027300008871", "name": "Nguyễn Thị Phương", "dob": "25/1/2000", "gender": "Nữ", "address": "Đông Xá-Tam Đa-Yên Phong", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0866257200", "created_time": "27/09/2026", "pv_status": "THAM GIA PV", "pv_result": "FAIL", "training_status": "", "work_status": "", "booking_code": "B.9QZE75", "overall_status": "THAM GIA PV", "source": "Facebook group ( Miễn phí )", "pv_date": "1/10", "ob_date": "", "mnv": ""}, {"id": "108270", "cccd": "024305000316", "name": "Nguyễn Thị Liên", "dob": "2/8/2005", "gender": "Nữ", "address": "NGỌC SƠN HIỆP HOÀ BẮC GIANG", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0971762805", "created_time": "27/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.9QZE75", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Miễn phí )", "pv_date": "28/9", "ob_date": "", "mnv": ""}, {"id": "525310", "cccd": "025093011654", "name": "Nguyễn Hồng Cương", "dob": "28/4/1993", "gender": "Nam", "address": "Khu 7 Dân Quyền, Tam Nông Phú Thọ", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0949582493", "created_time": "28/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.9QZE75", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Miễn phí )", "pv_date": "28/9", "ob_date": "", "mnv": ""}, {"id": "119066", "cccd": "027207007767", "name": "Lê Đăng Đại Dương", "dob": "24/5/2007", "gender": "Nam", "address": "Thôn Đông, Tam Giang, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0975350622", "created_time": "28/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.9QZE75", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Miễn phí )", "pv_date": "29/9", "ob_date": "29/9/2026", "mnv": ""}, {"id": "545421", "cccd": "024308001712", "name": "Nguyễn Thị Thùy Linh", "dob": "29/7/2008", "gender": "Nữ", "address": "Thôn Vân Cẩm, Đông Lỗ, Hiệp Hòa, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0976395963", "created_time": "28/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.9QZE75", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Miễn phí )", "pv_date": "29/9", "ob_date": "29/9/2026", "mnv": ""}, {"id": "607109", "cccd": "027300002810", "name": "Nguyễn Thị Thu Phương", "dob": "15/9/2000", "gender": "Nữ", "address": "Kim Trung, Đa Phúc, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0393545054", "created_time": "29/09/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.4EQI80", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Miễn phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "374593", "cccd": "024080012968", "name": "Ngô Văn Lượng", "dob": "6/8/1980", "gender": "Nam", "address": "Tiên Sơn Hương Lâm Hiệp Hoà Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0366121299", "created_time": "30/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.CRKC42", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Miễn phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "289939", "cccd": "036198002500", "name": "Đinh Thị Quỳnh", "dob": "7/3/1998", "gender": "Nữ", "address": "Thị trấn Rạng Đông, Nghĩa Hưng, Nam Định", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0942249396", "created_time": "30/09/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.CRKC42", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Miễn phí )", "pv_date": "", "ob_date": "1/10/2026", "mnv": "T257-00983"}, {"id": "208295", "cccd": "027207012737", "name": "Nguyễn Văn Phúc", "dob": "25/7/2007", "gender": "Nam", "address": "Khu Tiêu Xá, Hạp Lĩnh, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0978636110", "created_time": "04/10/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.1HML36", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Miễn phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "376019", "cccd": "024089009378", "name": "Nguyễn Xuân Trường", "dob": "2/7/1989", "gender": "Nam", "address": "Ngọ Phúc, Châu Minh, Hiệp Hòa, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0979529895", "created_time": "01/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NGHỈ VIỆC", "booking_code": "B.1HML36", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Miễn phí )", "pv_date": "", "ob_date": "5/10", "mnv": ""}, {"id": "466803", "cccd": "024195009592", "name": "Đặng Thị Thuỷ", "dob": "21/3/1995", "gender": "Nữ", "address": "Hưng Đạo Đông Lỗ Hiệp Hoà Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0389071149", "created_time": "07/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.E71L09", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Miễn phí )", "pv_date": "", "ob_date": "8/10", "mnv": ""}, {"id": "301826", "cccd": "019088005610", "name": "Lý Văn Tuyến", "dob": "12/9/1988", "gender": "Nam", "address": "Xóm Làng Bầng, Đồng Thịnh, Định Hóa, Thái Nguyên", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0984533003", "created_time": "08/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.1HML36", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "388372", "cccd": "0", "name": "Tính", "dob": "1/1/1976", "gender": "Nam", "address": "", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0858746875", "created_time": "12/10/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.1HML36", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "856013", "cccd": "024079011187", "name": "Phùng Văn Nam", "dob": "19/7/1979", "gender": "Nam", "address": "TDP Tam Hợp, Bắc Lý, Hiệp Hòa, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "09771154", "created_time": "09/10/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.7PMO59", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "821464", "cccd": "024180015458", "name": "Nguyễn Thị Thu Phương", "dob": "26/12/1980", "gender": "Nữ", "address": "Thôn Quả, Trung Sơn, Việt Yên, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "06610113", "created_time": "09/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.7PMO59", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "12/10", "mnv": ""}, {"id": "242500", "cccd": "024179007348", "name": "Nguyễn Thị Kiên", "dob": "10/4/1979", "gender": "Nữ", "address": "thôn Nguyễn, Trung Sơn, Việt Yên, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0366991212", "created_time": "09/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.7PMO59", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "12/10", "mnv": ""}, {"id": "965707", "cccd": "001196003024", "name": "Nguyễn Thị Hồng Nhung", "dob": "20/5/1996", "gender": "Nữ", "address": "Khu 5 Thụy Lôi, Thụy Lâm, Đông Anh, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0378012670", "created_time": "09/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "29/10", "mnv": "T552-00243"}, {"id": "806193", "cccd": "024091010424", "name": "Vương Văn Vịnh", "dob": "25/1/1991", "gender": "Nam", "address": "Phú Tài Tiên Sơn Việt Yên Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0971449448", "created_time": "09/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": "F"}, {"id": "512615", "cccd": "001198001308", "name": "Nguyễn Thị Linh", "dob": "14/9/1998", "gender": "Nữ", "address": "Xuân Lai, Xuân Thu, Sóc Sơn, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0372839280", "created_time": "09/10/2026", "pv_status": "THAM GIA PV", "pv_result": "FAIL", "training_status": "", "work_status": "", "booking_code": "B.7PMO59", "overall_status": "THAM GIA PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "850514", "cccd": "027201002585", "name": "Đỗ Văn Hanh", "dob": "12/10/2001", "gender": "Nam", "address": "Thôn Cầu Giữa, Văn Môn, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0866414911", "created_time": "11/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.7PMO59", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "13/10", "mnv": ""}, {"id": "467561", "cccd": "001087042633", "name": "Nguyễn Khắc Duy", "dob": "27/1/1987", "gender": "Nam", "address": "Tiên Tảo, Đa Phúc, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0961645393", "created_time": "11/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "392689", "cccd": "011306007667", "name": "Lò Thị Kiều", "dob": "8/3/2006", "gender": "Nữ", "address": "Bản Kéo, Ẳng Cang, Mường Ảng, Điện Biên", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0392756964", "created_time": "11/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "960588", "cccd": "038203007017", "name": "Lò Thanh Tùng", "dob": "16/1/2003", "gender": "Nam", "address": "Thôn Thành Thượng, Tân Thành, Thường Xuân, Thanh Hóa", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0339756461", "created_time": "11/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "13/10", "mnv": "T257-00993"}, {"id": "977668", "cccd": "024194017235", "name": "Ngô Thị Loan", "dob": "6/9/1994", "gender": "Nữ", "address": "Thị Trần Thắng Hiệp Hòa Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0912704752", "created_time": "11/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "12/10", "mnv": "T257-00994"}, {"id": "637257", "cccd": "038202018842", "name": "Lương Văn Hào", "dob": "12/10/2022", "gender": "Nam", "address": "Tân Thành Thường Xuân Thanh Hoá", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0359064014", "created_time": "11/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "13/10", "mnv": "T257-00995"}, {"id": "418920", "cccd": "027197010562", "name": "Nguyễn Thị Dịu", "dob": "6/6/1997", "gender": "Nữ", "address": "Đông Phong yên Phong Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0964516042", "created_time": "11/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.7PMO59", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "270374", "cccd": "040208005386", "name": "Lò Văn Giang", "dob": "7/3/2008", "gender": "Nam", "address": "Nam Sơn Quỳ Hợp Nghệ An", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0372079408", "created_time": "11/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "744553", "cccd": "040205011402", "name": "Lo Văn Tuấn", "dob": "5/11/2005", "gender": "Nam", "address": "Bản Hằm, Nam Sơn, Quỳ Hợp, Nghệ An", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0896899825", "created_time": "11/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "628579", "cccd": "040098012210", "name": "Lo Văn Hào", "dob": "13/10/1998", "gender": "Nam", "address": "Bản Hằm, Mường Chọng, Nghệ An", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0395775469", "created_time": "11/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "407255", "cccd": "024087014725", "name": "Nguyễn Văn Hào", "dob": "11/7/1987", "gender": "Nam", "address": "Danh Thắng Hiệp Hoà Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0987563511", "created_time": "11/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "12/10", "mnv": ""}, {"id": "761399", "cccd": "024191002886", "name": "Hứa Thị Học", "dob": "2/8/1991", "gender": "Nữ", "address": "Yên Ninh, Đông Lỗ, Hiệp Hòa, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0368973990", "created_time": "12/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "12/10", "mnv": ""}, {"id": "638144", "cccd": "024175014500", "name": "Đỗ Thị Sánh", "dob": "27/7/1975", "gender": "Nữ", "address": "Thôn Khoát, Đông Lỗ, Hiệp Hòa, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0366121298", "created_time": "12/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.7PMO59", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "12/10", "mnv": ""}, {"id": "972238", "cccd": "038186004433", "name": "Lê Thị Phượng", "dob": "26/5/1986", "gender": "Nữ", "address": "Thôn Minh Ngọc, Minh Sơn, , Thanh Hóa", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0982113410", "created_time": "12/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "13/10", "mnv": ""}, {"id": "457059", "cccd": "027206006320", "name": "Phạm Văn Vượng", "dob": "20/10/2006", "gender": "Nam", "address": "Dũng Liệt Yên Phong Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0337121006", "created_time": "12/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.7PMO59", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "160607", "cccd": "027201009773", "name": "Mẫn Đình Hiệu", "dob": "28/2/2001", "gender": "Nam", "address": "Thôn Tiên Trà, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0368532201", "created_time": "12/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "13/10", "mnv": "T257-00996"}, {"id": "272142", "cccd": "024099013760", "name": "Nguyễn Trung Hiếu", "dob": "10/4/1999", "gender": "Nam", "address": "Tam Sơn, Hợp Thịnh, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0379677006", "created_time": "12/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "14/10", "mnv": ""}, {"id": "866813", "cccd": "027190012171", "name": "Nguyễn Thị Yến", "dob": "16/9/1990", "gender": "Nữ", "address": "Thôn Đại Lâm, Tam Đa, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0973139690", "created_time": "13/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "862605", "cccd": "040196021241", "name": "Trương Thị Hương", "dob": "26/11/1996", "gender": "Nữ", "address": "Xóm Hồng Thọ, Nghĩa Mai, Nghệ An", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0964425983", "created_time": "13/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "670657", "cccd": "001075017088", "name": "Đào Trung Chính", "dob": "6/12/1975", "gender": "Nam", "address": "Thôn Đồng Thôn, Đông Tiến, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0396394569", "created_time": "14/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.7PMO59", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "15/10", "mnv": "T552-00224"}, {"id": "355470", "cccd": "024076010746", "name": "Nguyễn Văn Bằng", "dob": "11/7/1976", "gender": "Nam", "address": "Nguộn, Liên Chung, Tân Yên, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0976771515", "created_time": "14/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.7PMO59", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "15/10", "mnv": "T552-00225"}, {"id": "332422", "cccd": "027079009326", "name": "Ngô Bá Cấp", "dob": "22/7/1979", "gender": "Nam", "address": "Đông Phong, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0815203669", "created_time": "14/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.7PMO59", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "15/10", "mnv": "T552-00226"}, {"id": "919218", "cccd": "017190005141", "name": "Bùi Thị Khen", "dob": "7/11/1990", "gender": "Nữ", "address": "Thôn Đông Trước Xuân Cẩm Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0376697986", "created_time": "14/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "666445", "cccd": "001085003176", "name": "Nguyễn Tiến Kiên", "dob": "18/4/1985", "gender": "Nam", "address": "Thanh Lãm Tổ 1 Phú Lãm Hà Đông Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0869804185", "created_time": "14/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "473437", "cccd": "024198007070", "name": "Phạm Thị Huế", "dob": "6/10/1998", "gender": "Nữ", "address": "Bảo Sơn, Lục Nam, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0374632514", "created_time": "13/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "127085", "cccd": "027204009801", "name": "Nguyễn Minh Đức", "dob": "17/1/2004", "gender": "Nam", "address": "Số 28 Ngõ Như Nguyệt Khu 1, Vũ Ninh, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0388517104", "created_time": "13/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "840559", "cccd": "027303005861", "name": "Nguyễn Thị Liên", "dob": "1/5/2003", "gender": "Nữ", "address": "Thôn Đại Chu, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0965410533", "created_time": "13/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "954715", "cccd": "024307008979", "name": "Dương Thị Thu Thảo", "dob": "15/3/2007", "gender": "Nữ", "address": "Thôn Nguộn, Thượng Lan, Việt Yên, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0326992947", "created_time": "15/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "828758", "cccd": "001207059792", "name": "Đàm Minh Đức", "dob": "7/7/2007", "gender": "Nam", "address": "Thôn Xuân Đồng, Tân Minh, Sóc Sơn, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0333336083", "created_time": "15/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "KHÔNG THAM GIA ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "PASS PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "120930", "cccd": "019202006299", "name": "Nguyễn Thành Công", "dob": "10/1/2002", "gender": "Nam", "address": "Xóm Trại, Kha Sơn, Phú Bình, Thái Nguyên", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0968596710", "created_time": "15/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "16/10", "mnv": "T257-00997"}, {"id": "174485", "cccd": "020205004293", "name": "Nông Khánh Đoan", "dob": "28/6/2005", "gender": "Nam", "address": "Thôn Hợp Thành, Quốc Khánh, Tràng Định, Lạng Sơn", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0984747306", "created_time": "15/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "596186", "cccd": "020205002139", "name": "Nông Văn Nghiệp", "dob": "15/9/2005", "gender": "Nam", "address": "Thôn Phù Huê, Trấn Ninh, Văn Quan, Lạng Sơn", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0333693602", "created_time": "15/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "424191", "cccd": "038201001264", "name": "Nguyễn Đình Thái", "dob": "22/8/2001", "gender": "Nam", "address": "Thôn Quắc Quên, Đồng Lương, Thanh Hóa", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0335042706", "created_time": "18/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "20/10", "mnv": ""}, {"id": "436972", "cccd": "027184005721", "name": "Hoàng Thị Hảo", "dob": "16/12/1984", "gender": "Nữ", "address": "Thôn Yên Vỹ, Tam Giang, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0967268492", "created_time": "18/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.N24M03", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "572079", "cccd": "027193006914", "name": "Nguyễn Thị Chang", "dob": "25/11/1993", "gender": "Nữ", "address": "Phúc Xuân, Bắc Sơn, Sóc Sơn, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0835212990", "created_time": "18/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.N24M03", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "2/11/2026", "mnv": ""}, {"id": "232327", "cccd": "040193020693", "name": "Nguyễn Thị Hoài", "dob": "15/3/1993", "gender": "Nữ", "address": "Yên Lãng, Yên Trung, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0362604892", "created_time": "18/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.N24M03", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "531348", "cccd": "037194007070", "name": "Nguyễn Thị Cậy", "dob": "17/10/1994", "gender": "Nữ", "address": "Gia Viễn Ninh Bình", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "LGE-HP", "phone": "0355688788", "created_time": "18/10/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.DSFS30", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "989224", "cccd": "027206011054", "name": "Nguyễn Quang Anh", "dob": "7/1/2006", "gender": "Nam", "address": "Thôn Phấn Động, Tam Đa, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0961872301", "created_time": "18/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.N24M03", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "173061", "cccd": "027206005478", "name": "Trần Thọ Huân", "dob": "7/11/2006", "gender": "Nam", "address": "Phấn Đông, Tam Đa, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0975259282", "created_time": "18/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.N24M03", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "231336", "cccd": "027307005178", "name": "Lê Thị Thanh Huyền", "dob": "11/4/2007", "gender": "Nữ", "address": "Thôn Đông Xá, Đông Phong, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0392621328", "created_time": "19/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.N24M03", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "20/10", "mnv": "T552-00232"}, {"id": "507121", "cccd": "020086009873", "name": "Trần Văn Quý", "dob": "25/12/1986", "gender": "Nam", "address": "Thôn Ao Kham, Tân Thành, Hữu Lũng, Lạng Sơn", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0396612683", "created_time": "19/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.N24M03", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "699195", "cccd": "040303025238", "name": "Lữ Thị Mĩ Lệ", "dob": "23/8/2003", "gender": "Nữ", "address": "Bản Pòng, Nậm Giải, Quế Phong, Nghệ An", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0339635094", "created_time": "19/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "20/10", "mnv": ""}, {"id": "445797", "cccd": "024305001031", "name": "Đặng Thị Hoa", "dob": "4/8/2005", "gender": "Nữ", "address": "Khánh, Hiệp Hòa, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0379804683", "created_time": "19/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "DỜI LỊCH NHẬN VIỆC", "booking_code": "B.WJKD90", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "981127", "cccd": "024080019612", "name": "Lê Quang Vui", "dob": "10/6/1980", "gender": "Nam", "address": "Thôn Nguyễn, Trung Sơn, Việt Yên, Bắc Giang", "recruiter": "TRẦN HÙNG ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0334655966", "created_time": "21/10/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.N24M03", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "422338", "cccd": "024083011577", "name": "Nguyễn Văn Chinh", "dob": "18/3/1983", "gender": "Nam", "address": "Trung Sơn, Việt Yên, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0339134415", "created_time": "21/10/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.N24M03", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "170080", "cccd": "027093010705", "name": "Nguyễn Hữu Hải", "dob": "10/4/1993", "gender": "Nam", "address": "Thọ Đức Tam Đa Yên Phong Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0963201035", "created_time": "19/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "26/10/2026", "mnv": "T552-00237"}, {"id": "626872", "cccd": "040097010012", "name": "Võ Duy Quân", "dob": "18/2/1997", "gender": "Nam", "address": "Xóm Nghĩa Sơn, Bình Hợp, Tân Kỳ, Nghệ An", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0357997678", "created_time": "21/10/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.D2WL34", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "663556", "cccd": "014198001869", "name": "Hoàng Bạch Cúc", "dob": "4/5/1998", "gender": "Nữ", "address": "Bản Mo 1, Quang Huy, Phú yên, Sơn La", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0336040598", "created_time": "21/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "23/10", "mnv": "T552-00235"}, {"id": "553716", "cccd": "024094010356", "name": "Nguyễn Xuân Phương", "dob": "14/12/1994", "gender": "Nam", "address": "Thôn Chằm, Thượng Lan, Việt Yên, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0389074981", "created_time": "21/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "22/10", "mnv": "T552-00234"}, {"id": "440776", "cccd": "020305005262", "name": "Dương Thị Phương", "dob": "24/11/2005", "gender": "Nữ", "address": "Thôn Nà Nâm, Tân Lập, Bắc Sơn, Lạng Sơn", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0867925894", "created_time": "21/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "22/10", "mnv": ""}, {"id": "304800", "cccd": "024095007702", "name": "Trần Văn Linh", "dob": "4/3/1995", "gender": "Nam", "address": "Thôn Sau, Đoan Bái, Hiệp Hòa, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0589491995", "created_time": "21/10/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.D2WL34", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "807712", "cccd": "040199005169", "name": "Lê Thị Hương", "dob": "13/3/1999", "gender": "Nữ", "address": "Bản Mường Piệt, Thông Thụ, Quế Phong, Nghệ An", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0364209117", "created_time": "21/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "23/10", "mnv": ""}, {"id": "916869", "cccd": "015203004845", "name": "Hoàng Thanh Cảnh", "dob": "12/6/2003", "gender": "Nam", "address": "Thôn Sơn Bắc Mai Sơn Lục yên Yên Bái", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0879744997", "created_time": "22/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "807935", "cccd": "027203005523", "name": "Trần Văn Sang", "dob": "29/3/2003", "gender": "Nam", "address": "Thôn Đức Lân, Yên Phụ, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0966786617", "created_time": "22/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "23/10", "mnv": "T552-00236"}, {"id": "989336", "cccd": "025195003303", "name": "Nguyễn Thị Thu Hằng", "dob": "2/3/1995", "gender": "Nữ", "address": "ngô xá long châu yên phong bắc ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0981711395", "created_time": "22/10/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.WJKD90", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "594915", "cccd": "024301005564", "name": "Đồng Thị Hằng", "dob": "13/11/2001", "gender": "Nữ", "address": "Thôn Châu Lỗ, Xuân Cẩm, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "AVD-WH", "phone": "0394195835", "created_time": "01/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.4EQI80", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "1/10/2026", "mnv": "T257-00990"}, {"id": "204190", "cccd": "027093009749", "name": "Hoàng Bá Đức", "dob": "28/2/1993", "gender": "Nam", "address": "Thôn Phù Cầm, Dũng Liệt, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0975741754", "created_time": "23/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "26/10", "mnv": "T552-00238"}, {"id": "239070", "cccd": "027174004265", "name": "Nguyễn Thị Phương", "dob": "20/4/1974", "gender": "Nữ", "address": "Thôn Đồng Hương, Hương Mạc, Từ Sơn, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0961935905", "created_time": "23/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "26/10", "mnv": ""}, {"id": "513834", "cccd": "027175004356", "name": "Nguyễn Thị Phương", "dob": "1/5/1975", "gender": "Nữ", "address": "Đông Hương, Hương Mạc Thị xã Từ Sơn, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0966642099", "created_time": "23/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "26/10", "mnv": ""}, {"id": "492500", "cccd": "004094007662", "name": "Hoàng Đức Quý", "dob": "27/2/1994", "gender": "Nam", "address": "Đa Cấu Nam Sơn Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0327221694", "created_time": "23/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "26/10", "mnv": "T552-00239"}, {"id": "935846", "cccd": "040302010439", "name": "Quang Thị Mỹ La", "dob": "12/10/2002", "gender": "Nữ", "address": "Thôn Tam Liên, Tam Quang, Tương Dương, Nghệ An", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0982231702", "created_time": "23/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "26/10", "mnv": "T552-00240"}, {"id": "827068", "cccd": "034075008007", "name": "Hà Đình Xuân", "dob": "1/10/1975", "gender": "Nam", "address": "Thôn Sòi 2, Phúc Khánh, Hưng Hà, Thái Bình", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0836835086", "created_time": "23/10/2026", "pv_status": "THAM GIA PV", "pv_result": "FAIL", "training_status": "", "work_status": "", "booking_code": "B.D2WL34", "overall_status": "THAM GIA PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "222894", "cccd": "027206011937", "name": "Nguyễn Khắc Phương", "dob": "25/10/2006", "gender": "Nam", "address": "Thôn Đức Lân, Yên Phụ, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "036 3844671", "created_time": "23/10/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.D2WL34", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "383670", "cccd": "027175011493", "name": "Nguyễn Thị Nga", "dob": "16/2/1975", "gender": "Nữ", "address": "Kim Thiều Hương Mạc Từ Sơn Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0971183076", "created_time": "25/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "26/10", "mnv": ""}, {"id": "286019", "cccd": "001176051598", "name": "Trương Thị Hà", "dob": "23/3/1976", "gender": "Nữ", "address": "Thù Lỗ, Liên Hà, Đông Anh, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0366772595", "created_time": "25/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "26/10", "mnv": ""}, {"id": "570320", "cccd": "027175001983", "name": "Đinh Thị Tuyết Minh", "dob": "6/3/1975", "gender": "Nữ", "address": "Nghĩa Lập Phù Khê Từ Sơn Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0969939223", "created_time": "25/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "26/10", "mnv": ""}, {"id": "393536", "cccd": "002193006992", "name": "Lại Thị Trang", "dob": "4/1/1993", "gender": "Nữ", "address": "Thôn Đông Yên, Đông Phong, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0325900711", "created_time": "25/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "2/11/2026", "mnv": ""}, {"id": "917129", "cccd": "024093019981", "name": "Đinh Văn Tú", "dob": "7/12/1993", "gender": "Nam", "address": "Bắc Lý Hiệp Hoà Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0896619528", "created_time": "25/10/2026", "pv_status": "THAM GIA PV", "pv_result": "FAIL", "training_status": "", "work_status": "", "booking_code": "B.D2WL34", "overall_status": "THAM GIA PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "364303", "cccd": "020197006334", "name": "Mông Thị Thảo", "dob": "26/5/1997", "gender": "Nữ", "address": "Bắc Lý Hiệp Hoà Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0386912318", "created_time": "25/10/2026", "pv_status": "THAM GIA PV", "pv_result": "FAIL", "training_status": "", "work_status": "", "booking_code": "B.D2WL34", "overall_status": "THAM GIA PV", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "497604", "cccd": "027090007745", "name": "Nguyễn Thể Thuật", "dob": "18/8/1990", "gender": "Nam", "address": "Dũng Liệt, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0965263790", "created_time": "26/10/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.D2WL34", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "695302", "cccd": "004178001421", "name": "Nông Thị Hiền", "dob": "4/1/1978", "gender": "Nữ", "address": "Thôn Nà Cường, Thạch An, Cao Bằng", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0905021987", "created_time": "26/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "27/10", "mnv": ""}, {"id": "690552", "cccd": "024188008095", "name": "Nguyễn Thị Thanh", "dob": "1/3/1988", "gender": "Nữ", "address": "Tiên Sơn, Việt Yên, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0903993266", "created_time": "27/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "27/10", "mnv": ""}, {"id": "891437", "cccd": "024308009891", "name": "Trần Thị Mai Lan", "dob": "22/8/2008", "gender": "Nữ", "address": "Đông Lễ, Hiệp Hoà, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0869115841", "created_time": "27/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "27/10", "mnv": ""}, {"id": "192800", "cccd": "014199011626", "name": "Hà Thị Uyên", "dob": "14/7/1999", "gender": "Nữ", "address": "Sơn La", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0879480045", "created_time": "27/10/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.D2WL34", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "273037", "cccd": "024191003696", "name": "Trương Thị Thoan", "dob": "22/6/1991", "gender": "Nữ", "address": "Thôn Yên Lãng, Yên Trung, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0967248731", "created_time": "28/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.D2WL34", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "10/11/2026", "mnv": ""}, {"id": "931195", "cccd": "027307000863", "name": "Nguyễn Thị Ngân Hà", "dob": "23/3/2007", "gender": "Nữ", "address": "Từ Sơn Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0378704290", "created_time": "29/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.H0KG29", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "30/10/2026", "mnv": ""}, {"id": "992504", "cccd": "027304006865", "name": "Nguyễn Thị Thu Hiền", "dob": "12/5/2004", "gender": "Nữ", "address": "Đại Đồng Từ Sơn Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0968675181", "created_time": "29/10/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.H0KG29", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "819401", "cccd": "027307002117", "name": "Lê Quỳnh Chi", "dob": "30/9/2007", "gender": "Nữ", "address": "Đại Đồng TS BN", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0846309207", "created_time": "29/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.H0KG29", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "30/10/2026", "mnv": ""}, {"id": "428429", "cccd": "027307011286", "name": "Nguyễn Thị Mai", "dob": "10/3/2007", "gender": "Nữ", "address": "Tiên Sơn Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0342336902", "created_time": "29/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.H0KG29", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "30/10/2026", "mnv": ""}, {"id": "741675", "cccd": "027200009380", "name": "Nguyễn Công Cử", "dob": "10/6/2000", "gender": "Nam", "address": "Tiên Du Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0372825666", "created_time": "29/10/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.H0KG29", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "410372", "cccd": "038092000762", "name": "Lê Đình Phước", "dob": "25/2/1992", "gender": "Nam", "address": "Đại Đồng BN", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0976777627", "created_time": "29/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.H0KG29", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "30/10/2026", "mnv": ""}, {"id": "877388", "cccd": "040099000708", "name": "Lê Văn Hoàng", "dob": "12/6/1999", "gender": "Nam", "address": "Tiên Du Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0967364049", "created_time": "29/10/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.H0KG29", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "278720", "cccd": "027305005771", "name": "Nguyễn Thị Dung", "dob": "17/11/2005", "gender": "Nữ", "address": "Từ Sơn BN", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0388198255", "created_time": "29/10/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.H0KG29", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "335062", "cccd": "042189002806", "name": "TRẦN THỊ DUNG", "dob": "27/9/1989", "gender": "Nữ", "address": "Hiệp Hoà Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0834952287", "created_time": "29/10/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.H0KG29", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "646716", "cccd": "027194003736", "name": "Nghiêm Thị Phương", "dob": "25/4/1994", "gender": "Nữ", "address": "Thuận Thành Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0339932228", "created_time": "29/10/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.H0KG29", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "830549", "cccd": "027195005952", "name": "Nguyễn Thị Ngọc Anh", "dob": "12/7/1995", "gender": "Nữ", "address": "Yên Phong Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0963214395", "created_time": "29/10/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.H0KG29", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "493622", "cccd": "027205011978", "name": "Nguyễn Văn Việt", "dob": "7/9/2005", "gender": "Nam", "address": "Tiên Du Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0375704601", "created_time": "29/10/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.H0KG29", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "934209", "cccd": "040098028592", "name": "Phan Bá Tiến", "dob": "9/4/1998", "gender": "Nam", "address": "Đại Đồng bắc NInh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0962391535", "created_time": "29/10/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.H0KG29", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "554341", "cccd": "027306004312", "name": "Đào Thị Thuỳ Trang", "dob": "14/8/2006", "gender": "Nữ", "address": "Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0987287514", "created_time": "29/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.H0KG29", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "30/10/2026", "mnv": ""}, {"id": "368417", "cccd": "027305011211", "name": "Nguyễn Phương Thảo", "dob": "4/9/2005", "gender": "Nữ", "address": "Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0898581300", "created_time": "29/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.H0KG29", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "30/10/2026", "mnv": ""}, {"id": "856023", "cccd": "024304012008", "name": "Nguyễn Thị Phương Thanh", "dob": "24/10/2004", "gender": "Nữ", "address": "Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0973593204", "created_time": "29/10/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.H0KG29", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "167568", "cccd": "027180007553", "name": "Đỗ Thị Thêm", "dob": "1/5/1980", "gender": "Nữ", "address": "BN", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0903203317", "created_time": "29/10/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.H0KG29", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "677125", "cccd": "038302003916", "name": "Phạm Thanh Châu", "dob": "21/2/2002", "gender": "Nam", "address": "BN", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0356453745", "created_time": "29/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.H0KG29", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "30/10/2026", "mnv": ""}, {"id": "211695", "cccd": "038200013912", "name": "Bùi Văn Thế", "dob": "5/4/2000", "gender": "Nữ", "address": "BN", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0333061841", "created_time": "29/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.H0KG29", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "30/10/2026", "mnv": ""}, {"id": "929356", "cccd": "027305003082", "name": "Đào Thị Linh", "dob": "1/12/2005", "gender": "Nữ", "address": "BN", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0385937885", "created_time": "29/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.H0KG29", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "30/10/2026", "mnv": ""}, {"id": "472559", "cccd": "027306000938", "name": "Nguyễn Thị Phương", "dob": "12/5/2006", "gender": "Nữ", "address": "BN", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0862370041", "created_time": "29/10/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.H0KG29", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "30/10/2026", "mnv": ""}, {"id": "539856", "cccd": "038094009516", "name": "Ngân Văn Chiến", "dob": "8/8/1994", "gender": "Nam", "address": "Tân Thành Thường Xuân Thanh Hoá", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0969484909", "created_time": "02/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.GFKX80", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "803269", "cccd": "038094018021", "name": "Cầm Bá Thân", "dob": "25/11/1994", "gender": "Nam", "address": "Thôn Ná Mén, Vạn Xuân, Thanh Hóa", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0394871894", "created_time": "02/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.GFKX80", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "10/11/2026", "mnv": ""}, {"id": "722921", "cccd": "027097004305", "name": "Nguyễn Mậu Chương", "dob": "21/5/1997", "gender": "Nam", "address": "Xóm Hồ, Mão Điền, Thuận Thành, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0328830135", "created_time": "02/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.GFKX80", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "3/11/2026", "mnv": ""}, {"id": "666930", "cccd": "017098002814", "name": "Bùi Văn Hà", "dob": "1/9/1998", "gender": "Nam", "address": "Xóm Vín Hòa, Hương Nhượng, Lạc Sơn, Hòa Bình", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0962187503", "created_time": "02/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.GFKX80", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "479265", "cccd": "017207001795", "name": "Quách Văn Vươn", "dob": "25/11/2007", "gender": "Nam", "address": "Xóm Vín Hòa, Hương Nhượng, Lạc Sơn, Hòa Bình", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0362317074", "created_time": "02/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.GFKX80", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "876083", "cccd": "038094010378", "name": "Bùi Văn Hoan", "dob": "25/9/1994", "gender": "Nam", "address": "Đồng Thanh, Thượng Ninh, Như Xuân, Thanh Hóa", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0392099698", "created_time": "02/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.GFKX80", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "576068", "cccd": "014093006382", "name": "Lường Văn Hặc", "dob": "1/1/1993", "gender": "Nam", "address": "Bản Công II, Chiềng Sơ, Sông Mã, Sơn La", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0962389190", "created_time": "02/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.GFKX80", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "772501", "cccd": "004082007389", "name": "NGUYỄN TRÌNH TỰ", "dob": "12/4/1982", "gender": "Nam", "address": "LÂM ĐỒNG", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0969299855", "created_time": "02/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.GFKX80", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "391258", "cccd": "027097010615", "name": "Nguyễn Đức Tú", "dob": "18/11/1997", "gender": "Nam", "address": "Thị xã Từ Sơn Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0934212366", "created_time": "02/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.GFKX80", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "6/11/2026", "mnv": ""}, {"id": "719307", "cccd": "001077044526", "name": "Đặng Duy Long", "dob": "10/6/1977", "gender": "Nam", "address": "Xóm Đại Tảo, Thôn Xuân Giang, Xã Đa Phúc, Thành Phố Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0965107481", "created_time": "03/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "978477", "cccd": "015302003460", "name": "Hoàng Thuý Niết", "dob": "25/5/2002", "gender": "Nữ", "address": "Lâm Thượng, Lục Yên, Yên Bái", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0386960163", "created_time": "03/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "315336", "cccd": "024191008043", "name": "Nguyễn Thị Hằng", "dob": "7/10/1991", "gender": "Nữ", "address": "Cẩm Bào, Xuân Cẩm, Hiệp Hòa, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0383069272", "created_time": "03/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "4/11/2026", "mnv": ""}, {"id": "434544", "cccd": "027183016449", "name": "Nguyễn Thị Len", "dob": "5/11/1983", "gender": "Nữ", "address": "Thôn Đại Lâm, Tam Đa, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0364478726", "created_time": "03/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "945332", "cccd": "024080000490", "name": "Đặng Văn Thà", "dob": "25/7/1980", "gender": "Nam", "address": "Hiệp Hoà Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0986441188", "created_time": "03/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "4/11/2026", "mnv": ""}, {"id": "967195", "cccd": "015199006575", "name": "Hoàng Thị Tháng", "dob": "17/2/1999", "gender": "Nữ", "address": "Thôn Sơn Bắc, Mai Sơn, Lục Yên, Yên Bái", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0332481496", "created_time": "04/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "974684", "cccd": "015098005786", "name": "Hoàng Trung Kiên", "dob": "1/2/1998", "gender": "Nam", "address": "thôn Sơn Bắc, Mai Sơn, Lục Yên, Yên Bái", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0366606962", "created_time": "04/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "122814", "cccd": "038201021313", "name": "Trương Quang Hà", "dob": "3/2/2001", "gender": "Nam", "address": "Vân Đình, Thành Vinh, , Thanh Hóa", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0983295643", "created_time": "04/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.GFKX80", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "6/11/2026", "mnv": ""}, {"id": "792923", "cccd": "027099001719", "name": "Chu Quang Hùng", "dob": "21/7/1999", "gender": "Nam", "address": "Số Nhà 09 Ngõ 6, Khu Phố Nội Trì, Tân Hồng, Từ Sơn, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0359050271", "created_time": "04/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.GFKX80", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "10/11/2026", "mnv": ""}, {"id": "838213", "cccd": "038092014563", "name": "Lê Ngọc Thanh", "dob": "10/5/1992", "gender": "Nam", "address": "Thường Xuân Thanh Hoá", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0968326630", "created_time": "04/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.GFKX80", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "688118", "cccd": "038097024214", "name": "Vi Xuân Khánh", "dob": "26/8/1997", "gender": "Nam", "address": "Xuân Phong, Bến Sung, Như Thanh, Thanh Hóa", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0982747697", "created_time": "04/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.GFKX80", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "579817", "cccd": "002200010095", "name": "Mương Văn Lợi", "dob": "1/3/2000", "gender": "Nam", "address": "Thôn Bản Bó, Yên Định, Bắc Mê, Hà Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "KTL-HN", "phone": "0867409167", "created_time": "05/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.5QPU15", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "670046", "cccd": "027086014147", "name": "Nguyễn Văn Quý", "dob": "15/1/1986", "gender": "Nam", "address": "Thôn Như Nguyệt, Tam Giang, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "098.291.8681", "created_time": "05/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "633497", "cccd": "027201004452", "name": "Nguyễn Anh Quân", "dob": "1/11/2001", "gender": "Nam", "address": "Khu Phố Kim Bảng, Phù Khê, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0972278169", "created_time": "05/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "381050", "cccd": "027306008243", "name": "Nguyễn Thị Ngọc", "dob": "12/4/2006", "gender": "Nữ", "address": "Thôn Lạc Trung, Dũng Liệt, Yên Phong, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0836812001", "created_time": "05/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "562035", "cccd": "019203010892", "name": "Ma Văn Giang", "dob": "5/12/2003", "gender": "Nam", "address": "Tân Hợp Tân Dương Định Hoá Thái Nguyên", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0325867687", "created_time": "05/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "6/11/2026", "mnv": ""}, {"id": "475648", "cccd": "001204032985", "name": "Nguyễn Quang Huy", "dob": "22/11/2004", "gender": "Nam", "address": "Thôn Phú Ninh, Minh Phú, Sóc Sơn, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "KTL-HN", "phone": "0978732963", "created_time": "06/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.5QPU15", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "202260", "cccd": "020300004331", "name": "Triệu Thị Hạnh", "dob": "14/2/2000", "gender": "Nữ", "address": "Lương Viên, Tiên Sơn, Việt Yên, Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0332987045", "created_time": "06/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "6/11/2026", "mnv": ""}, {"id": "191834", "cccd": "038090001093", "name": "Lại Thế Thắng", "dob": "9/4/1990", "gender": "Nam", "address": "Đông Trung, Hà Bình, Hà Trung, Thanh Hóa", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0973211773", "created_time": "06/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "6/11/2026", "mnv": ""}, {"id": "102218", "cccd": "001087052167", "name": "Nguyễn Ngọc Sơn Nhật", "dob": "20/12/1987", "gender": "Nam", "address": "Đồng Dành, Đông Xuân, Sóc Sơn, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0352293689", "created_time": "06/11/2026", "pv_status": "DỜI LỊCH PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "235888", "cccd": "008200008205", "name": "Trần Doãn Sáng", "dob": "10/2/2000", "gender": "Nam", "address": "Thôn Chắng Thượng, Hòa An, Chiêm Hóa, Tuyên Quang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0824347956", "created_time": "06/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.GFKX80", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "663363", "cccd": "015202007951", "name": "Nguyễn Hồng Quân", "dob": "23/8/2002", "gender": "Nam", "address": "Thôn Đồng Bẳn, Tân Thịnh, Văn Chấn, Yên Bái", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0972832582", "created_time": "06/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.GFKX80", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "883592", "cccd": "001096018036", "name": "Nguyễn Đức Nhất", "dob": "14/11/1996", "gender": "Nam", "address": "Phù Dực 2, Phù Đổng, Gia Lâm, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0988142325", "created_time": "06/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.GFKX80", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "457542", "cccd": "033082004533", "name": "Lê Văn Sơn", "dob": "10/7/1982", "gender": "Nam", "address": "Dị Sử, Mỹ Hào, Hưng Yên", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "CPP-TD", "phone": "0971672815", "created_time": "06/11/2026", "pv_status": "", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.HJ2K56", "overall_status": "ĐÃ ĐIỀN THÔNG TIN", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "481487", "cccd": "024208009436", "name": "Nguyễn Đình Huy", "dob": "4/2/2008", "gender": "Nam", "address": "Thổ Hà, Vân Hà Việt Yên Bắc Giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0367473993", "created_time": "09/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "9/11/2026", "mnv": ""}, {"id": "996289", "cccd": "024183019913", "name": "Nguyễn Thị Thu Hà", "dob": "8/12/1983", "gender": "Nữ", "address": "thổ Hà vân hà việt yên bắc giang", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0367473990", "created_time": "09/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "9/11/2026", "mnv": ""}, {"id": "186850", "cccd": "001182027474", "name": "Nguyễn Thị Hoan", "dob": "31/1/1982", "gender": "Nữ", "address": "Xuân Tảo, Xuân Giang, Sóc Sơn, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "KTL-HN", "phone": "0985853984", "created_time": "09/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.5QPU15", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "647511", "cccd": "027095009912", "name": "Nguyễn Văn Trường", "dob": "6/2/1995", "gender": "Nam", "address": "Thôn Nghĩa Chỉ, Minh Đạo, Tiên Du, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0369739878", "created_time": "09/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.GFKX80", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "388232", "cccd": "001091015640", "name": "Nguyễn Văn Hưng", "dob": "13/4/1991", "gender": "Nam", "address": "Phú Cường Sóc Sơn Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "KTL-HN", "phone": "0865376291", "created_time": "09/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.DVOS53", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "214056", "cccd": "001206032548", "name": "Nguyễn Tiến Hải", "dob": "13/2/2006", "gender": "Nam", "address": "Kim Giao, Tiến Thắng, Mê Linh, Hà Nội", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "KTL-HN", "phone": "0981819660", "created_time": "09/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "ĐÃ NHẬN VIỆC", "booking_code": "B.DVOS53", "overall_status": "ĐÃ NHẬN VIỆC", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "13/11/2026", "mnv": ""}, {"id": "199217", "cccd": "014201007235", "name": "Đinh Đức Thọ", "dob": "23/8/2001", "gender": "Nam", "address": "Bản Tiên Phong, Tường Hạ, Sơn La", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0333577400", "created_time": "09/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.Q5GM01", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "146942", "cccd": "027200005309", "name": "Đỗ Hữu Quảng", "dob": "12/9/2000", "gender": "Nam", "address": "Số Nhà 44, Phố 10/3, Khu Phố Trịnh Nguyễn, Phù Khê, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0923992000", "created_time": "09/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.GFKX80", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "162681", "cccd": "027098005580", "name": "Nguyễn Đức Hải", "dob": "22/6/1998", "gender": "Nam", "address": "Số Nhà 3 Ngách 3 Ngõ Giữa, Khu Phố Trịnh Nguyễn, Phù Khê, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0866602297", "created_time": "09/11/2026", "pv_status": "THAM GIA PV", "pv_result": "PASS", "training_status": "ĐÃ ĐÀO TẠO", "work_status": "HỦY NHẬN VIỆC", "booking_code": "B.GFKX80", "overall_status": "ĐÃ ĐÀO TẠO", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "441787", "cccd": "020087008959", "name": "Trần Khắc Vinh", "dob": "9/9/1987", "gender": "Nam", "address": "Đông Kinh, Lạng Sơn", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0328036383", "created_time": "09/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.GFKX80", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "160685", "cccd": "010304003824", "name": "Phàn Thị Hương", "dob": "11/12/2004", "gender": "Nữ", "address": "Thôn Nậm Tồn, Nậm Khánh, Bắc Hà, Lào Cai", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "NIP-BN", "phone": "0353757024", "created_time": "10/11/2026", "pv_status": "HỦY PV", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.DVOS53", "overall_status": "ĐÃ LIÊN HỆ", "source": "Facebook group ( Miễn phí )", "pv_date": "", "ob_date": "", "mnv": ""}, {"id": "487024", "cccd": "027086003519", "name": "Nguyễn Tiến Dũng", "dob": "4/2/1986", "gender": "Nam", "address": "Khu Phố Hưng Phúc, Tương Giang, Từ Sơn, Bắc Ninh", "recruiter": "TRẦN TUẤN ANH", "email": "tuananhtran0402@gmail.com", "project": "UNI-MB", "phone": "0983368242", "created_time": "12/11/2026", "pv_status": "", "pv_result": "", "training_status": "", "work_status": "", "booking_code": "B.GFKX80", "overall_status": "ĐÃ ĐIỀN THÔNG TIN", "source": "Facebook group ( Trả phí )", "pv_date": "", "ob_date": "", "mnv": ""}];
+    const SPREADSHEET_ID = '1o9pUUKB3NXUmbZv6cIuV50a6Mszo8-dOZrAR3hQeVfw';
+    const GID_DATA_FINAL = '1448578932';
+
+    // Default & Custom Data Sources
+    const DEFAULT_SOURCES = ['Tự tuyển', 'CTV Dương Thảo', 'CTV Hồng Ngọc', 'CTV Xuân Khánh', 'CTV Thanh Thanh'];
+    const SOURCE_STORAGE_KEY = 'ECL_REAL_DATA_SOURCES_LIST_V1';
+    const CANDIDATE_SOURCE_KEY = 'ECL_CANDIDATE_ASSIGNED_SOURCES_V1';
+
+    let customSourcesList = [...DEFAULT_SOURCES];
+    try {
+      const savedSources = localStorage.getItem(SOURCE_STORAGE_KEY);
+      if (savedSources) customSourcesList = JSON.parse(savedSources);
+    } catch(e) { console.error('Error loading sources', e); }
+
+    let candidateAssignedSources = {};
+    try {
+      const savedAssigned = localStorage.getItem(CANDIDATE_SOURCE_KEY);
+      if (savedAssigned) candidateAssignedSources = JSON.parse(savedAssigned);
+    } catch(e) { console.error('Error loading assigned sources', e); }
+
+    // Persistent Multi-Month KPI Storage
+    const STORAGE_KEY = 'ECL_KPI_MULTI_MONTH_POINTS_V5';
+    let customKPIState = {};
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) customKPIState = JSON.parse(saved);
+    } catch(e) { console.error('Error loading KPI storage', e); }
+
+    let filteredCandidates = [...RAW_CANDIDATES];
+    let currentPage = 1;
+    let pageSize = 15;
+    let autoSyncTimer = null;
+
+    function saveSourcesState() {
+      try {
+        localStorage.setItem(SOURCE_STORAGE_KEY, JSON.stringify(customSourcesList));
+        localStorage.setItem(CANDIDATE_SOURCE_KEY, JSON.stringify(candidateAssignedSources));
+      } catch(e) { console.error('Error saving sources', e); }
+    }
+
+    function saveKPIState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(customKPIState));
+      } catch(e) { console.error('Error saving KPI storage', e); }
+    }
+
+    // Add new CTV dynamically
+    function promptAddNewCTV() {
+      const name = prompt('Nhập tên Cộng Tác Viên (CTV) mới cần thêm vào danh sách:\n(Ví dụ: CTV Mai Linh, CTV Tuấn Hưng...)');
+      if (name && name.trim()) {
+        const cleanName = name.trim();
+        if (!customSourcesList.includes(cleanName)) {
+          customSourcesList.push(cleanName);
+          saveSourcesState();
+          populateRealSourceFilter();
+          renderCandidateTable();
+          renderRealSourceStats();
+          if (document.getElementById('tab-monthly').classList.contains('active')) {
+            renderMonthlyTab();
+          }
+          alert(`✅ Đã thêm thành công "${cleanName}" vào danh mục Nguồn Data Thực Tế!`);
+        } else {
+          alert(`Nguồn "${cleanName}" đã tồn tại trong danh sách.`);
+        }
+      }
+    }
+
+    function populateRealSourceFilter() {
+      const select = document.getElementById('filter-real-source');
+      const currentVal = select.value;
+      select.innerHTML = '<option value="ALL">Tất cả nguồn data thực tế</option>';
+      customSourcesList.forEach(s => {
+        select.innerHTML += `<option value="${s}">${s}</option>`;
+      });
+      select.value = currentVal || 'ALL';
+    }
+
+    function handleSourceChange(candidateId, newSource) {
+      if (newSource === '__ADD_NEW__') {
+        const name = prompt('Nhập tên CTV mới:');
+        if (name && name.trim()) {
+          const cleanName = name.trim();
+          if (!customSourcesList.includes(cleanName)) {
+            customSourcesList.push(cleanName);
+            saveSourcesState();
+            populateRealSourceFilter();
+          }
+          candidateAssignedSources[candidateId] = cleanName;
+        } else {
+          // Revert to previous or default
+          candidateAssignedSources[candidateId] = candidateAssignedSources[candidateId] || 'Tự tuyển';
+        }
+      } else {
+        candidateAssignedSources[candidateId] = newSource;
+      }
+      saveSourcesState();
+      renderCandidateTable();
+      renderRealSourceStats();
+      if (document.getElementById('tab-monthly').classList.contains('active')) {
+        renderMonthlyTab();
+      }
+    }
+
+    function getCandidateRealSource(candidateId) {
+      return candidateAssignedSources[candidateId] || 'Tự tuyển';
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+
+      if (tabId === 'tab-overview') {
+        document.getElementById('btn-tab-overview').classList.add('active');
+        document.getElementById('tab-overview').classList.add('active');
+        applyFilters();
+      } else if (tabId === 'tab-monthly') {
+        document.getElementById('btn-tab-monthly').classList.add('active');
+        document.getElementById('tab-monthly').classList.add('active');
+        renderMonthlyTab();
+      }
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const btn = document.getElementById('theme-toggle');
+      if (current === 'light') {
+        html.removeAttribute('data-theme');
+        btn.innerHTML = '☀️ Light Mode';
+      } else {
+        html.setAttribute('data-theme', 'light');
+        btn.innerHTML = '🌙 Dark Mode';
+      }
+    }
+
+    function toggleAutoSync(isSilent) {
+      const btn = document.getElementById('btn-auto-sync');
+      if (autoSyncTimer) {
+        clearInterval(autoSyncTimer);
+        autoSyncTimer = null;
+        if (btn) {
+          btn.innerHTML = '⚡ Tự Động Live (Tắt)';
+          btn.classList.remove('btn-primary');
+          btn.classList.add('btn-outline');
+        }
+      } else {
+        autoSyncTimer = setInterval(() => triggerRealtimeSync(true), 20000); // Tự động kéo dữ liệu mỗi 20 giây
+        if (btn) {
+          btn.innerHTML = '🟢 Tự Động Live (20s)';
+          btn.classList.remove('btn-outline');
+          btn.classList.add('btn-primary');
+        }
+        triggerRealtimeSync(isSilent);
+      }
+    }
+
+    function triggerRealtimeSync(isSilent) {
+      const btn = document.getElementById('btn-sync-live');
+      const statusText = document.getElementById('sync-status-text');
+      if (btn) {
+        btn.innerHTML = '⏳ Đang kéo dữ liệu live...';
+        btn.disabled = true;
+      }
+
+      // Endpoint Google Visualization API trả về cấu trúc dữ liệu JSON sạch 100%
+      const gvizUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?gid=${GID_DATA_FINAL}&t=${Date.now()}`;
+      
+      fetch(gvizUrl)
+        .then(res => {
+          if (!res.ok) throw new Error('HTTP ' + res.status + ': Vui lòng kiểm tra quyền xem link trên Google Sheets');
+          return res.text();
+        })
+        .then(text => {
+          const startIdx = text.indexOf('{');
+          const endIdx = text.lastIndexOf('}');
+          if (startIdx === -1 || endIdx === -1) {
+            throw new Error('Dữ liệu trả về không đúng định dạng JSON của Google Sheets');
+          }
+          const json = JSON.parse(text.substring(startIdx, endIdx + 1));
+          const rows = json.table ? json.table.rows : [];
+          if (!rows || rows.length === 0) {
+            throw new Error('Không có dòng dữ liệu nào trên sheet DATA FINAL');
+          }
+
+          function getCell(row, idx) {
+            if (!row || !row.c || !row.c[idx]) return '';
+            const c = row.c[idx];
+            if (c.f !== undefined && c.f !== null) return String(c.f).trim();
+            if (c.v !== undefined && c.v !== null) {
+              if (typeof c.v === 'string' && c.v.startsWith('Date(')) {
+                const parts = c.v.replace('Date(', '').replace(')', '').split(',');
+                if (parts.length >= 3) {
+                  const y = parts[0];
+                  const m = String(parseInt(parts[1]) + 1).padStart(2, '0');
+                  const d = String(parts[2]).padStart(2, '0');
+                  return `${y}-${m}-${d}`;
+                }
+              }
+              return String(c.v).trim();
+            }
+            return '';
+          }
+
+          const newCandidates = [];
+          rows.forEach(r => {
+            const idVal = getCell(r, 0);
+            const nameVal = getCell(r, 3);
+            if (!idVal && !nameVal) return;
+
+            newCandidates.push({
+              id: idVal,
+              cccd: getCell(r, 1),
+              name: nameVal,
+              dob: getCell(r, 4),
+              gender: getCell(r, 5),
+              address: getCell(r, 6),
+              recruiter: getCell(r, 9),
+              email: getCell(r, 10),
+              project: getCell(r, 11),
+              phone: getCell(r, 12),
+              created_time: getCell(r, 14),
+              pv_status: getCell(r, 15),
+              pv_result: getCell(r, 16),
+              training_status: getCell(r, 17),
+              work_status: getCell(r, 18),
+              booking_code: getCell(r, 19),
+              overall_status: getCell(r, 20),
+              source: getCell(r, 22),
+              pv_date: getCell(r, 23),
+              ob_date: getCell(r, 25),
+              mnv: getCell(r, 26)
+            });
+          });
+
+          if (newCandidates.length > 0) {
+            RAW_CANDIDATES = newCandidates;
+            console.log('✅ Real-time Live Sync thành công! Tổng ứng viên:', RAW_CANDIDATES.length);
+          }
+
+          if (statusText) {
+            statusText.innerHTML = `🟢 <strong style="color:#34d399;">LIVE REAL-TIME:</strong> Cập nhật ${new Date().toLocaleTimeString('vi-VN')} (${RAW_CANDIDATES.length} UV)`;
+          }
+          if (btn) {
+            btn.innerHTML = '✅ Đã Đồng Bộ!';
+            setTimeout(() => { btn.innerHTML = '🔄 Đồng Bộ Google Sheets'; btn.disabled = false; }, 1500);
+          }
+
+          applyFilters();
+          renderMonthlyTab();
+        })
+        .catch(err => {
+          console.warn('Live sync fallback:', err.message);
+          if (btn) {
+            btn.innerHTML = '🔄 Đồng Bộ Google Sheets';
+            btn.disabled = false;
+          }
+          if (statusText) {
+            statusText.innerHTML = '🟡 Đang hiển thị bản dữ liệu gần nhất';
+          }
+          if (!isSilent && !autoSyncTimer) {
+            console.warn("Sync notice:", err.message);
+          }
+        });
+    }
+
+    // ==========================================
+    // TAB 1: OVERVIEW & CANDIDATE MASTER TABLE
+    // ==========================================
+    function applyFilters() {
+      const rec = document.getElementById('filter-recruiter').value;
+      const proj = document.getElementById('filter-project').value;
+      const workSt = document.getElementById('filter-work-status').value;
+      const realSrc = document.getElementById('filter-real-source').value;
+      const month = document.getElementById('filter-month').value;
+      const search = document.getElementById('filter-search').value.toLowerCase().trim();
+
+      filteredCandidates = RAW_CANDIDATES.filter(c => {
+        if (rec !== 'ALL' && c.recruiter !== rec) return false;
+        if (proj !== 'ALL' && c.project !== proj) return false;
+        if (workSt === 'ĐÃ NHẬN VIỆC' && c.work_status !== 'ĐÃ NHẬN VIỆC') return false;
+        if (workSt === 'ĐÃ NGHỈ VIỆC' && c.work_status !== 'ĐÃ NGHỈ VIỆC') return false;
+        if (workSt === 'HỦY NHẬN VIỆC' && c.work_status !== 'HỦY NHẬN VIỆC') return false;
+        if (workSt === 'DỜI LỊCH NHẬN VIỆC' && c.work_status !== 'DỜI LỊCH NHẬN VIỆC') return false;
+        if (workSt === 'PENDING' && (c.work_status === 'ĐÃ NHẬN VIỆC' || c.work_status === 'HỦY NHẬN VIỆC' || c.work_status === 'ĐÃ NGHỈ VIỆC')) return false;
+
+        // Real Data Source filter
+        const cRealSrc = getCandidateRealSource(c.id);
+        if (realSrc !== 'ALL' && cRealSrc !== realSrc) return false;
+
+        if (month !== 'ALL') {
+          const obIso = normalizeDateToISO(c.ob_date);
+          const crIso = normalizeDateToISO(c.created_time);
+          const pvIso = normalizeDateToISO(c.pv_date);
+
+          const obMonth = obIso ? obIso.slice(0, 7) : '';
+          const crMonth = crIso ? crIso.slice(0, 7) : '';
+          const pvMonth = pvIso ? pvIso.slice(0, 7) : '';
+
+          const matchMonth = (obMonth === month) || (!obMonth && (crMonth === month || pvMonth === month));
+          if (!matchMonth) return false;
+        }
+
+        if (search) {
+          const haystack = `${c.name} ${c.cccd} ${c.phone} ${c.booking_code} ${c.id} ${c.mnv} ${cRealSrc}`.toLowerCase();
+          if (!haystack.includes(search)) return false;
+        }
+
+        return true;
+      });
+
+      currentPage = 1;
+      updateKPICards();
+      renderRealSourceStats();
+      renderCandidateTable();
+    }
+
+    function updateKPICards() {
+      const monthVal = document.getElementById('filter-month').value;
+      const monthTitles = {
+        '2026-10': 'KỲ THÁNG 10/2026 (T10-2026)',
+        '2026-09': 'KỲ THÁNG 09/2026 (T9-2026)',
+        '2026-11': 'KỲ THÁNG 11/2026 (T11-2026)',
+        '2026-12': 'KỲ THÁNG 12/2026 (T12-2026)',
+        'ALL': 'TOÀN BỘ CÁC KỲ (T9 - T11/2026)'
+      };
+      const displayTitle = monthTitles[monthVal] || monthVal;
+      const titleEl = document.getElementById('tab1-kpi-period-title');
+      if (titleEl) titleEl.innerText = `📊 BÁO CÁO TỔNG HỢP SỐ LIỆU: ${displayTitle}`;
+      const srcTitleEl = document.getElementById('tab1-source-stats-title');
+      if (srcTitleEl) srcTitleEl.innerText = `🌐 BẢNG THỐNG KÊ HIỆU QUẢ NGUỒN DATA THỰC TẾ (${displayTitle})`;
+      const srcBadgeEl = document.getElementById('real-source-period-badge');
+      if (srcBadgeEl) srcBadgeEl.innerText = `Kỳ: ${displayTitle}`;
+
+      const total = filteredCandidates.length;
+      const nhanViec = filteredCandidates.filter(c => c.work_status === 'ĐÃ NHẬN VIỆC').length;
+      const daNghi = filteredCandidates.filter(c => c.work_status === 'ĐÃ NGHỈ VIỆC').length;
+      const grossOB = nhanViec + daNghi;
+      const passPV = filteredCandidates.filter(c => c.pv_result === 'PASS').length;
+      const failPV = filteredCandidates.filter(c => c.pv_result === 'FAIL').length;
+      const totalPV = passPV + failPV;
+
+      document.getElementById('kpi-net-ob').innerText = nhanViec;
+      document.getElementById('kpi-gross-ob').innerText = grossOB;
+      document.getElementById('kpi-pass-pv').innerText = passPV;
+      const ratePass = totalPV > 0 ? ((passPV / totalPV) * 100).toFixed(1) + '%' : '0.0%';
+      document.getElementById('kpi-rate-pass').innerText = ratePass;
+      const rateNVPass = passPV > 0 ? ((nhanViec / passPV) * 100).toFixed(1) + '%' : '0.0%';
+      document.getElementById('kpi-rate-nv-pass').innerText = rateNVPass;
+    }
+
+    function renderRealSourceStats() {
+      const stats = {};
+      customSourcesList.forEach(s => {
+        stats[s] = { total: 0, passPV: 0, nhanViec: 0, daNghi: 0, huyNV: 0 };
+      });
+
+      // TÍNH TOÁN THEO ĐÚNG KỲ ĐANG ĐƯỢC CHỌN (filteredCandidates)
+      filteredCandidates.forEach(c => {
+        const src = getCandidateRealSource(c.id);
+        if (!stats[src]) stats[src] = { total: 0, passPV: 0, nhanViec: 0, daNghi: 0, huyNV: 0 };
+        stats[src].total++;
+        if (c.pv_result === 'PASS') stats[src].passPV++;
+        if (c.work_status === 'ĐÃ NHẬN VIỆC') stats[src].nhanViec++;
+        else if (c.work_status === 'ĐÃ NGHỈ VIỆC') stats[src].daNghi++;
+        else if (c.work_status === 'HỦY NHẬN VIỆC') stats[src].huyNV++;
+      });
+
+      const tbody = document.getElementById('real-source-stats-tbody');
+      tbody.innerHTML = '';
+
+      Object.keys(stats).sort((a,b) => stats[b].nhanViec - stats[a].nhanViec).forEach(sName => {
+        const s = stats[sName];
+        if (s.total === 0 && !DEFAULT_SOURCES.includes(sName)) return;
+
+        const conv = s.total > 0 ? ((s.nhanViec / s.total) * 100).toFixed(1) + '%' : '0.0%';
+        let rating = '<span class="tag-badge tag-blue">Đang Cung Ứng</span>';
+        if (s.nhanViec >= 10) rating = '<span class="tag-badge tag-green">⭐ NGUỒN CHỦ LỰC</span>';
+        else if (s.nhanViec >= 5) rating = '<span class="tag-badge tag-purple">HIỆU QUẢ CAO</span>';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${sName}</strong></td>
+          <td>${s.total} hồ sơ</td>
+          <td><span style="color:#60a5fa; font-weight:700;">${s.passPV}</span></td>
+          <td><span class="badge-kpi-star">⭐ ${s.nhanViec} ĐIỂM</span></td>
+          <td><span style="color:#fbbf24;">${s.daNghi}</span></td>
+          <td><span style="color:#f87171;">${s.huyNV}</span></td>
+          <td><strong style="color:#34d399;">${conv}</strong></td>
+          <td>${rating}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderCandidateTable() {
+      const tbody = document.getElementById('candidate-tbody');
+      tbody.innerHTML = '';
+
+      const total = filteredCandidates.length;
+      document.getElementById('table-record-count').innerText = total;
+
+      const start = (currentPage - 1) * pageSize;
+      const end = Math.min(start + pageSize, total);
+      const pageData = filteredCandidates.slice(start, end);
+
+      pageData.forEach((c, idx) => {
+        const tr = document.createElement('tr');
+        const currentSrc = getCandidateRealSource(c.id);
+
+        let sourceOptions = '';
+        customSourcesList.forEach(s => {
+          sourceOptions += `<option value="${s}" ${currentSrc === s ? 'selected' : ''}>${s}</option>`;
+        });
+        sourceOptions += '<option value="__ADD_NEW__">➕ Thêm CTV mới...</option>';
+
+        let col19Badge = '<span class="status-badge badge-exact-nhan-viec">ĐÃ NHẬN VIỆC</span>';
+        if (c.work_status === 'ĐÃ NGHỈ VIỆC') {
+          col19Badge = '<span class="status-badge badge-exact-nghi-viec">ĐÃ NGHỈ VIỆC</span>';
+        } else if (c.work_status === 'HỦY NHẬN VIỆC') {
+          col19Badge = '<span class="status-badge badge-exact-huy-nhan-viec">HỦY NHẬN VIỆC</span>';
+        } else if (c.work_status === 'DỜI LỊCH NHẬN VIỆC') {
+          col19Badge = '<span class="status-badge badge-exact-doi-lich">DỜI LỊCH NHẬN VIỆC</span>';
+        } else if (!c.work_status) {
+          col19Badge = '<span style="color:var(--text-sub);">-</span>';
+        }
+
+        const isTranThiGam = c.name.includes('Trần Thị Gấm');
+        const nameDisplay = isTranThiGam ? 
+          `<strong style="color: #34d399;">🌟 ${c.name}</strong> <span class="tag-badge tag-green" style="font-size:10px;">MNV: ${c.mnv || 'T257-00982'}</span>` : 
+          `<strong>${c.name}</strong>`;
+
+        const srcClass = currentSrc === 'Tự tuyển' ? 'tu-tuyen-selected' : 'ctv-selected';
+
+        tr.innerHTML = `
+          <td>${start + idx + 1}</td>
+          <td><code>${c.id || '-'}</code></td>
+          <td>${nameDisplay}</td>
+          <td>${c.phone || '-'}</td>
+          <td><strong>${c.project}</strong></td>
+          <td>${c.recruiter}</td>
+          <td><span style="font-family:var(--font-mono); font-size:12px;">${c.ob_date || '-'}</span></td>
+          <td>${col19Badge}</td>
+          <td><span style="color:#94a3b8; font-size:12px; font-weight:600;">${c.overall_status || '-'}</span></td>
+          
+          <!-- Cột Nguồn Data Thực Tế -->
+          <td style="background: rgba(139, 92, 246, 0.06); border-left: 2px solid rgba(139, 92, 246, 0.4);">
+            <select class="source-select ${srcClass}" onchange="handleSourceChange('${c.id}', this.value)">
+              ${sourceOptions}
+            </select>
+          </td>
+
+          <td style="font-size:11px; max-width:160px; overflow:hidden; text-overflow:ellipsis;">${c.source}</td>
+          <td><button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="viewCandidate('${c.id}')">Xem</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('page-info').innerText = total > 0 ? 
+        `Đang hiển thị ${start + 1} đến ${end} của ${total} ứng viên` : 
+        `Không có ứng viên nào khớp với bộ lọc`;
+
+      renderPagination(total);
+    }
+
+    function renderPagination(total) {
+      const container = document.getElementById('pagination-controls');
+      container.innerHTML = '';
+      const totalPages = Math.ceil(total / pageSize);
+      if (totalPages <= 1) return;
+
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'page-btn';
+      prevBtn.innerHTML = '&laquo;';
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => { currentPage--; renderCandidateTable(); };
+      container.appendChild(prevBtn);
+
+      for (let p = 1; p <= totalPages; p++) {
+        if (p === 1 || p === totalPages || (p >= currentPage - 2 && p <= currentPage + 2)) {
+          const btn = document.createElement('button');
+          btn.className = 'page-btn' + (p === currentPage ? ' active' : '');
+          btn.innerText = p;
+          btn.onclick = () => { currentPage = p; renderCandidateTable(); };
+          container.appendChild(btn);
+        } else if (p === currentPage - 3 || p === currentPage + 3) {
+          const span = document.createElement('span');
+          span.style.padding = '0 4px';
+          span.innerText = '...';
+          container.appendChild(span);
+        }
+      }
+
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'page-btn';
+      nextBtn.innerHTML = '&raquo;';
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => { currentPage++; renderCandidateTable(); };
+      container.appendChild(nextBtn);
+    }
+
+    function changePageSize() {
+      pageSize = parseInt(document.getElementById('page-size-select').value);
+      currentPage = 1;
+      renderCandidateTable();
+    }
+
+    function viewCandidate(id) {
+      const c = RAW_CANDIDATES.find(item => item.id === id);
+      if (!c) return;
+
+      const realSrc = getCandidateRealSource(c.id);
+
+      document.getElementById('modal-candidate-name').innerText = `Hồ Sơ: ${c.name} (${c.id})`;
+      const content = document.getElementById('modal-detail-content');
+      content.innerHTML = `
+        <div class="detail-item"><span>Họ và Tên</span><span>${c.name}</span></div>
+        <div class="detail-item"><span>Số CCCD</span><span>${c.cccd || 'Chưa cập nhật'}</span></div>
+        <div class="detail-item"><span>Ngày Sinh / Giới Tính</span><span>${c.dob || '-'} | ${c.gender || '-'}</span></div>
+        <div class="detail-item"><span>Số Điện Thoại</span><span>${c.phone || '-'}</span></div>
+        <div class="detail-item"><span>Địa Chỉ</span><span>${c.address || '-'}</span></div>
+        <div class="detail-item"><span>Dự Án / Nhà Máy</span><span><strong>${c.project}</strong></span></div>
+        <div class="detail-item"><span>Chuyên Viên Tuyển Dụng</span><span><strong>${c.recruiter}</strong></span></div>
+        <div class="detail-item"><span>Mã Booking</span><span><code>${c.booking_code || '-'}</code></span></div>
+        <div class="detail-item"><span>Ngày Onboarding (OB)</span><span><strong>${c.ob_date || '-'}</strong></span></div>
+        <div class="detail-item"><span>Mã Nhân Viên (MNV)</span><span>${c.mnv || '-'}</span></div>
+        <div class="detail-item"><span>Tình Trạng Nhận Việc (Col 19)</span><span><strong>${c.work_status || '-'}</strong></span></div>
+        <div class="detail-item"><span>Tình Trạng Tổng Hợp (Col 21)</span><span><strong>${c.overall_status || '-'}</strong></span></div>
+        <div class="detail-item"><span>NGUỒN DATA THỰC TẾ</span><span><strong style="color:#c084fc;">${realSrc}</strong></span></div>
+        <div class="detail-item"><span>Nguồn Gốc Trên File</span><span>${c.source || '-'}</span></div>
+      `;
+
+      document.getElementById('detail-modal').classList.add('active');
+    }
+
+    function closeModal(event) {
+      document.getElementById('detail-modal').classList.remove('active');
+    }
+
+    function exportOverviewCSV() {
+      let csv = 'STT,Ma UV,Ho va Ten,Gioi Tinh,SDT,Du An,Chuyen Vien Tuyen Dung,Ma Booking,Ngay OB,Tinh Trang Nhan Viec (Col 19),Tinh Trang Tong Hop (Col 21),Nguon Data Thuc Te,Nguon Goc File\n';
+      filteredCandidates.forEach((c, idx) => {
+        const realSrc = getCandidateRealSource(c.id);
+        csv += `"${idx + 1}","${c.id}","${c.name}","${c.gender}","${c.phone}","${c.project}","${c.recruiter}","${c.booking_code}","${c.ob_date}","${c.work_status || ''}","${c.overall_status || ''}","${realSrc}","${c.source}"\n`;
+      });
+
+      const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Danh_Sach_Ung_Vien_Chi_Tiet_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+
+    // =========================================================================
+    // TAB 2: TÍNH KPI THEO THÁNG & CHỌN THÁNG GHI NHẬN (CÓ Ô ĐIỀN ĐIỂM KỲ 2)
+    // =========================================================================
+    let monthlyCandidatesList = [];
+    const AVAILABLE_MONTHS = ['2026-09', '2026-10', '2026-11', '2026-12', '2027-01'];
+
+    function normalizeDateToISO(dStr) {
+      if (!dStr) return '';
+      dStr = String(dStr).trim();
+      if (dStr.includes('-') && dStr.length >= 10) {
+        return dStr.slice(0, 10);
+      }
+      if (dStr.includes('/')) {
+        const parts = dStr.split('/');
+        if (parts.length >= 2) {
+          const d = parts[0].trim().padStart(2, '0');
+          const m = parts[1].trim().padStart(2, '0');
+          let y = parts.length >= 3 ? parts[2].trim() : '2026';
+          if (y.length === 2) y = '20' + y;
+          return `${y}-${m}-${d}`;
+        }
+      }
+      return dStr;
+    }
+
+    function getMonthLabel(dateStr) {
+      const iso = normalizeDateToISO(dateStr);
+      if (iso && iso.length >= 7) return iso.slice(0, 7);
+      return '2026-10';
+    }
+
+    function getNextMonth(monthStr) {
+      if (monthStr === '2026-09') return '2026-10';
+      if (monthStr === '2026-10') return '2026-11';
+      if (monthStr === '2026-11') return '2026-12';
+      if (monthStr === '2026-12') return '2027-01';
+      return '2026-11';
+    }
+
+    function getEffectiveRecruiter(recruiterName) {
+      const merge = document.getElementById('monthly-merge-recruiters').value === 'YES';
+      if (merge && recruiterName === 'TRẦN HÙNG ANH') {
+        return 'TRẦN TUẤN ANH';
+      }
+      return recruiterName;
+    }
+
+    function renderMonthlyTab() {
+      const selectedMonth = document.getElementById('monthly-select-month').value;
+      const selectedRec = document.getElementById('monthly-select-recruiter').value;
+      const selectedProj = document.getElementById('monthly-select-project').value;
+
+      const monthNames = {
+        '2026-10': 'Tháng 10/2026',
+        '2026-11': 'Tháng 11/2026',
+        '2026-09': 'Tháng 09/2026',
+        '2026-12': 'Tháng 12/2026',
+        'ALL': 'Toàn Bộ Các Tháng (Lũy kế cả 2 kỳ)'
+      };
+
+      const displayMonthTitle = monthNames[selectedMonth] || selectedMonth;
+      document.getElementById('label-kpi-month-title').innerText = `🌟 TỔNG ĐIỂM KPI GHI NHẬN (${displayMonthTitle.toUpperCase()})`;
+      document.getElementById('monthly-rec-summary-label').innerText = `Đang xem báo cáo KPI: ${displayMonthTitle}`;
+
+      // Candidates qualifying for onboarding: 54 ĐÃ NHẬN VIỆC + 9 ĐÃ NGHỈ VIỆC SAU OB = 63 candidates
+      monthlyCandidatesList = RAW_CANDIDATES.filter(c => {
+        const hasOBDate = !!c.ob_date;
+        const isNhanViec = c.work_status === 'ĐÃ NHẬN VIỆC';
+        const isResignedOB = c.work_status === 'ĐÃ NGHỈ VIỆC' && hasOBDate;
+        if (!isNhanViec && !isResignedOB) return false;
+
+        const effectiveRec = getEffectiveRecruiter(c.recruiter);
+        if (selectedRec !== 'ALL' && effectiveRec !== selectedRec && c.recruiter !== selectedRec) return false;
+        if (selectedProj !== 'ALL' && c.project !== selectedProj) return false;
+
+        return true;
+      });
+
+      monthlyCandidatesList.sort((a,b) => (b.ob_date || '').localeCompare(a.ob_date || ''));
+
+      const filterViewMode = document.getElementById('monthly-filter-view') ? document.getElementById('monthly-filter-view').value : 'ACTIVE';
+
+      // Pre-calculate points to determine which candidates belong to this period
+      const activeCandidatesInMonth = [];
+      monthlyCandidatesList.forEach(c => {
+        const defaultMonth1 = getMonthLabel(c.ob_date);
+        if (!customKPIState[c.id]) {
+          customKPIState[c.id] = {
+            selected: true,
+            month1: defaultMonth1,
+            points1: 1.0,
+            month2: 'NONE',
+            points2: 0.0,
+            note: ''
+          };
+        }
+        const state = customKPIState[c.id];
+        if (!state.month1) state.month1 = defaultMonth1;
+        if (state.points1 === undefined) state.points1 = 1.0;
+        if (state.month2 === undefined) state.month2 = 'NONE';
+        if (state.points2 === undefined) state.points2 = 0.0;
+
+        const hasActivePeriod2 = (state.month2 !== 'NONE' && state.month2 !== '') && (parseFloat(state.points2) > 0);
+        let pts = 0;
+        if (state.selected) {
+          if (selectedMonth === 'ALL') {
+            pts = (parseFloat(state.points1) || 0) + (hasActivePeriod2 ? (parseFloat(state.points2) || 0) : 0);
+          } else {
+            if (state.month1 === selectedMonth) pts += (parseFloat(state.points1) || 0);
+            if (hasActivePeriod2 && state.month2 === selectedMonth) pts += (parseFloat(state.points2) || 0);
+          }
+        }
+        c._pointsForSelectedMonth = pts;
+        c._belongsToActiveMonth = (state.month1 === selectedMonth) || (hasActivePeriod2 && state.month2 === selectedMonth);
+        if (selectedMonth === 'ALL' || c._belongsToActiveMonth || pts > 0) {
+          activeCandidatesInMonth.push(c);
+        }
+      });
+
+      const listToDisplay = (filterViewMode === 'ACTIVE' && selectedMonth !== 'ALL') ? activeCandidatesInMonth : monthlyCandidatesList;
+
+      document.getElementById('monthly-list-badge').innerText = `Hiển thị: ${listToDisplay.length} ứng viên (${filterViewMode === 'ACTIVE' ? 'Chỉ ứng viên có điểm trong kỳ ' + displayMonthTitle : 'Toàn bộ ứng viên'})`;
+
+      const tbody = document.getElementById('monthly-candidates-tbody');
+      tbody.innerHTML = '';
+
+      listToDisplay.forEach((c, idx) => {
+        const defaultMonth1 = getMonthLabel(c.ob_date);
+
+        if (!customKPIState[c.id]) {
+          customKPIState[c.id] = {
+            selected: true,
+            month1: defaultMonth1,
+            points1: 1.0,
+            month2: 'NONE',
+            points2: 0.0,
+            note: ''
+          };
+        }
+        const state = customKPIState[c.id];
+        if (!state.month1) state.month1 = defaultMonth1;
+        if (state.points1 === undefined) state.points1 = 1.0;
+        if (state.month2 === undefined) state.month2 = 'NONE';
+        if (state.points2 === undefined) state.points2 = 0.0;
+
+        const hasActivePeriod2 = (state.month2 !== 'NONE' && state.month2 !== '') && (parseFloat(state.points2) > 0);
+
+        let pointsForCurrentMonth = 0;
+        if (state.selected) {
+          if (selectedMonth === 'ALL') {
+            pointsForCurrentMonth = (parseFloat(state.points1) || 0) + (hasActivePeriod2 ? (parseFloat(state.points2) || 0) : 0);
+          } else {
+            if (state.month1 === selectedMonth) pointsForCurrentMonth += (parseFloat(state.points1) || 0);
+            if (hasActivePeriod2 && state.month2 === selectedMonth) pointsForCurrentMonth += (parseFloat(state.points2) || 0);
+          }
+        }
+
+        const total2Periods = (parseFloat(state.points1) || 0) + (hasActivePeriod2 ? (parseFloat(state.points2) || 0) : 0);
+
+        const tr = document.createElement('tr');
+        tr.id = `row-monthly-${c.id}`;
+        if (state.selected) tr.classList.add('row-selected');
+        if (pointsForCurrentMonth > 0) tr.classList.add('row-active-month');
+
+        let m1Options = '';
+        AVAILABLE_MONTHS.forEach(m => {
+          m1Options += `<option value="${m}" ${state.month1 === m ? 'selected' : ''}>${m}</option>`;
+        });
+
+        let m2Options = `<option value="NONE" ${state.month2 === 'NONE' ? 'selected' : ''}>-- Không tính Kỳ 2 --</option>`;
+        AVAILABLE_MONTHS.forEach(m => {
+          m2Options += `<option value="${m}" ${state.month2 === m ? 'selected' : ''}>${m}</option>`;
+        });
+
+        let currentImpactBadge = '<span style="color:var(--text-sub); font-size:11px;">0đ (Không tính vào tháng này)</span>';
+        if (pointsForCurrentMonth > 0) {
+          currentImpactBadge = `<span class="badge-kpi-star" style="font-size:12px;">⭐ +${pointsForCurrentMonth.toFixed(1).replace('.0','')} ĐIỂM</span>`;
+        }
+
+        let exactCol19Badge = '<span class="status-badge badge-exact-nhan-viec">ĐÃ NHẬN VIỆC</span>';
+        if (c.work_status === 'ĐÃ NGHỈ VIỆC') {
+          exactCol19Badge = '<span class="status-badge badge-exact-nghi-viec">ĐÃ NGHỈ VIỆC</span>';
+        }
+
+        const isTranThiGam = c.name.includes('Trần Thị Gấm');
+        const nameDisplay = isTranThiGam ? 
+          `<strong style="color: #34d399;">🌟 ${c.name}</strong> <span class="tag-badge tag-green" style="font-size:10px;">MNV: ${c.mnv || 'T257-00982'}</span>` : 
+          `<strong>${c.name}</strong>`;
+
+        const displayRec = c.recruiter === 'TRẦN HÙNG ANH' ? 
+          `<span>TRẦN HÙNG ANH <span style="font-size:10px; color:#f59e0b;">(Quy về Tuấn Anh)</span></span>` : 
+          c.recruiter;
+
+        // Real Data Source dropdown
+        const currentSrc = getCandidateRealSource(c.id);
+        let sourceOptions = '';
+        customSourcesList.forEach(s => {
+          sourceOptions += `<option value="${s}" ${currentSrc === s ? 'selected' : ''}>${s}</option>`;
+        });
+        sourceOptions += '<option value="__ADD_NEW__">➕ Thêm CTV mới...</option>';
+        const srcClass = currentSrc === 'Tự tuyển' ? 'tu-tuyen-selected' : 'ctv-selected';
+
+        tr.innerHTML = `
+          <td style="text-align: center;">
+            <input type="checkbox" class="custom-checkbox" 
+                   onchange="handleCandidateToggle('${c.id}', this.checked)" ${state.selected ? 'checked' : ''}>
+          </td>
+          <td>${idx + 1}</td>
+          <td><code>${c.id}</code></td>
+          <td>${nameDisplay}</td>
+          <td><strong>${c.project}</strong></td>
+          <td>${displayRec}</td>
+          <td><span style="font-family:var(--font-mono); font-size:12px;">${c.ob_date || '-'}</span></td>
+          <td>${exactCol19Badge}</td>
+          
+          <!-- Nguồn Data Thực Tế -->
+          <td style="background: rgba(139, 92, 246, 0.05); border-left: 2px solid rgba(139, 92, 246, 0.4);">
+            <select class="source-select ${srcClass}" style="padding: 4px 8px; font-size: 11px;" onchange="handleSourceChange('${c.id}', this.value)">
+              ${sourceOptions}
+            </select>
+          </td>
+
+          <!-- KỲ 1 -->
+          <td style="background: rgba(16, 185, 129, 0.05); border-left: 2px solid rgba(16, 185, 129, 0.4);">
+            <select class="table-select" style="border-color:#10b981; color:#34d399;" 
+                    onchange="handleMonth1Change('${c.id}', this.value)" ${state.selected ? '' : 'disabled'}>
+              ${m1Options}
+            </select>
+          </td>
+          <td style="text-align: center; background: rgba(16, 185, 129, 0.05);">
+            <input type="number" class="point-input green-point" value="${state.points1}" step="0.5" min="0" max="10"
+                   onchange="handlePoint1Change('${c.id}', this.value)" ${state.selected ? '' : 'disabled'}>
+          </td>
+
+          <!-- KỲ 2 -->
+          <td style="background: rgba(139, 92, 246, 0.05); border-left: 2px solid rgba(139, 92, 246, 0.4);">
+            <select class="table-select" style="border-color:#8b5cf6; color:#c084fc;" 
+                    onchange="handleMonth2Change('${c.id}', this.value)" 
+                    ${state.selected ? '' : 'disabled'}>
+              ${m2Options}
+            </select>
+          </td>
+          <td style="text-align: center; background: rgba(139, 92, 246, 0.05);">
+            <input type="number" class="point-input purple-point" 
+                   id="input-point2-${c.id}"
+                   value="${state.points2}" step="0.5" min="0" max="10" 
+                   placeholder="0.0"
+                   onchange="handlePoint2Change('${c.id}', this.value)" 
+                   ${state.selected ? '' : 'disabled'}>
+          </td>
+
+          <!-- Impact on current selected month & Total 2 Periods -->
+          <td style="text-align: center; background: rgba(59, 130, 246, 0.05); border-left: 2px solid rgba(59, 130, 246, 0.4);">
+            ${currentImpactBadge}
+          </td>
+          <td style="text-align: center; font-weight:800; font-family:var(--font-mono); color:#f8fafc;">
+            ${total2Periods.toFixed(1).replace('.0','')} đ
+          </td>
+
+          <!-- Notes -->
+          <td>
+            <input type="text" class="note-input" value="${state.note || ''}" placeholder="Ghi chú đợt 1 / đợt 2..."
+                   onchange="handleNoteChange('${c.id}', this.value)">
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      calculateMonthlyTotals();
+    }
+
+    function handleCandidateToggle(candidateId, isChecked) {
+      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
+      customKPIState[candidateId].selected = isChecked;
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function handleMonth1Change(candidateId, monthVal) {
+      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
+      customKPIState[candidateId].month1 = monthVal;
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function handlePoint1Change(candidateId, val) {
+      let num = parseFloat(val);
+      if (isNaN(num) || num < 0) num = 0;
+      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
+      customKPIState[candidateId].points1 = num;
+      saveKPIState();
+      calculateMonthlyTotals();
+    }
+
+    function handleMonth2Change(candidateId, monthVal) {
+      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
+      customKPIState[candidateId].month2 = monthVal;
+      if (monthVal !== 'NONE' && (!customKPIState[candidateId].points2 || customKPIState[candidateId].points2 === 0)) {
+        customKPIState[candidateId].points2 = 1.0;
+      }
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function handlePoint2Change(candidateId, val) {
+      let num = parseFloat(val);
+      if (isNaN(num) || num < 0) num = 0;
+      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
+      customKPIState[candidateId].points2 = num;
+
+      if (num > 0 && (!customKPIState[candidateId].month2 || customKPIState[candidateId].month2 === 'NONE')) {
+        customKPIState[candidateId].month2 = getNextMonth(customKPIState[candidateId].month1 || '2026-10');
+      }
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function handleNoteChange(candidateId, val) {
+      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
+      customKPIState[candidateId].note = val;
+      saveKPIState();
+    }
+
+    function selectAllMonthly(checked) {
+      monthlyCandidatesList.forEach(c => {
+        if (!customKPIState[c.id]) customKPIState[c.id] = {};
+        customKPIState[c.id].selected = checked;
+      });
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function toggleCheckAllMonthly(checked) {
+      selectAllMonthly(checked);
+    }
+
+    function resetDefaultMultiPoints() {
+      monthlyCandidatesList.forEach(c => {
+        const defM = getMonthLabel(c.ob_date);
+        customKPIState[c.id] = {
+          selected: true,
+          month1: defM,
+          points1: 1.0,
+          month2: 'NONE',
+          points2: 0.0,
+          note: ''
+        };
+      });
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function autoSplitAllToNextMonth() {
+      monthlyCandidatesList.forEach(c => {
+        if (!customKPIState[c.id]) customKPIState[c.id] = {};
+        const state = customKPIState[c.id];
+        state.selected = true;
+        if (!state.month1) state.month1 = getMonthLabel(c.ob_date);
+        if (state.points1 === undefined) state.points1 = 1.0;
+        state.month2 = getNextMonth(state.month1);
+        state.points2 = 1.0;
+      });
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function calculateMonthlyTotals() {
+      const selectedMonth = document.getElementById('monthly-select-month').value;
+      const unitPrice = parseFloat(document.getElementById('monthly-kpi-unit-price').value) || 0;
+
+      let totalPoints = 0;
+      let countMonth1 = 0;
+      let pointsMonth1 = 0;
+      let countMonth2 = 0;
+      let pointsMonth2 = 0;
+      let uniqueCandidatesInMonth = new Set();
+      let multiMonthCandidatesCount = 0;
+
+      const recStats = {};
+
+      monthlyCandidatesList.forEach(c => {
+        const state = customKPIState[c.id] || { selected: true, month1: getMonthLabel(c.ob_date), points1: 1.0, month2: 'NONE', points2: 0.0 };
+        const rec = getEffectiveRecruiter(c.recruiter);
+
+        if (!recStats[rec]) {
+          recStats[rec] = { m1Count: 0, m1Points: 0, m2Count: 0, m2Points: 0, totalPoints: 0, uniqueUV: new Set() };
+        }
+
+        const hasActivePeriod2 = (state.month2 !== 'NONE' && state.month2 !== '') && (parseFloat(state.points2) > 0);
+        if (hasActivePeriod2) multiMonthCandidatesCount++;
+
+        if (state.selected) {
+          if (selectedMonth === 'ALL' || state.month1 === selectedMonth) {
+            const p1 = parseFloat(state.points1) || 0;
+            totalPoints += p1;
+            pointsMonth1 += p1;
+            countMonth1++;
+            uniqueCandidatesInMonth.add(c.id);
+            recStats[rec].m1Count++;
+            recStats[rec].m1Points += p1;
+            recStats[rec].totalPoints += p1;
+            recStats[rec].uniqueUV.add(c.id);
+          }
+
+          if (hasActivePeriod2 && (selectedMonth === 'ALL' || state.month2 === selectedMonth)) {
+            const p2 = parseFloat(state.points2) || 0;
+            totalPoints += p2;
+            pointsMonth2 += p2;
+            countMonth2++;
+            uniqueCandidatesInMonth.add(c.id);
+            recStats[rec].m2Count++;
+            recStats[rec].m2Points += p2;
+            recStats[rec].totalPoints += p2;
+            recStats[rec].uniqueUV.add(c.id);
+          }
+        }
+      });
+
+      document.getElementById('monthly-total-kpi-points').innerText = totalPoints.toFixed(1).replace('.0', '');
+      document.getElementById('monthly-split-summary').innerText = `Kỳ 1: ${pointsMonth1.toFixed(1).replace('.0','')}đ (${countMonth1} lượt) | Kỳ 2: ${pointsMonth2.toFixed(1).replace('.0','')}đ (${countMonth2} lượt)`;
+      
+      document.getElementById('monthly-selected-count').innerText = uniqueCandidatesInMonth.size;
+      document.getElementById('monthly-ratio-tag').innerText = `${uniqueCandidatesInMonth.size} ứng viên hưởng điểm`;
+
+      const totalBonus = totalPoints * unitPrice;
+      document.getElementById('monthly-total-bonus').innerText = totalBonus.toLocaleString('vi-VN') + ' đ';
+      document.getElementById('monthly-unit-badge').innerText = unitPrice.toLocaleString('vi-VN') + ' đ / Điểm';
+
+      document.getElementById('monthly-multi-month-count').innerText = multiMonthCandidatesCount;
+
+      const tbody = document.getElementById('monthly-recruiter-summary-tbody');
+      tbody.innerHTML = '';
+
+      Object.keys(recStats).sort((a,b) => recStats[b].totalPoints - recStats[a].totalPoints).forEach(rec => {
+        const s = recStats[rec];
+        const bonus = s.totalPoints * unitPrice;
+
+        let evalBadge = '<span class="tag-badge tag-green">⭐ XUẤT SẮC</span>';
+        if (s.totalPoints < 5) evalBadge = '<span class="tag-badge tag-blue">ĐẠT CHỈ TIÊU</span>';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${rec}</strong></td>
+          <td><strong style="color: #60a5fa;">${s.uniqueUV.size} UV</strong></td>
+          <td><span style="color: #34d399; font-weight:700;">${s.m1Points.toFixed(1).replace('.0','')} đ (${s.m1Count} UV)</span></td>
+          <td><span style="color: #c084fc; font-weight:700;">${s.m2Points.toFixed(1).replace('.0','')} đ (${s.m2Count} UV)</span></td>
+          <td><span class="badge-kpi-star" style="font-size: 13px;">⭐ ${s.totalPoints.toFixed(1).replace('.0', '')} ĐIỂM KPI</span></td>
+          <td><strong style="color: #c084fc;">${bonus.toLocaleString('vi-VN')} đ</strong></td>
+          <td>${evalBadge}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function exportMonthlyKPIReport() {
+      const selectedMonth = document.getElementById('monthly-select-month').value;
+      const unitPrice = parseFloat(document.getElementById('monthly-kpi-unit-price').value) || 0;
+
+      let csv = 'STT,Ma UV,Ho va Ten,Du An,Chuyen Vien Tuyen Dung,Ngay OB Goc,Tinh Trang Nhan Viec (Col 19),Nguon Data Thuc Te,Thang Ghi Nhan Ky 1,Diem Ky 1,Thang Ghi Nhan Ky 2,Diem Ky 2,Diem Tinh Vao Thang Chon,Tien Thuong (VND),Ghi Chu\n';
+      
+      let idx = 1;
+      monthlyCandidatesList.forEach(c => {
+        const state = customKPIState[c.id] || { selected: true, month1: getMonthLabel(c.ob_date), points1: 1.0, month2: 'NONE', points2: 0.0, note: '' };
+        const hasActivePeriod2 = (state.month2 !== 'NONE' && state.month2 !== '') && (parseFloat(state.points2) > 0);
+        const realSrc = getCandidateRealSource(c.id);
+
+        let ptsThisMonth = 0;
+        if (state.selected) {
+          if (selectedMonth === 'ALL') {
+            ptsThisMonth = (parseFloat(state.points1) || 0) + (hasActivePeriod2 ? (parseFloat(state.points2) || 0) : 0);
+          } else {
+            if (state.month1 === selectedMonth) ptsThisMonth += (parseFloat(state.points1) || 0);
+            if (hasActivePeriod2 && state.month2 === selectedMonth) ptsThisMonth += (parseFloat(state.points2) || 0);
+          }
+        }
+        const bonus = ptsThisMonth * unitPrice;
+
+        csv += `"${idx++}","${c.id}","${c.name}","${c.project}","${getEffectiveRecruiter(c.recruiter)}","${c.ob_date}","${c.work_status || ''}","${realSrc}","${state.month1}","${state.points1}","${hasActivePeriod2 ? state.month2 : 'KHONG'}","${hasActivePeriod2 ? state.points2 : 0}","${ptsThisMonth}","${bonus}","${state.note || ''}"\n`;
+      });
+
+      const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Bang_Phan_Bo_KPI_Chuan_File_${selectedMonth}_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    window.onload = function() {
+      populateRealSourceFilter();
+      applyFilters();
+      renderMonthlyTab();
+      // Tự động bật chế độ Live Sync theo thời gian thực ngay khi mở trang!
+      toggleAutoSync(true);
+    };
+  </script>
+</body>
+</html>
