@@ -830,6 +830,32 @@
     .detail-item { display: flex; flex-direction: column; gap: 4px; }
     .detail-item span:first-child { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
     .detail-item span:last-child { font-weight: 600; color: var(--text-main); }
+      .pill-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(30, 41, 59, 0.7);
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pill-btn:hover {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.5);
+      color: #93c5fd;
+      transform: translateY(-1px);
+    }
+    .pill-btn.active {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.35) 0%, rgba(139, 92, 246, 0.35) 100%);
+      border-color: #3b82f6;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.35);
+    }
   </style>
 </head>
 <body>
@@ -1121,26 +1147,76 @@
             </select>
           </div>
 
+          <!-- LỌC NGUỒN DATA THỰC TẾ TAB 2 -->
           <div class="form-group">
-            <label>Gộp Trần Hùng Anh vào Trần Tuấn Anh?</label>
-            <select id="monthly-merge-recruiters" class="form-control" onchange="renderMonthlyTab()">
-              <option value="YES" selected>Có - Gộp chung về Trần Tuấn Anh</option>
-              <option value="NO">Không - Tách riêng Trần Hùng Anh</option>
+            <label style="color: #c084fc; font-weight:800;">🎯 NGUỒN DATA THỰC TẾ</label>
+            <select id="monthly-filter-source" class="form-control" style="border-color: #8b5cf6;" onchange="renderMonthlyTab()">
+              <option value="ALL">Tất cả nguồn data</option>
+            </select>
+          </div>
+
+          <!-- LỌC TRẠNG THÁI NHẬN VIỆC (COL 19) TAB 2 -->
+          <div class="form-group">
+            <label style="color: #fbbf24; font-weight:800;">📋 TRẠNG THÁI (COL 19)</label>
+            <select id="monthly-filter-work-status" class="form-control" style="border-color: #f59e0b;" onchange="renderMonthlyTab()">
+              <option value="ALL">Tất cả trạng thái Col 19</option>
+              <option value="ĐÃ NHẬN VIỆC">ĐÃ NHẬN VIỆC</option>
+              <option value="ĐÃ NGHỈ VIỆC">ĐÃ NGHỈ VIỆC (Sau OB)</option>
+            </select>
+          </div>
+
+          <!-- LỌC ĐIỂM KPI -->
+          <div class="form-group">
+            <label style="color: #34d399; font-weight:800;">⭐ LỌC THEO ĐIỂM KPI</label>
+            <select id="monthly-filter-score-status" class="form-control" style="border-color: #10b981;" onchange="renderMonthlyTab()">
+              <option value="ALL">Tất cả (Đã có điểm & Chưa có điểm)</option>
+              <option value="HAS_POINTS">⭐ Đã có điểm (> 0đ)</option>
+              <option value="ZERO_POINTS">⚪ Chưa chấm điểm (0đ)</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label>Đơn Giá Thưởng KPI / Điểm (VNĐ)</label>
+            <label>Gộp Trần Hùng Anh?</label>
+            <select id="monthly-merge-recruiters" class="form-control" onchange="renderMonthlyTab()">
+              <option value="YES" selected>Có - Gộp về Tuấn Anh</option>
+              <option value="NO">Không - Tách riêng</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Đơn Giá Thưởng KPI (VNĐ)</label>
             <input type="number" id="monthly-kpi-unit-price" class="form-control" value="200000" step="50000" oninput="calculateMonthlyTotals()">
           </div>
 
           <div class="form-group" style="border: 1px solid rgba(16, 185, 129, 0.4); padding: 8px 12px; border-radius: 10px; background: rgba(16, 185, 129, 0.05);">
             <label style="color: #34d399; font-weight: 800; font-size: 12px;">👁️ BỘ LỌC DANH SÁCH BẢNG</label>
             <select id="monthly-filter-view" class="form-control" style="font-weight: 800; border-color: #10b981;" onchange="renderMonthlyTab()">
-              <option value="ACTIVE" selected>🎯 Chỉ hiện UV có điểm trong kỳ này (Khuyên dùng)</option>
-              <option value="ALL">📋 Hiện toàn bộ UV đã nhận việc để phân bổ</option>
+              <option value="ACTIVE" selected>🎯 Chỉ UV có điểm/OB trong kỳ</option>
+              <option value="ALL">📋 Toàn bộ UV nhận việc</option>
             </select>
           </div>
+
+          <!-- TÌM KIẾM THÔNG MINH TAB 2 -->
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label style="color: #60a5fa; font-weight: 800;">🔍 TÌM KIẾM THÔNG MINH TAB 2 (TÊN, ID CỘT A, MÃ NV CỘT AA, SĐT, CCCD...)</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="monthly-filter-search" class="form-control" 
+                     style="border-color: #3b82f6; font-size: 14px; background: rgba(15, 23, 42, 0.8);" 
+                     placeholder="Gõ tên ứng viên, ID cột A, Mã nhân viên (Cột AA), số điện thoại, CCCD..." 
+                     oninput="renderMonthlyTab()">
+              <button class="btn btn-outline" style="white-space: nowrap;" onclick="document.getElementById('monthly-filter-search').value=''; renderMonthlyTab();">Xóa tìm</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUICK FILTER PILLS -->
+        <div style="display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap; align-items: center;">
+          <span style="font-size: 12px; color: var(--text-sub); font-weight: 700; margin-right: 4px;">⚡ Lọc nhanh:</span>
+          <button id="pill-filter-all" class="pill-btn active" onclick="setMonthlyQuickFilter('ALL')">📋 Tất cả (<span id="count-pill-all">0</span>)</button>
+          <button id="pill-filter-scored" class="pill-btn" onclick="setMonthlyQuickFilter('SCORED')">⭐ Đã có điểm (<span id="count-pill-scored">0</span>)</button>
+          <button id="pill-filter-unscored" class="pill-btn" onclick="setMonthlyQuickFilter('UNSCORED')">⚪ Chưa có điểm (<span id="count-pill-unscored">0</span>)</button>
+          <button id="pill-filter-tu_tuyen" class="pill-btn" onclick="setMonthlyQuickFilter('TU_TUYEN')">🟣 Tự tuyển (<span id="count-pill-tu-tuyen">0</span>)</button>
+          <button id="pill-filter-ctv" class="pill-btn" onclick="setMonthlyQuickFilter('CTV')">🟢 Nguồn CTV (<span id="count-pill-ctv">0</span>)</button>
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
@@ -1440,13 +1516,25 @@
     }
 
     function populateRealSourceFilter() {
-      const select = document.getElementById('filter-real-source');
-      const currentVal = select.value;
-      select.innerHTML = '<option value="ALL">Tất cả nguồn data thực tế</option>';
-      customSourcesList.forEach(s => {
-        select.innerHTML += `<option value="${s}">${s}</option>`;
-      });
-      select.value = currentVal || 'ALL';
+      const select1 = document.getElementById('filter-real-source');
+      if (select1) {
+        const currentVal = select1.value;
+        select1.innerHTML = '<option value="ALL">Tất cả nguồn data thực tế</option>';
+        customSourcesList.forEach(s => {
+          select1.innerHTML += `<option value="${s}">${s}</option>`;
+        });
+        select1.value = currentVal || 'ALL';
+      }
+
+      const select2 = document.getElementById('monthly-filter-source');
+      if (select2) {
+        const currentVal2 = select2.value;
+        select2.innerHTML = '<option value="ALL">Tất cả nguồn data (Tự tuyển, CTV...)</option>';
+        customSourcesList.forEach(s => {
+          select2.innerHTML += `<option value="${s}">${s}</option>`;
+        });
+        select2.value = currentVal2 || 'ALL';
+      }
     }
 
     function handleSourceChange(candidateId, newSource) {
@@ -1980,6 +2068,35 @@
       return recruiterName;
     }
 
+        let currentMonthlyQuickFilter = 'ALL';
+    function setMonthlyQuickFilter(type) {
+      currentMonthlyQuickFilter = type;
+      document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`pill-filter-${type.toLowerCase()}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const scEl = document.getElementById('monthly-filter-score-status');
+      const srcEl = document.getElementById('monthly-filter-source');
+
+      if (type === 'ALL') {
+        if (scEl) scEl.value = 'ALL';
+        if (srcEl) srcEl.value = 'ALL';
+      } else if (type === 'SCORED') {
+        if (scEl) scEl.value = 'HAS_POINTS';
+        if (srcEl) srcEl.value = 'ALL';
+      } else if (type === 'UNSCORED') {
+        if (scEl) scEl.value = 'ZERO_POINTS';
+        if (srcEl) srcEl.value = 'ALL';
+      } else if (type === 'TU_TUYEN') {
+        if (scEl) scEl.value = 'ALL';
+        if (srcEl) srcEl.value = 'Tự tuyển';
+      } else if (type === 'CTV') {
+        if (scEl) scEl.value = 'ALL';
+        if (srcEl) srcEl.value = 'ALL';
+      }
+      renderMonthlyTab();
+    }
+
     function renderMonthlyTab() {
       const selectedMonth = document.getElementById('monthly-select-month').value;
       const selectedRec = document.getElementById('monthly-select-recruiter').value;
@@ -1997,7 +2114,12 @@
       document.getElementById('label-kpi-month-title').innerText = `🌟 TỔNG ĐIỂM KPI GHI NHẬN (${displayMonthTitle.toUpperCase()})`;
       document.getElementById('monthly-rec-summary-label').innerText = `Đang xem báo cáo KPI: ${displayMonthTitle}`;
 
-      // Candidates qualifying for onboarding: 54 ĐÃ NHẬN VIỆC + 9 ĐÃ NGHỈ VIỆC SAU OB = 63 candidates
+      const search = (document.getElementById('monthly-filter-search')?.value || '').toLowerCase().trim();
+      const filterSource = document.getElementById('monthly-filter-source')?.value || 'ALL';
+      const filterWorkSt = document.getElementById('monthly-filter-work-status')?.value || 'ALL';
+      const filterScore = document.getElementById('monthly-filter-score-status')?.value || 'ALL';
+
+      // Candidates qualifying for onboarding: ĐÃ NHẬN VIỆC + ĐÃ NGHỈ VIỆC SAU OB
       monthlyCandidatesList = RAW_CANDIDATES.filter(c => {
         const hasOBDate = !!c.ob_date;
         const isNhanViec = c.work_status === 'ĐÃ NHẬN VIỆC';
@@ -2007,6 +2129,22 @@
         const effectiveRec = getEffectiveRecruiter(c.recruiter);
         if (selectedRec !== 'ALL' && effectiveRec !== selectedRec && c.recruiter !== selectedRec) return false;
         if (selectedProj !== 'ALL' && c.project !== selectedProj) return false;
+
+        // Lọc theo Trạng thái nhận việc Col 19
+        if (filterWorkSt !== 'ALL' && c.work_status !== filterWorkSt) return false;
+
+        // Lọc theo Nguồn Data Thực Tế
+        const realSrc = getCandidateRealSource(c.id);
+        if (filterSource !== 'ALL' && realSrc !== filterSource) return false;
+
+        // Lọc CTV nếu chọn pill CTV
+        if (currentMonthlyQuickFilter === 'CTV' && realSrc === 'Tự tuyển') return false;
+
+        // Tìm kiếm thông minh: Tên, CCCD, SĐT, Mã NV (Col AA), ID (Col A), Dự án, Nguồn Data
+        if (search) {
+          const haystack = `${c.name} ${c.cccd || ''} ${c.phone || ''} ${c.booking_code || ''} ${c.id} ${c.mnv || ''} ${c.project} ${realSrc}`.toLowerCase();
+          if (!haystack.includes(search)) return false;
+        }
 
         return true;
       });
@@ -2052,7 +2190,44 @@
         }
       });
 
-      const listToDisplay = (filterViewMode === 'ACTIVE' && selectedMonth !== 'ALL') ? activeCandidatesInMonth : monthlyCandidatesList;
+      let baseList = (filterViewMode === 'ACTIVE' && selectedMonth !== 'ALL') ? activeCandidatesInMonth : monthlyCandidatesList;
+
+      // Cập nhật số liệu trên các nút Lọc Nhanh (Quick Filter Pills)
+      let countAll = baseList.length;
+      let countScored = 0;
+      let countUnscored = 0;
+      let countTuTuyen = 0;
+      let countCTV = 0;
+
+      baseList.forEach(c => {
+        const state = customKPIState[c.id];
+        const p1 = state ? (parseFloat(state.points1) || 0) : 0;
+        const p2 = state ? (parseFloat(state.points2) || 0) : 0;
+        if ((p1 + p2) > 0) countScored++;
+        else countUnscored++;
+
+        const src = getCandidateRealSource(c.id);
+        if (src === 'Tự tuyển') countTuTuyen++;
+        else countCTV++;
+      });
+
+      if (document.getElementById('count-pill-all')) document.getElementById('count-pill-all').innerText = countAll;
+      if (document.getElementById('count-pill-scored')) document.getElementById('count-pill-scored').innerText = countScored;
+      if (document.getElementById('count-pill-unscored')) document.getElementById('count-pill-unscored').innerText = countUnscored;
+      if (document.getElementById('count-pill-tu-tuyen')) document.getElementById('count-pill-tu-tuyen').innerText = countTuTuyen;
+      if (document.getElementById('count-pill-ctv')) document.getElementById('count-pill-ctv').innerText = countCTV;
+
+      // Áp dụng bộ lọc Điểm KPI nếu chọn
+      let listToDisplay = baseList.filter(c => {
+        const state = customKPIState[c.id];
+        const p1 = state ? (parseFloat(state.points1) || 0) : 0;
+        const p2 = state ? (parseFloat(state.points2) || 0) : 0;
+        const total = p1 + p2;
+
+        if (filterScore === 'HAS_POINTS' && total <= 0) return false;
+        if (filterScore === 'ZERO_POINTS' && total > 0) return false;
+        return true;
+      });
 
       document.getElementById('monthly-list-badge').innerText = `Hiển thị: ${listToDisplay.length} ứng viên (${filterViewMode === 'ACTIVE' ? 'Chỉ ứng viên có điểm trong kỳ ' + displayMonthTitle : 'Toàn bộ ứng viên'})`;
 
