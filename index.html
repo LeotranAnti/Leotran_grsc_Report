@@ -1156,6 +1156,103 @@
     #candidate-table tbody tr:hover td:nth-child(-n+3) {
       background: #172554 !important;
     }
+      /* === PRECISE TABLE COLUMN ALIGNMENT & SPACING === */
+    #monthly-table th, #monthly-table td {
+      vertical-align: middle !important;
+      padding: 10px 12px !important;
+    }
+    /* Centered columns */
+    #monthly-table th:nth-child(1), #monthly-table td:nth-child(1),
+    #monthly-table th:nth-child(2), #monthly-table td:nth-child(2),
+    #monthly-table th:nth-child(3), #monthly-table td:nth-child(3),
+    #monthly-table th:nth-child(5), #monthly-table td:nth-child(5),
+    #monthly-table th:nth-child(6), #monthly-table td:nth-child(6),
+    #monthly-table th:nth-child(8), #monthly-table td:nth-child(8),
+    #monthly-table th:nth-child(9), #monthly-table td:nth-child(9),
+    #monthly-table th:nth-child(10), #monthly-table td:nth-child(10),
+    #monthly-table th:nth-child(11), #monthly-table td:nth-child(11),
+    #monthly-table th:nth-child(12), #monthly-table td:nth-child(12),
+    #monthly-table th:nth-child(13), #monthly-table td:nth-child(13),
+    #monthly-table th:nth-child(14), #monthly-table td:nth-child(14),
+    #monthly-table th:nth-child(15), #monthly-table td:nth-child(15),
+    #monthly-table th:nth-child(16), #monthly-table td:nth-child(16) {
+      text-align: center !important;
+    }
+    /* Left-aligned text columns */
+    #monthly-table th:nth-child(4), #monthly-table td:nth-child(4),
+    #monthly-table th:nth-child(7), #monthly-table td:nth-child(7),
+    #monthly-table th:nth-child(17), #monthly-table td:nth-child(17) {
+      text-align: left !important;
+    }
+
+    /* Standardized Form Control Sizing in Toolbar */
+    .unified-filter-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 992px) {
+      .unified-filter-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .unified-filter-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .form-group-clean {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group-clean label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .form-control-clean {
+      height: 42px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: #f8fafc;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 0 12px;
+      outline: none;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+    .form-control-clean:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+      background: #0f172a;
+    }
+    .point-input {
+      margin: 0 auto;
+      display: block;
+      text-align: center;
+      height: 32px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+    }
+    .table-select {
+      margin: 0 auto;
+      display: block;
+      text-align: center;
+      height: 32px;
+    }
+    .source-select {
+      margin: 0 auto;
+      display: block;
+      height: 32px;
+    }
   </style>
 </head>
 <body>
@@ -1211,335 +1308,86 @@
     <!-- ========================================== -->
     <div id="tab-overview" class="tab-content active">
       <!-- Bộ lọc Tab 1 -->
-      <div class="filter-card">
-        <div class="filter-grid">
-          <div class="form-group">
-            <label>Chuyên viên tuyển dụng</label>
-            <select id="filter-recruiter" class="form-control" onchange="applyFilters()">
-              <option value="ALL">Tất cả nhân sự (133 UV)</option>
-              <option value="TRẦN TUẤN ANH">TRẦN TUẤN ANH (130 UV)</option>
-              <option value="TRẦN HÙNG ANH">TRẦN HÙNG ANH (3 UV)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Dự án / Nhà máy</label>
-            <select id="filter-project" class="form-control" onchange="applyFilters()">
-              <option value="ALL">Tất cả dự án (4 nhà máy)</option>
-              <option value="NIP-BN">NIP-BN (56 UV - 29 Nhận việc)</option>
-              <option value="AVD-WH">AVD-WH (55 UV - 15 Nhận việc + Trần Thị Gấm)</option>
-              <option value="UNI-MB">UNI-MB (21 UV - 10 Nhận việc)</option>
-              <option value="LGE-HP">LGE-HP (1 UV)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Trạng thái nhận việc (Col 19)</label>
-            <select id="filter-work-status" class="form-control" onchange="applyFilters()">
-              <option value="ALL">Tất cả trạng thái nhận việc</option>
-              <option value="ĐÃ NHẬN VIỆC">ĐÃ NHẬN VIỆC (54 UV)</option>
-              <option value="ĐÃ NGHỈ VIỆC">ĐÃ NGHỈ VIỆC (9 UV - Có Trần Thị Gấm)</option>
-              <option value="HỦY NHẬN VIỆC">HỦY NHẬN VIỆC (29 UV)</option>
-              <option value="DỜI LỊCH NHẬN VIỆC">DỜI LỊCH NHẬN VIỆC (1 UV)</option>
-              <option value="PENDING">CHƯA CÓ TRẠNG THÁI / RỖNG (40 UV)</option>
-            </select>
-          </div>
-
-          <!-- LỌC NGUỒN DATA THỰC TẾ (MỚI) -->
-          <div class="form-group">
-            <label style="color: #c084fc; font-weight:800;">🎯 NGUỒN DATA THỰC TẾ</label>
-            <select id="filter-real-source" class="form-control" style="border-color: #8b5cf6;" onchange="applyFilters()">
-              <option value="ALL">Tất cả nguồn data thực tế</option>
-              <!-- Populated dynamically -->
-            </select>
-          </div>
-
-          <div class="form-group" style="border: 1px solid rgba(59, 130, 246, 0.4); padding: 8px 12px; border-radius: 10px; background: rgba(59, 130, 246, 0.05);">
-            <label style="color: #60a5fa; font-weight: 800; font-size: 12px;">📅 KỲ BÁO CÁO (THÁNG TÍNH KPI)</label>
-            <select id="filter-month" class="form-control" style="font-weight: 800; border-color: #3b82f6;" onchange="applyFilters()">
+      <div class="filter-card" style="border: 1px solid rgba(59, 130, 246, 0.35); background: linear-gradient(135deg, rgba(59, 130, 246, 0.06) 0%, rgba(17, 24, 39, 0.9) 100%);">
+        
+        <!-- HÀNG 1 & HÀNG 2: CẤU HÌNH & BỘ LỌC CĂN CHỈNH 3 CỘT ĐỀU ĐẶN 100% -->
+        <div class="unified-filter-grid">
+          <!-- 1. Tháng tính KPI -->
+          <div class="form-group-clean">
+            <label style="color: #60a5fa;">📅 Tháng Báo Cáo KPI</label>
+            <select id="monthly-select-month" class="form-control-clean" style="border-color: #3b82f6; font-weight: 800;" onchange="renderMonthlyTab()">
               <option value="2026-11" selected>Tháng 11/2026 (Kỳ Hiện Tại - 15 UV Nhận Việc)</option>
               <option value="2026-10">Tháng 10/2026 (Kỳ T10-2026 - 50 UV Nhận Việc)</option>
               <option value="2026-09">Tháng 09/2026 (Kỳ T9-2026 - 10 UV Onboard - Trần Thị Gấm)</option>
               <option value="2026-12">Tháng 12/2026 (Kỳ T12-2026)</option>
-              <option value="ALL">Toàn Bộ Các Kỳ (Lũy Kế T9 - T11/2026 - 75 UV Nhận Việc)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Tìm kiếm thông minh</label>
-            <input type="text" id="filter-search" class="form-control" placeholder="Tên (Trần Thị Gấm...), SĐT, CCCD..." oninput="applyFilters()">
-          </div>
-        </div>
-      </div>
-
-      <!-- Executive KPI Cards (Tính theo kỳ) -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-        <h3 id="tab1-kpi-period-title" style="color: #38bdf8; font-size: 16px; font-weight: 800;">📊 BÁO CÁO TỔNG HỢP SỐ LIỆU: KỲ THÁNG 10/2026 (T10-2026)</h3>
-        <span class="tag-badge tag-blue" id="tab1-kpi-period-badge">Chỉ tính số liệu ứng viên trong kỳ được chọn</span>
-      </div>
-      <div class="kpi-grid">
-        <div class="kpi-card highlight-green">
-          <div class="kpi-card-header">
-            <span class="kpi-title">ĐIỂM KPI OB1 (ĐANG LÀM VIỆC)</span>
-            <div class="kpi-icon icon-green">🏆</div>
-          </div>
-          <div class="kpi-value" id="kpi-net-ob">54</div>
-          <div class="kpi-sub">
-            <span class="tag-badge tag-green">ĐÃ NHẬN VIỆC</span>
-            <span>Trạng thái nguyên bản trên file</span>
-          </div>
-        </div>
-
-        <div class="kpi-card highlight-blue">
-          <div class="kpi-card-header">
-            <span class="kpi-title">LŨY KẾ ĐẠT OB 1 NGÀY (GROSS)</span>
-            <div class="kpi-icon icon-blue">📈</div>
-          </div>
-          <div class="kpi-value" id="kpi-gross-ob">63</div>
-          <div class="kpi-sub">
-            <span class="tag-badge tag-blue">TÍNH OB1 NGÀY</span>
-            <span>54 ĐÃ NHẬN VIỆC + 9 ĐÃ NGHỈ VIỆC</span>
-          </div>
-        </div>
-
-        <div class="kpi-card">
-          <div class="kpi-card-header">
-            <span class="kpi-title">ỨNG VIÊN PASS PHỎNG VẤN</span>
-            <div class="kpi-icon icon-purple">🎯</div>
-          </div>
-          <div class="kpi-value" id="kpi-pass-pv">93</div>
-          <div class="kpi-sub">
-            <span class="tag-badge tag-blue" id="kpi-rate-pass">94.9%</span>
-            <span>Tỷ lệ đỗ phỏng vấn</span>
-          </div>
-        </div>
-
-        <div class="kpi-card">
-          <div class="kpi-card-header">
-            <span class="kpi-title">TỶ LỆ CHỐT NV / PASS PV</span>
-            <div class="kpi-icon icon-green">⚡</div>
-          </div>
-          <div class="kpi-value" id="kpi-rate-nv-pass">58.1%</div>
-          <div class="kpi-sub">
-            <span class="tag-badge tag-green">HIỆU QUẢ CAO</span>
-            <span>54 người nhận việc / 93 đỗ PV</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bảng Thống Kê Nguồn Data Thực Tế (Mới) -->
-      <div class="table-card" style="border: 1px solid rgba(139, 92, 246, 0.35);">
-        <div class="chart-header">
-          <h3 style="color: #c084fc;" id="tab1-source-stats-title">🌐 BẢNG THỐNG KÊ HIỆU QUẢ NGUỒN DATA THỰC TẾ (KỲ THÁNG 10/2026)</h3>
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <span class="tag-badge tag-purple" id="real-source-period-badge">Kỳ: Tháng 10/2026</span>
-            <button class="btn btn-amber" style="padding: 5px 12px; font-size: 12px;" onclick="promptAddNewCTV()">➕ Thêm CTV Mới</button>
-          </div>
-        </div>
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>Nguồn Data Thực Tế</th>
-                <th>Tổng Số Ứng Viên Tiếp Nhận</th>
-                <th>Số UV Pass Phỏng Vấn</th>
-                <th>SỐ UV ĐÃ NHẬN VIỆC (KPI)</th>
-                <th>SỐ UV ĐÃ NGHỈ VIỆC</th>
-                <th>HỦY NHẬN VIỆC</th>
-                <th>TỶ LỆ NHẬN VIỆC / TỔNG HỒ SƠ</th>
-                <th>ĐÁNH GIÁ CHẤT LƯỢNG NGUỒN</th>
-              </tr>
-            </thead>
-            <tbody id="real-source-stats-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- BẢNG DANH SÁCH CỤ THỂ TOÀN BỘ ỨNG VIÊN (TAB TỔNG QUAN) -->
-      <div class="table-card" style="border: 1px solid rgba(59, 130, 246, 0.35);">
-        <div class="chart-header" style="flex-wrap: wrap; gap: 12px;">
-          <div>
-            <h3 style="color: #60a5fa;">📋 DANH SÁCH CỤ THỂ TOÀN BỘ ỨNG VIÊN (<span id="table-record-count">0</span> hồ sơ)</h3>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
-              💡 <em>Anh có thể chọn trực tiếp <strong>Nguồn Data Thực Tế</strong> (Tự tuyển, CTV Dương Thảo, CTV Hồng Ngọc, CTV Xuân Khánh, CTV Thanh Thanh...) cho từng bạn hoặc thêm CTV mới. Dữ liệu tự động lưu 100%!</em>
-            </p>
-          </div>
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <button class="btn btn-outline" style="padding: 6px 12px;" onclick="exportOverviewCSV()">📥 Xuất CSV Danh Sách</button>
-            <select id="page-size-select" class="form-control" style="width: auto; padding: 6px 12px;" onchange="changePageSize()">
-              <option value="15">15 dòng / trang</option>
-              <option value="30">30 dòng / trang</option>
-              <option value="50">50 dòng / trang</option>
-              <option value="1000">Tất cả ứng viên</option>
-            </select>
-          </div>
-        </div>
-        <div class="table-responsive">
-          <table id="candidate-table">
-            <thead>
-              <tr>
-                <th>STT</th>
-                <th>ID (Cột A)</th>
-                <th>Họ & Tên</th>
-                <th style="color:#34d399; font-weight:800;">MÃ NV (CỘT AA)</th>
-                <th>Số Điện Thoại</th>
-                <th>Dự Án</th>
-                <th>Chuyên Viên Tuyển Dụng</th>
-                <th>Ngày OB</th>
-                <!-- Cột trạng thái đúng nguyên văn file -->
-                <th style="color:#fbbf24; font-weight:800;">TÌNH TRẠNG NHẬN VIỆC (COL 19)</th>
-                <th style="color:#60a5fa; font-weight:800;">TÌNH TRẠNG TỔNG HỢP (COL 21)</th>
-                
-                <!-- CỘT NGUỒN DATA THỰC TẾ (MỚI) -->
-                <th style="background: rgba(139, 92, 246, 0.2); color: #c084fc; font-weight: 800; border-left: 2px solid #8b5cf6;">
-                  NGUỒN DATA THỰC TẾ
-                </th>
-
-                <th>Nguồn Gốc (File)</th>
-                <th>Thao Tác</th>
-              </tr>
-            </thead>
-            <tbody id="candidate-tbody"></tbody>
-          </table>
-        </div>
-        <div class="table-footer">
-          <div style="font-size: 13px; color: var(--text-muted);" id="page-info"></div>
-          <div class="pagination" id="pagination-controls"></div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- ========================================== -->
-    <!-- TAB 2: TÍNH KPI THEO THÁNG & GHI NHẬN 2 KỲ -->
-    <!-- ========================================== -->
-    <div id="tab-monthly" class="tab-content">
-      <!-- Toolbar & Cấu hình Tháng -->
-      <div class="filter-card" style="border: 1px solid rgba(59, 130, 246, 0.4); background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(17, 24, 39, 0.85) 100%);">
-        <div class="filter-grid" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));">
-          <div class="form-group">
-            <label style="color: #60a5fa; font-weight:800; font-size:12px;">📅 THÁNG TÍNH & BÁO CÁO KPI</label>
-            <select id="monthly-select-month" class="form-control" style="border-color: #3b82f6; font-weight:800; font-size: 14px;" onchange="renderMonthlyTab()">
-              <option value="2026-11" selected>Tháng 11/2026 (Kỳ Hiện Tại - 15 UV Nhận Việc)</option>
-              <option value="2026-10">Tháng 10/2026 (Kỳ T10-2026 - 50 UV Nhận Việc)</option>
-              <option value="2026-09">Tháng 09/2026 (Kỳ T9-2026 - 10 UV Onboard - Trần Thị Gấm)</option>
-              <option value="2026-12">Tháng 12/2026</option>
               <option value="ALL">Toàn Bộ Các Tháng (Tổng Hợp Cả 2 Kỳ - 76 UV)</option>
             </select>
           </div>
 
-          <div class="form-group">
-            <label>Lọc Chuyên Viên Tuyển Dụng</label>
-            <select id="monthly-select-recruiter" class="form-control" onchange="renderMonthlyTab()">
-              <option value="ALL">Tất cả nhân sự</option>
-              <option value="TRẦN TUẤN ANH">TRẦN TUẤN ANH</option>
-              <option value="TRẦN HÙNG ANH">TRẦN HÙNG ANH</option>
+          <!-- 2. Chế độ xem bảng -->
+          <div class="form-group-clean">
+            <label style="color: #34d399;">👁️ Chế Độ Hiển Thị Bảng</label>
+            <select id="monthly-filter-view" class="form-control-clean" style="border-color: #10b981; font-weight: 800;" onchange="renderMonthlyTab()">
+              <option value="ACTIVE" selected>🎯 Chỉ hiện UV có điểm / OB trong kỳ</option>
+              <option value="ALL">📋 Hiện toàn bộ 76 UV đã nhận việc để phân bổ</option>
             </select>
           </div>
 
-          <!-- MULTI-SELECT: DỰ ÁN / NHÀ MÁY -->
-          <div class="form-group">
-            <label>Lọc Dự Án / Nhà Máy (Chọn nhiều)</label>
-            <div class="custom-multiselect" id="multiselect-projects">
-              <button type="button" class="multiselect-toggle" id="multiselect-btn-projects" onclick="MultiSelectManager.toggle('projects')">
-                <span class="multiselect-label" id="multiselect-label-projects">🏭 Dự án: Tất cả</span>
-                <span class="multiselect-arrow">▾</span>
-              </button>
-              <div class="multiselect-menu" id="multiselect-menu-projects">
-                <div class="multiselect-actions">
-                  <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('projects', true)">Chọn tất cả</button>
-                  <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('projects', false)">Bỏ chọn</button>
-                </div>
-                <div class="multiselect-options" id="multiselect-options-projects"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- MULTI-SELECT: NGUỒN DATA THỰC TẾ (CHỌN ĐƯỢC NHIỀU GIÁ TRỊ) -->
-          <div class="form-group">
-            <label style="color: #c084fc; font-weight:800;">🎯 NGUỒN DATA THỰC TẾ (Chọn nhiều)</label>
-            <div class="custom-multiselect" id="multiselect-sources">
-              <button type="button" class="multiselect-toggle" id="multiselect-btn-sources" style="border-color: rgba(139, 92, 246, 0.5);" onclick="MultiSelectManager.toggle('sources')">
-                <span class="multiselect-label" id="multiselect-label-sources" style="color: #c084fc;">🎯 Nguồn: Tất cả nguồn data</span>
-                <span class="multiselect-arrow">▾</span>
-              </button>
-              <div class="multiselect-menu" id="multiselect-menu-sources">
-                <div class="multiselect-actions">
-                  <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('sources', true)">Chọn tất cả</button>
-                  <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('sources', false)">Bỏ chọn</button>
-                </div>
-                <div class="multiselect-options" id="multiselect-options-sources"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- MULTI-SELECT: TRẠNG THÁI (COL 19) -->
-          <div class="form-group">
-            <label style="color: #fbbf24; font-weight:800;">📋 TRẠNG THÁI (COL 19) (Chọn nhiều)</label>
-            <div class="custom-multiselect" id="multiselect-workStatuses">
-              <button type="button" class="multiselect-toggle" id="multiselect-btn-workStatuses" style="border-color: rgba(245, 158, 11, 0.5);" onclick="MultiSelectManager.toggle('workStatuses')">
-                <span class="multiselect-label" id="multiselect-label-workStatuses" style="color: #fbbf24;">📋 Trạng thái: Tất cả</span>
-                <span class="multiselect-arrow">▾</span>
-              </button>
-              <div class="multiselect-menu" id="multiselect-menu-workStatuses">
-                <div class="multiselect-actions">
-                  <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('workStatuses', true)">Chọn tất cả</button>
-                  <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('workStatuses', false)">Bỏ chọn</button>
-                </div>
-                <div class="multiselect-options" id="multiselect-options-workStatuses"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- LỌC ĐIỂM KPI -->
-          <div class="form-group">
-            <label style="color: #34d399; font-weight:800;">⭐ LỌC THEO ĐIỂM KPI</label>
-            <select id="monthly-filter-score-status" class="form-control" style="border-color: #10b981;" onchange="renderMonthlyTab()">
-              <option value="ALL">Tất cả (Đã có điểm & Chưa có điểm)</option>
+          <!-- 3. Lọc theo điểm KPI -->
+          <div class="form-group-clean">
+            <label style="color: #fbbf24;">⭐ Lọc Theo Tình Trạng Điểm</label>
+            <select id="monthly-filter-score-status" class="form-control-clean" style="border-color: #f59e0b; font-weight: 800;" onchange="renderMonthlyTab()">
+              <option value="ALL">Tất cả ứng viên (Đã có điểm & Chưa có điểm)</option>
               <option value="HAS_POINTS">⭐ Đã có điểm (> 0đ)</option>
               <option value="ZERO_POINTS">⚪ Chưa chấm điểm (0đ)</option>
             </select>
           </div>
 
-          <div class="form-group">
-            <label>Gộp Trần Hùng Anh?</label>
-            <select id="monthly-merge-recruiters" class="form-control" onchange="renderMonthlyTab()">
-              <option value="YES" selected>Có - Gộp về Tuấn Anh</option>
-              <option value="NO">Không - Tách riêng</option>
+          <!-- 4. Chuyên viên tuyển dụng -->
+          <div class="form-group-clean">
+            <label>👥 Chuyên Viên Tuyển Dụng</label>
+            <select id="monthly-select-recruiter" class="form-control-clean" onchange="renderMonthlyTab()">
+              <option value="ALL">Tất cả nhân sự (Trần Tuấn Anh, Trần Hùng Anh)</option>
+              <option value="TRẦN TUẤN ANH">TRẦN TUẤN ANH</option>
+              <option value="TRẦN HÙNG ANH">TRẦN HÙNG ANH</option>
             </select>
           </div>
 
-          <div class="form-group">
-            <label>Đơn Giá Thưởng KPI (VNĐ)</label>
-            <input type="number" id="monthly-kpi-unit-price" class="form-control" value="200000" step="50000" oninput="calculateMonthlyTotals()">
-          </div>
-
-          <div class="form-group" style="border: 1px solid rgba(16, 185, 129, 0.4); padding: 8px 12px; border-radius: 10px; background: rgba(16, 185, 129, 0.05);">
-            <label style="color: #34d399; font-weight: 800; font-size: 12px;">👁️ BỘ LỌC DANH SÁCH BẢNG</label>
-            <select id="monthly-filter-view" class="form-control" style="font-weight: 800; border-color: #10b981;" onchange="renderMonthlyTab()">
-              <option value="ACTIVE" selected>🎯 Chỉ UV có điểm/OB trong kỳ</option>
-              <option value="ALL">📋 Toàn bộ UV nhận việc</option>
+          <!-- 5. Gộp Trần Hùng Anh -->
+          <div class="form-group-clean">
+            <label>⚙️ Quy Đổi Tuyển Dụng</label>
+            <select id="monthly-merge-recruiters" class="form-control-clean" onchange="renderMonthlyTab()">
+              <option value="YES" selected>Có - Gộp chung về Trần Tuấn Anh</option>
+              <option value="NO">Không - Tách riêng Trần Hùng Anh</option>
             </select>
           </div>
 
-          <!-- TÌM KIẾM THÔNG MINH TAB 2 -->
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label style="color: #60a5fa; font-weight: 800;">🔍 TÌM KIẾM THÔNG MINH TAB 2 (TÊN, ID CỘT A, MÃ NV CỘT AA, SĐT, CCCD...)</label>
+          <!-- 6. Đơn giá thưởng KPI -->
+          <div class="form-group-clean">
+            <label style="color: #c084fc;">💰 Đơn Giá Thưởng KPI / Điểm</label>
+            <input type="number" id="monthly-kpi-unit-price" class="form-control-clean" value="200000" step="50000" oninput="calculateMonthlyTotals()">
+          </div>
+        </div>
+
+        <!-- HÀNG 3: TÌM KIẾM THÔNG MINH TRẢI RỘNG 100% -->
+        <div style="margin-top: 14px;">
+          <div class="form-group-clean">
+            <label style="color: #60a5fa;">🔍 Tìm Kiếm Thông Minh (Họ Tên, ID Cột A, Mã NV Cột AA, SĐT, CCCD...)</label>
             <div style="display: flex; gap: 8px;">
-              <input type="text" id="monthly-filter-search" class="form-control" 
-                     style="border-color: #3b82f6; font-size: 14px; background: rgba(15, 23, 42, 0.8);" 
-                     placeholder="Gõ tên ứng viên, ID cột A, Mã nhân viên (Cột AA), số điện thoại, CCCD..." 
+              <input type="text" id="monthly-filter-search" class="form-control-clean" 
+                     style="border-color: #3b82f6; font-size: 14px; background: rgba(15, 23, 42, 0.9);" 
+                     placeholder="Gõ tên ứng viên, ID cột A, Mã nhân viên (Cột AA), số điện thoại, CCCD, nhà máy..." 
                      oninput="renderMonthlyTab()">
-              <button class="btn btn-outline" style="white-space: nowrap;" onclick="document.getElementById('monthly-filter-search').value=''; renderMonthlyTab();">Xóa tìm</button>
+              <button class="btn btn-outline" style="white-space: nowrap; height: 42px;" onclick="document.getElementById('monthly-filter-search').value=''; renderMonthlyTab();">Xóa tìm</button>
             </div>
           </div>
         </div>
 
-        <!-- BỘ CHỌN NHIỀU NGUỒN DATA THỰC TẾ (CLICK TRỰC TIẾP CHỌN NHIỀU TRƯỜNG) -->
-        <div class="filter-chip-group" style="border-left: 3px solid #c084fc;">
+        <!-- HÀNG 4: BỘ CHỌN NHIỀU NGUỒN DATA THỰC TẾ TRỰC TIẾP (CHIPS MULTI-SELECT) -->
+        <div class="filter-chip-group" style="border-left: 3px solid #c084fc; margin-top: 14px;">
           <div class="filter-chip-header">
-            <span style="color: #c084fc; font-weight: 800; font-size: 13px;">🎯 NGUỒN DATA THỰC TẾ (Bấm chọn nhiều nguồn cùng lúc):</span>
-            <div style="display: flex; gap: 6px;">
+            <span style="color: #c084fc; font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase;">🎯 Lọc Nguồn Data Thực Tế (Bấm chọn nhiều nguồn cùng lúc):</span>
+            <div style="display: flex; gap: 8px;">
               <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('sources', true)">✓ Chọn tất cả</button>
               <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('sources', false)">✗ Bỏ chọn tất cả</button>
             </div>
@@ -1547,11 +1395,11 @@
           <div class="filter-chip-container" id="chip-container-sources"></div>
         </div>
 
-        <!-- BỘ CHỌN NHIỀU DỰ ÁN / NHÀ MÁY -->
-        <div class="filter-chip-group" style="border-left: 3px solid #3b82f6; margin-top: 8px;">
+        <!-- HÀNG 5: BỘ CHỌN NHIỀU DỰ ÁN / NHÀ MÁY (CHIPS MULTI-SELECT) -->
+        <div class="filter-chip-group" style="border-left: 3px solid #3b82f6; margin-top: 10px;">
           <div class="filter-chip-header">
-            <span style="color: #60a5fa; font-weight: 800; font-size: 13px;">🏭 DỰ ÁN / NHÀ MÁY (Bấm chọn nhiều dự án cùng lúc):</span>
-            <div style="display: flex; gap: 6px;">
+            <span style="color: #60a5fa; font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase;">🏭 Lọc Dự Án / Nhà Máy (Bấm chọn nhiều dự án cùng lúc):</span>
+            <div style="display: flex; gap: 8px;">
               <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('projects', true)">✓ Chọn tất cả</button>
               <button type="button" class="btn-text-action" onclick="MultiSelectManager.selectAll('projects', false)">✗ Bỏ chọn tất cả</button>
             </div>
@@ -1559,7 +1407,7 @@
           <div class="filter-chip-container" id="chip-container-projects"></div>
         </div>
 
-        <!-- QUICK FILTER PILLS -->
+        <!-- HÀNG 6: THANH NÚT LỌC NHANH KÈM SỐ ĐẾM -->
         <div style="display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap; align-items: center;">
           <span style="font-size: 12px; color: var(--text-sub); font-weight: 700; margin-right: 4px;">⚡ Lọc nhanh:</span>
           <button id="pill-filter-all" class="pill-btn active" onclick="setMonthlyQuickFilter('ALL')">📋 Tất cả (<span id="count-pill-all">0</span>)</button>
@@ -1569,7 +1417,8 @@
           <button id="pill-filter-ctv" class="pill-btn" onclick="setMonthlyQuickFilter('CTV')">🟢 Nguồn CTV (<span id="count-pill-ctv">0</span>)</button>
         </div>
 
-        <div style="display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+        <!-- HÀNG 7: NÚT THAO TÁC HÀNH ĐỘNG -->
+        <div style="display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button class="btn btn-blue" onclick="selectAllMonthly(true)">✅ Chọn Tất Cả UV</button>
             <button class="btn btn-outline" onclick="selectAllMonthly(false)">❌ Bỏ Chọn Tất Cả</button>
