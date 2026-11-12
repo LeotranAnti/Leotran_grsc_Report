@@ -1147,6 +1147,7 @@
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button class="btn btn-blue" onclick="selectAllMonthly(true)">✅ Chọn Tất Cả UV</button>
             <button class="btn btn-outline" onclick="selectAllMonthly(false)">❌ Bỏ Chọn Tất Cả</button>
+            <button class="btn btn-blue" onclick="restoreFromBackupKeys()" title="Khôi phục lại toàn bộ dữ liệu điểm anh đã điền">📥 Khôi Phục Toàn Bộ Điểm Đã Điền</button>
             <button class="btn btn-outline" onclick="resetDefaultMultiPoints()">🔄 Đặt Lại Điểm Mặc Định (Về 0đ)</button>
             <button class="btn btn-purple" onclick="autoSplitAllToNextMonth()">⚡ Tự Động Gán & Điền Điểm Kỳ 2 Sang Tháng Sau (+1.0đ)</button>
           </div>
@@ -1329,13 +1330,68 @@
       if (savedAssigned) candidateAssignedSources = JSON.parse(savedAssigned);
     } catch(e) { console.error('Error loading assigned sources', e); }
 
-    // Persistent Multi-Month KPI Storage
+    // Persistent Multi-Month KPI Storage with Auto-Recovery across all versions
     const STORAGE_KEY = 'ECL_KPI_MULTI_MONTH_POINTS_V6';
+    const BACKUP_STORAGE_KEY = 'ECL_KPI_MULTI_MONTH_POINTS_V5';
+    const ALL_BACKUP_KEYS = [
+      'ECL_KPI_MULTI_MONTH_POINTS_V5',
+      'ECL_KPI_MULTI_MONTH_POINTS_V6',
+      'ECL_KPI_MULTI_MONTH_POINTS_V4',
+      'ECL_KPI_MULTI_MONTH_POINTS_V3',
+      'ECL_KPI_MULTI_MONTH_POINTS_V2',
+      'ECL_KPI_CUSTOM_POINTS_V1'
+    ];
     let customKPIState = {};
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) customKPIState = JSON.parse(saved);
-    } catch(e) { console.error('Error loading KPI storage', e); }
+
+    function loadAndRestoreKPIState() {
+      // 1. First load from V6 if exists
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && typeof parsed === 'object') customKPIState = parsed;
+        }
+      } catch(e) {}
+
+      // 2. Scan ALL historical keys to recover any filled points, notes, months from V5/V4/etc.
+      ALL_BACKUP_KEYS.forEach(k => {
+        try {
+          const oldRaw = localStorage.getItem(k);
+          if (!oldRaw) return;
+          const oldData = JSON.parse(oldRaw);
+          if (!oldData || typeof oldData !== 'object') return;
+          for (const id in oldData) {
+            const item = oldData[id];
+            if (!item) continue;
+            if (!customKPIState[id]) {
+              customKPIState[id] = { ...item };
+            } else {
+              // Restore points if user had entered points in old key
+              if (item.points1 !== undefined && (customKPIState[id].points1 === undefined || customKPIState[id].points1 === 0)) {
+                customKPIState[id].points1 = item.points1;
+              }
+              if (item.points2 !== undefined && (customKPIState[id].points2 === undefined || customKPIState[id].points2 === 0)) {
+                customKPIState[id].points2 = item.points2;
+              }
+              if (item.month1 && !customKPIState[id].month1) customKPIState[id].month1 = item.month1;
+              if (item.month2 && item.month2 !== 'NONE' && (!customKPIState[id].month2 || customKPIState[id].month2 === 'NONE')) {
+                customKPIState[id].month2 = item.month2;
+              }
+              if (item.note && !customKPIState[id].note) customKPIState[id].note = item.note;
+              if (item.selected !== undefined) customKPIState[id].selected = item.selected;
+            }
+          }
+        } catch(e) {}
+      });
+
+      // Synchronize across both V6 and V5 so neither is ever lost
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(customKPIState));
+        localStorage.setItem(BACKUP_STORAGE_KEY, JSON.stringify(customKPIState));
+      } catch(e) {}
+    }
+
+    loadAndRestoreKPIState();
 
     let filteredCandidates = [...RAW_CANDIDATES];
     let currentPage = 1;
@@ -1352,7 +1408,14 @@
     function saveKPIState() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(customKPIState));
+        localStorage.setItem(BACKUP_STORAGE_KEY, JSON.stringify(customKPIState));
       } catch(e) { console.error('Error saving KPI storage', e); }
+    }
+
+    function restoreFromBackupKeys() {
+      loadAndRestoreKPIState();
+      renderMonthlyTab();
+      alert('✅ Đã quét và khôi phục toàn bộ dữ liệu điểm anh đã điền từ các phiên lưu trước!');
     }
 
     // Add new CTV dynamically
@@ -2449,6 +2512,7 @@
     }
 
     window.onload = function() {
+      loadAndRestoreKPIState();
       populateRealSourceFilter();
       applyFilters();
       renderMonthlyTab();
