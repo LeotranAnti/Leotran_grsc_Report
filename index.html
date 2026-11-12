@@ -2100,13 +2100,17 @@
           <!-- KỲ 1 -->
           <td style="background: rgba(16, 185, 129, 0.05); border-left: 2px solid rgba(16, 185, 129, 0.4);">
             <select class="table-select" style="border-color:#10b981; color:#34d399;" 
+                    id="select-month1-${c.id}"
                     onchange="handleMonth1Change('${c.id}', this.value)" ${state.selected ? '' : 'disabled'}>
               ${m1Options}
             </select>
           </td>
           <td style="text-align: center; background: rgba(16, 185, 129, 0.05);">
-            <input type="number" class="point-input green-point" value="${state.points1}" step="0.5" min="0" max="10"
+            <input type="number" class="point-input green-point" 
+                   id="input-point1-${c.id}"
+                   value="${state.points1}" step="0.5" min="0" max="10"
                    placeholder="0.0"
+                   onfocus="if(this.value==='0' || this.value==='0.0') this.select();"
                    oninput="handlePoint1Change('${c.id}', this.value)"
                    onchange="handlePoint1Change('${c.id}', this.value)" ${state.selected ? '' : 'disabled'}>
           </td>
@@ -2125,6 +2129,7 @@
                    id="input-point2-${c.id}"
                    value="${state.points2}" step="0.5" min="0" max="10" 
                    placeholder="0.0"
+                   onfocus="if(this.value==='0' || this.value==='0.0') this.select();"
                    oninput="handlePoint2Change('${c.id}', this.value)"
                    onchange="handlePoint2Change('${c.id}', this.value)" 
                    ${state.selected ? '' : 'disabled'}>
@@ -2150,18 +2155,73 @@
       calculateMonthlyTotals();
     }
 
+    function updateMonthlyRowDisplay(candidateId) {
+      const state = customKPIState[candidateId];
+      if (!state) return;
+      const selectMonthEl = document.getElementById('monthly-select-month');
+      const selectedMonth = selectMonthEl ? selectMonthEl.value : 'ALL';
+      const hasActivePeriod2 = (state.month2 !== 'NONE' && state.month2 !== '') && (parseFloat(state.points2) > 0);
+
+      let pointsForCurrentMonth = 0;
+      if (state.selected) {
+        if (selectedMonth === 'ALL') {
+          pointsForCurrentMonth = (parseFloat(state.points1) || 0) + (hasActivePeriod2 ? (parseFloat(state.points2) || 0) : 0);
+        } else {
+          if (state.month1 === selectedMonth) pointsForCurrentMonth += (parseFloat(state.points1) || 0);
+          if (hasActivePeriod2 && state.month2 === selectedMonth) pointsForCurrentMonth += (parseFloat(state.points2) || 0);
+        }
+      }
+      const total2Periods = (parseFloat(state.points1) || 0) + (hasActivePeriod2 ? (parseFloat(state.points2) || 0) : 0);
+
+      const impactEl = document.getElementById(`impact-cell-${candidateId}`);
+      if (impactEl) {
+        impactEl.innerHTML = pointsForCurrentMonth > 0 ? 
+          `<span class="badge-kpi-star" style="font-size:12px;">⭐ +${pointsForCurrentMonth.toFixed(1).replace('.0','')} ĐIỂM</span>` :
+          `<span style="color:var(--text-sub); font-size:11px;">0đ (Chưa tính điểm)</span>`;
+      }
+
+      const total2El = document.getElementById(`total2-cell-${candidateId}`);
+      if (total2El) {
+        total2El.innerText = `${total2Periods.toFixed(1).replace('.0','')} đ`;
+      }
+
+      const rowEl = document.getElementById(`row-monthly-${candidateId}`);
+      if (rowEl) {
+        if (pointsForCurrentMonth > 0) {
+          rowEl.classList.add('row-active-month');
+        } else {
+          rowEl.classList.remove('row-active-month');
+        }
+      }
+    }
+
     function handleCandidateToggle(candidateId, isChecked) {
       if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
       customKPIState[candidateId].selected = isChecked;
       saveKPIState();
-      renderMonthlyTab();
+      const p1 = document.getElementById(`input-point1-${candidateId}`);
+      const p2 = document.getElementById(`input-point2-${candidateId}`);
+      const m1 = document.getElementById(`select-month1-${candidateId}`);
+      const m2 = document.getElementById(`select-month2-${candidateId}`);
+      if (p1) p1.disabled = !isChecked;
+      if (p2) p2.disabled = !isChecked;
+      if (m1) m1.disabled = !isChecked;
+      if (m2) m2.disabled = !isChecked;
+      const row = document.getElementById(`row-monthly-${candidateId}`);
+      if (row) {
+        if (isChecked) row.classList.add('row-selected');
+        else row.classList.remove('row-selected');
+      }
+      updateMonthlyRowDisplay(candidateId);
+      calculateMonthlyTotals();
     }
 
     function handleMonth1Change(candidateId, monthVal) {
       if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
       customKPIState[candidateId].month1 = monthVal;
       saveKPIState();
-      renderMonthlyTab();
+      updateMonthlyRowDisplay(candidateId);
+      calculateMonthlyTotals();
     }
 
     function handlePoint1Change(candidateId, val) {
@@ -2170,6 +2230,7 @@
       if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
       customKPIState[candidateId].points1 = num;
       saveKPIState();
+      updateMonthlyRowDisplay(candidateId);
       calculateMonthlyTotals();
     }
 
@@ -2177,7 +2238,8 @@
       if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
       customKPIState[candidateId].month2 = monthVal;
       saveKPIState();
-      renderMonthlyTab();
+      updateMonthlyRowDisplay(candidateId);
+      calculateMonthlyTotals();
     }
 
     function handlePoint2Change(candidateId, val) {
@@ -2187,10 +2249,14 @@
       customKPIState[candidateId].points2 = num;
 
       if (num > 0 && (!customKPIState[candidateId].month2 || customKPIState[candidateId].month2 === 'NONE')) {
-        customKPIState[candidateId].month2 = getNextMonth(customKPIState[candidateId].month1 || '2026-10');
+        const nextM = getNextMonth(customKPIState[candidateId].month1 || '2026-10');
+        customKPIState[candidateId].month2 = nextM;
+        const m2Select = document.getElementById(`select-month2-${candidateId}`);
+        if (m2Select) m2Select.value = nextM;
       }
       saveKPIState();
-      renderMonthlyTab();
+      updateMonthlyRowDisplay(candidateId);
+      calculateMonthlyTotals();
     }
 
     function handleNoteChange(candidateId, val) {
