@@ -1370,7 +1370,7 @@
           <!-- 5. Quy đổi Trần Hùng Anh -->
           <div class="form-group-clean">
             <label>🔄 Quy Đổi Tuyển Dụng</label>
-            <select id="monthly-select-merge-recruiter" class="form-control-clean" onchange="renderMonthlyTab()">
+            <select id="monthly-merge-recruiters" class="form-control-clean" onchange="renderMonthlyTab()">
               <option value="YES" selected>Có – Gộp Trần Hùng Anh về Tuấn Anh</option>
               <option value="NO">Không – Tách riêng Trần Hùng Anh</option>
             </select>
@@ -1379,7 +1379,7 @@
           <!-- 6. Đơn giá thưởng KPI -->
           <div class="form-group-clean">
             <label>💰 Đơn Giá Thưởng KPI (VNĐ)</label>
-            <input type="number" id="monthly-unit-price" class="form-control-clean" value="200000" step="10000" min="0" oninput="renderMonthlyTab()">
+            <input type="number" id="monthly-kpi-unit-price" class="form-control-clean" value="200000" step="10000" min="0" oninput="renderMonthlyTab()">
           </div>
         </div>
 
@@ -1681,6 +1681,16 @@
 
 
     // === MULTI-SELECT MANAGER (HỖ TRỢ CHỌN NHIỀU NGUỒN DATA & NHIỀU DỰ ÁN CÙNG LÚC) ===
+    let currentMonthlyQuickFilter = 'ALL';
+
+    function setMonthlyQuickFilter(type) {
+      currentMonthlyQuickFilter = type;
+      document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`pill-filter-${type.toLowerCase()}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      renderMonthlyTab();
+    }
+
     const MultiSelectManager = {
       selectedSources: new Set(),
       selectedProjects: new Set(),
@@ -1696,6 +1706,8 @@
         });
         customSourcesList.forEach(s => sources.add(s));
         this.allSources = Array.from(sources).sort();
+        // Select all sources by default
+        this.selectedSources = new Set(this.allSources);
 
         // Collect all distinct projects
         const projects = new Set();
@@ -1703,6 +1715,8 @@
           if (c.project) projects.add(c.project);
         });
         this.allProjects = Array.from(projects).sort();
+        // Select all projects by default
+        this.selectedProjects = new Set(this.allProjects);
 
         this.renderChips('sources');
         this.renderChips('projects');
@@ -1736,39 +1750,33 @@
         container.innerHTML = '';
         const set = type === 'sources' ? this.selectedSources : this.selectedProjects;
         const all = type === 'sources' ? this.allSources : this.allProjects;
-        const isAllSelected = (set.size === 0 || set.size === all.length);
         const chipColorClass = type === 'sources' ? 'chip-purple' : 'chip-blue';
 
         all.forEach(item => {
-          const isSelected = isAllSelected || set.has(item);
+          const isSelected = set.has(item);
           const chip = document.createElement('button');
           chip.type = 'button';
           chip.className = `multiselect-chip ${chipColorClass} ${isSelected ? 'active' : ''}`;
           chip.innerHTML = `${isSelected ? '✓' : '+'} ${item}`;
           chip.onclick = () => {
-            // If currently all selected, clicking an item starts isolating
-            if (set.size === 0) {
-              all.forEach(x => set.add(x));
-              set.delete(item);
-            } else {
-              if (set.has(item)) set.delete(item);
-              else set.add(item);
-            }
-            MultiSelectManager.renderChips(type);
-            renderMonthlyTab();
+            MultiSelectManager.toggleItem(type, item);
           };
           container.appendChild(chip);
         });
       },
 
       matches(c) {
+        // If sets are empty, match nothing
+        if (this.allSources.length > 0 && this.selectedSources.size === 0) return false;
+        if (this.allProjects.length > 0 && this.selectedProjects.size === 0) return false;
+
         // Source match
         const cSrc = getCandidateRealSource(c.id);
-        if (this.selectedSources.size > 0 && !this.selectedSources.has(cSrc)) {
+        if (!this.selectedSources.has(cSrc)) {
           return false;
         }
         // Project match
-        if (this.selectedProjects.size > 0 && !this.selectedProjects.has(c.project)) {
+        if (c.project && !this.selectedProjects.has(c.project)) {
           return false;
         }
         return true;
@@ -2403,17 +2411,32 @@
     }
 
     function getEffectiveRecruiter(recruiterName) {
-      const merge = document.getElementById('monthly-merge-recruiters').value === 'YES';
+      const mergeEl = document.getElementById('monthly-merge-recruiters') || document.getElementById('monthly-select-merge-recruiter');
+      const merge = mergeEl ? mergeEl.value === 'YES' : true;
       if (merge && recruiterName === 'TRẦN HÙNG ANH') {
         return 'TRẦN TUẤN ANH';
       }
       return recruiterName;
     }
 
-    function renderMonthlyTab() {
-      const selectedMonth = document.getElementById('monthly-select-month').value;
-      const selectedRec = document.getElementById('monthly-select-recruiter').value;
-      const selectedProj = document.getElementById('monthly-select-project').value;
+        function getCandidateDefaultMonth(c) {
+      if (c && c.ob_date) return getMonthLabel(c.ob_date);
+      return '2026-10';
+    }
+
+function renderMonthlyTab() {
+      const selectMonthEl = document.getElementById('monthly-select-month');
+      const selectedMonth = selectMonthEl ? selectMonthEl.value : '2026-11';
+      const selectRecEl = document.getElementById('monthly-select-recruiter');
+      const selectedRec = selectRecEl ? selectRecEl.value : 'ALL';
+
+      const searchInput = document.getElementById('monthly-filter-search');
+      const search = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+      const scoreStatusEl = document.getElementById('monthly-filter-score-status');
+      const scoreStatusFilter = scoreStatusEl ? scoreStatusEl.value : 'ALL';
+
+      const filterViewMode = document.getElementById('monthly-filter-view') ? document.getElementById('monthly-filter-view').value : 'ACTIVE';
 
       const monthNames = {
         '2026-10': 'Tháng 10/2026',
@@ -2424,8 +2447,10 @@
       };
 
       const displayMonthTitle = monthNames[selectedMonth] || selectedMonth;
-      document.getElementById('label-kpi-month-title').innerText = `🌟 TỔNG ĐIỂM KPI GHI NHẬN (${displayMonthTitle.toUpperCase()})`;
-      document.getElementById('monthly-rec-summary-label').innerText = `Đang xem báo cáo KPI: ${displayMonthTitle}`;
+      const titleLabel = document.getElementById('label-kpi-month-title');
+      if (titleLabel) titleLabel.innerText = `🌟 TỔNG ĐIỂM KPI GHI NHẬN (${displayMonthTitle.toUpperCase()})`;
+      const summaryLabel = document.getElementById('monthly-rec-summary-label');
+      if (summaryLabel) summaryLabel.innerText = `Đang xem báo cáo KPI: ${displayMonthTitle}`;
 
       // Candidates qualifying for onboarding: 54 ĐÃ NHẬN VIỆC + 9 ĐÃ NGHỈ VIỆC SAU OB = 63 candidates
       monthlyCandidatesList = RAW_CANDIDATES.filter(c => {
@@ -2436,24 +2461,33 @@
 
         const effectiveRec = getEffectiveRecruiter(c.recruiter);
         if (selectedRec !== 'ALL' && effectiveRec !== selectedRec && c.recruiter !== selectedRec) return false;
-        if (selectedProj !== 'ALL' && c.project !== selectedProj) return false;
+
+        // MultiSelectManager for Sources & Projects
+        if (typeof MultiSelectManager !== 'undefined' && !MultiSelectManager.matches(c)) return false;
+
+        // Search filter
+        if (search) {
+          const matchName = (c.name || '').toLowerCase().includes(search);
+          const matchId = (c.id || '').toLowerCase().includes(search);
+          const matchMnv = (c.mnv || '').toLowerCase().includes(search);
+          const matchPhone = (c.phone || '').toLowerCase().includes(search);
+          if (!matchName && !matchId && !matchMnv && !matchPhone) return false;
+        }
 
         return true;
       });
 
       monthlyCandidatesList.sort((a,b) => (b.ob_date || '').localeCompare(a.ob_date || ''));
 
-      const filterViewMode = document.getElementById('monthly-filter-view') ? document.getElementById('monthly-filter-view').value : 'ACTIVE';
-
       // Pre-calculate points to determine which candidates belong to this period
       const activeCandidatesInMonth = [];
       monthlyCandidatesList.forEach(c => {
-        const defaultMonth1 = getMonthLabel(c.ob_date);
+        const defaultMonth1 = getCandidateDefaultMonth(c);
         if (!customKPIState[c.id]) {
           customKPIState[c.id] = {
             selected: true,
             month1: defaultMonth1,
-            points1: 1.0,
+            points1: 0.0,
             month2: 'NONE',
             points2: 0.0,
             note: ''
@@ -2461,7 +2495,7 @@
         }
         const state = customKPIState[c.id];
         if (!state.month1) state.month1 = defaultMonth1;
-        if (state.points1 === undefined) state.points1 = 1.0;
+        if (state.points1 === undefined) state.points1 = 0.0;
         if (state.month2 === undefined) state.month2 = 'NONE';
         if (state.points2 === undefined) state.points2 = 0.0;
 
@@ -2482,21 +2516,58 @@
         }
       });
 
-      const listToDisplay = (filterViewMode === 'ACTIVE' && selectedMonth !== 'ALL') ? activeCandidatesInMonth : monthlyCandidatesList;
+      // Update Quick Filter Pills counts
+      const poolForCounts = (filterViewMode === 'ACTIVE' && selectedMonth !== 'ALL') ? activeCandidatesInMonth : monthlyCandidatesList;
+      const cntAll = poolForCounts.length;
+      const cntScored = poolForCounts.filter(c => (c._pointsForSelectedMonth || 0) > 0).length;
+      const cntUnscored = poolForCounts.filter(c => (c._pointsForSelectedMonth || 0) === 0).length;
+      const cntTuTuyen = poolForCounts.filter(c => getCandidateRealSource(c.id) === 'Tự tuyển').length;
+      const cntCTV = poolForCounts.filter(c => getCandidateRealSource(c.id) !== 'Tự tuyển').length;
 
-      document.getElementById('monthly-list-badge').innerText = `Hiển thị: ${listToDisplay.length} ứng viên (${filterViewMode === 'ACTIVE' ? 'Chỉ ứng viên có điểm trong kỳ ' + displayMonthTitle : 'Toàn bộ ứng viên'})`;
+      if (document.getElementById('count-pill-all')) document.getElementById('count-pill-all').innerText = cntAll;
+      if (document.getElementById('count-pill-scored')) document.getElementById('count-pill-scored').innerText = cntScored;
+      if (document.getElementById('count-pill-unscored')) document.getElementById('count-pill-unscored').innerText = cntUnscored;
+      if (document.getElementById('count-pill-tu-tuyen')) document.getElementById('count-pill-tu-tuyen').innerText = cntTuTuyen;
+      if (document.getElementById('count-pill-ctv')) document.getElementById('count-pill-ctv').innerText = cntCTV;
+
+      // Filter list to display based on view mode, quick filter, and score status
+      let baseList = (filterViewMode === 'ACTIVE' && selectedMonth !== 'ALL') ? activeCandidatesInMonth : monthlyCandidatesList;
+
+      if (currentMonthlyQuickFilter === 'SCORED') {
+        baseList = baseList.filter(c => (c._pointsForSelectedMonth || 0) > 0);
+      } else if (currentMonthlyQuickFilter === 'UNSCORED') {
+        baseList = baseList.filter(c => (c._pointsForSelectedMonth || 0) === 0);
+      } else if (currentMonthlyQuickFilter === 'TU_TUYEN') {
+        baseList = baseList.filter(c => getCandidateRealSource(c.id) === 'Tự tuyển');
+      } else if (currentMonthlyQuickFilter === 'CTV') {
+        baseList = baseList.filter(c => getCandidateRealSource(c.id) !== 'Tự tuyển');
+      }
+
+      if (scoreStatusFilter === 'HAS_POINTS') {
+        baseList = baseList.filter(c => (c._pointsForSelectedMonth || 0) > 0);
+      } else if (scoreStatusFilter === 'ZERO_POINTS') {
+        baseList = baseList.filter(c => (c._pointsForSelectedMonth || 0) === 0);
+      }
+
+      const listToDisplay = baseList;
+
+      const badgeEl = document.getElementById('monthly-list-badge');
+      if (badgeEl) {
+        badgeEl.innerText = `Hiển thị: ${listToDisplay.length} ứng viên (${filterViewMode === 'ACTIVE' ? 'Chỉ ứng viên có điểm/OB trong kỳ ' + displayMonthTitle : 'Toàn bộ 63 ứng viên'})`;
+      }
 
       const tbody = document.getElementById('monthly-candidates-tbody');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
       listToDisplay.forEach((c, idx) => {
-        const defaultMonth1 = getMonthLabel(c.ob_date);
+        const defaultMonth1 = getCandidateDefaultMonth(c);
 
         if (!customKPIState[c.id]) {
           customKPIState[c.id] = {
             selected: true,
             month1: defaultMonth1,
-            points1: 1.0,
+            points1: 0.0,
             month2: 'NONE',
             points2: 0.0,
             note: ''
@@ -2504,7 +2575,7 @@
         }
         const state = customKPIState[c.id];
         if (!state.month1) state.month1 = defaultMonth1;
-        if (state.points1 === undefined) state.points1 = 1.0;
+        if (state.points1 === undefined) state.points1 = 0.0;
         if (state.month2 === undefined) state.month2 = 'NONE';
         if (state.points2 === undefined) state.points2 = 0.0;
 
@@ -2539,7 +2610,7 @@
 
         let currentImpactBadge = '<span style="color:var(--text-sub); font-size:11px;">0đ (Không tính vào tháng này)</span>';
         if (pointsForCurrentMonth > 0) {
-          currentImpactBadge = `<span class="badge-kpi-star" style="font-size:12px;">⭐ +${pointsForCurrentMonth.toFixed(1).replace('.0','')} ĐIỂM</span>`;
+          currentImpactBadge = `<span class="badge-kpi-star" style="font-size:12px;">⭐ +${formatPoint(pointsForCurrentMonth)} ĐIỂM</span>`;
         }
 
         let exactCol19Badge = '<span class="status-badge badge-exact-nhan-viec">ĐÃ NHẬN VIỆC</span>';
@@ -2584,47 +2655,56 @@
           <td>${exactCol19Badge}</td>
           
           <!-- Nguồn Data Thực Tế -->
-          <td style="background: rgba(139, 92, 246, 0.05); border-left: 2px solid rgba(139, 92, 246, 0.4);">
+          <td>
             <select class="source-select ${srcClass}" style="padding: 4px 8px; font-size: 11px;" onchange="handleSourceChange('${c.id}', this.value)">
               ${sourceOptions}
             </select>
           </td>
 
           <!-- KỲ 1 -->
-          <td style="background: rgba(16, 185, 129, 0.05); border-left: 2px solid rgba(16, 185, 129, 0.4);">
+          <td>
             <select class="table-select" style="border-color:#10b981; color:#34d399;" 
+                    id="select-month1-${c.id}"
                     onchange="handleMonth1Change('${c.id}', this.value)" ${state.selected ? '' : 'disabled'}>
               ${m1Options}
             </select>
           </td>
-          <td style="text-align: center; background: rgba(16, 185, 129, 0.05);">
-            <input type="number" class="point-input green-point" value="${state.points1}" step="0.01" min="0" max="10" onfocus="this.select()"
+          <td style="text-align: center;">
+            <input type="number" class="point-input green-point" 
+                   id="input-point1-${c.id}"
+                   value="${state.points1}" step="0.01" min="0" max="10"
+                   placeholder="0.0"
+                   onfocus="this.select();"
+                   oninput="handlePoint1Change('${c.id}', this.value)"
                    onchange="handlePoint1Change('${c.id}', this.value)" ${state.selected ? '' : 'disabled'}>
           </td>
 
           <!-- KỲ 2 -->
-          <td style="background: rgba(139, 92, 246, 0.05); border-left: 2px solid rgba(139, 92, 246, 0.4);">
+          <td>
             <select class="table-select" style="border-color:#8b5cf6; color:#c084fc;" 
+                    id="select-month2-${c.id}"
                     onchange="handleMonth2Change('${c.id}', this.value)" 
                     ${state.selected ? '' : 'disabled'}>
               ${m2Options}
             </select>
           </td>
-          <td style="text-align: center; background: rgba(139, 92, 246, 0.05);">
+          <td style="text-align: center;">
             <input type="number" class="point-input purple-point" 
                    id="input-point2-${c.id}"
-                   value="${state.points2}" step="0.01" min="0" max="10" onfocus="this.select()" 
+                   value="${state.points2}" step="0.01" min="0" max="10" 
                    placeholder="0.0"
+                   onfocus="this.select();"
+                   oninput="handlePoint2Change('${c.id}', this.value)"
                    onchange="handlePoint2Change('${c.id}', this.value)" 
                    ${state.selected ? '' : 'disabled'}>
           </td>
 
           <!-- Impact on current selected month & Total 2 Periods -->
-          <td style="text-align: center; background: rgba(59, 130, 246, 0.05); border-left: 2px solid rgba(59, 130, 246, 0.4);">
+          <td id="impact-cell-${c.id}" style="text-align: center;">
             ${currentImpactBadge}
           </td>
-          <td style="text-align: center; font-weight:800; font-family:var(--font-mono); color:#f8fafc;">
-            ${total2Periods.toFixed(1).replace('.0','')} đ
+          <td id="total-cell-${c.id}" style="text-align: center; font-weight:800; font-family:var(--font-mono); color:#f8fafc;">
+            ${formatPoint(total2Periods)} đ
           </td>
 
           <!-- Notes -->
@@ -2638,102 +2718,11 @@
 
       calculateMonthlyTotals();
     }
-
-    function handleCandidateToggle(candidateId, isChecked) {
-      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
-      customKPIState[candidateId].selected = isChecked;
-      saveKPIState();
-      renderMonthlyTab();
-    }
-
-    function handleMonth1Change(candidateId, monthVal) {
-      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
-      customKPIState[candidateId].month1 = monthVal;
-      saveKPIState();
-      renderMonthlyTab();
-    }
-
-    function handlePoint1Change(candidateId, val) {
-      let num = parseFloat(val);
-      if (isNaN(num) || num < 0) num = 0;
-      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
-      customKPIState[candidateId].points1 = num;
-      saveKPIState();
-      calculateMonthlyTotals();
-    }
-
-    function handleMonth2Change(candidateId, monthVal) {
-      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
-      customKPIState[candidateId].month2 = monthVal;
-      saveKPIState();
-      renderMonthlyTab();
-    }
-
-    function handlePoint2Change(candidateId, val) {
-      let num = parseFloat(val);
-      if (isNaN(num) || num < 0) num = 0;
-      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
-      customKPIState[candidateId].points2 = num;
-
-      if (num > 0 && (!customKPIState[candidateId].month2 || customKPIState[candidateId].month2 === 'NONE')) {
-        customKPIState[candidateId].month2 = getNextMonth(customKPIState[candidateId].month1 || '2026-10');
-      }
-      saveKPIState();
-      renderMonthlyTab();
-    }
-
-    function handleNoteChange(candidateId, val) {
-      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
-      customKPIState[candidateId].note = val;
-      saveKPIState();
-    }
-
-    function selectAllMonthly(checked) {
-      monthlyCandidatesList.forEach(c => {
-        if (!customKPIState[c.id]) customKPIState[c.id] = {};
-        customKPIState[c.id].selected = checked;
-      });
-      saveKPIState();
-      renderMonthlyTab();
-    }
-
-    function toggleCheckAllMonthly(checked) {
-      selectAllMonthly(checked);
-    }
-
-    function resetDefaultMultiPoints() {
-      monthlyCandidatesList.forEach(c => {
-        const defM = getMonthLabel(c.ob_date);
-        customKPIState[c.id] = {
-          selected: true,
-          month1: defM,
-          points1: 1.0,
-          month2: 'NONE',
-          points2: 0.0,
-          note: ''
-        };
-      });
-      saveKPIState();
-      renderMonthlyTab();
-    }
-
-    function autoSplitAllToNextMonth() {
-      monthlyCandidatesList.forEach(c => {
-        if (!customKPIState[c.id]) customKPIState[c.id] = {};
-        const state = customKPIState[c.id];
-        state.selected = true;
-        if (!state.month1) state.month1 = getMonthLabel(c.ob_date);
-        if (state.points1 === undefined) state.points1 = 1.0;
-        state.month2 = getNextMonth(state.month1);
-        state.points2 = 1.0;
-      });
-      saveKPIState();
-      renderMonthlyTab();
-    }
-
     function calculateMonthlyTotals() {
-      const selectedMonth = document.getElementById('monthly-select-month').value;
-      const unitPrice = parseFloat(document.getElementById('monthly-kpi-unit-price').value) || 0;
+      const selectMonthEl = document.getElementById('monthly-select-month');
+      const selectedMonth = selectMonthEl ? selectMonthEl.value : '2026-11';
+      const unitPriceInput = document.getElementById('monthly-kpi-unit-price') || document.getElementById('monthly-unit-price');
+      const unitPrice = parseFloat(unitPriceInput ? unitPriceInput.value : 200000) || 200000;
 
       let totalPoints = 0;
       let countMonth1 = 0;
@@ -2821,7 +2810,7 @@
 
     function exportMonthlyKPIReport() {
       const selectedMonth = document.getElementById('monthly-select-month').value;
-      const unitPrice = parseFloat(document.getElementById('monthly-kpi-unit-price').value) || 0;
+      const unitPriceInput = document.getElementById('monthly-kpi-unit-price') || document.getElementById('monthly-unit-price'); const unitPrice = parseFloat(unitPriceInput ? unitPriceInput.value : 200000) || 200000;
 
       let csv = 'STT,ID (Cot A),Ho va Ten,Ma Nhan Vien (Cot AA),Du An,Chuyen Vien Tuyen Dung,Ngay OB Goc,Tinh Trang Nhan Viec (Col 19),Nguon Data Thuc Te,Thang Ghi Nhan Ky 1,Diem Ky 1,Thang Ghi Nhan Ky 2,Diem Ky 2,Diem Tinh Vao Thang Chon,Tien Thuong (VND),Ghi Chu\n';
       
