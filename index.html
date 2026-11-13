@@ -1621,6 +1621,7 @@
     let customKPIState = {};
 
     function loadAndRestoreKPIState() {
+      // 1. Load active V6 state
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
@@ -1629,37 +1630,60 @@
         }
       } catch(e) {}
 
-      // Scan all historical storage keys to recover user-entered points
-      ALL_BACKUP_KEYS.forEach(k => {
-        try {
-          const raw = localStorage.getItem(k);
-          if (!raw) return;
-          const data = JSON.parse(raw);
-          if (!data || typeof data !== 'object') return;
-          for (const id in data) {
-            const item = data[id];
-            if (!item) continue;
-            if (!customKPIState[id]) {
-              customKPIState[id] = { ...item };
-            } else {
-              if (item.points1 !== undefined && (customKPIState[id].points1 === undefined || customKPIState[id].points1 === 0)) {
-                customKPIState[id].points1 = item.points1;
-              }
-              if (item.points2 !== undefined && (customKPIState[id].points2 === undefined || customKPIState[id].points2 === 0)) {
-                customKPIState[id].points2 = item.points2;
-              }
-              if (item.month1 && !customKPIState[id].month1) customKPIState[id].month1 = item.month1;
-              if (item.month2 && item.month2 !== 'NONE' && (!customKPIState[id].month2 || customKPIState[id].month2 === 'NONE')) {
-                customKPIState[id].month2 = item.month2;
-              }
-              if (item.note && !customKPIState[id].note) customKPIState[id].note = item.note;
-              if (item.selected !== undefined) customKPIState[id].selected = item.selected;
+      // 2. Scan ALL keys in browser localStorage for any previous KPI versions
+      try {
+        const candidateKeys = [];
+        if (typeof localStorage !== 'undefined') {
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && (k.includes('KPI') || k.includes('POINTS'))) {
+              candidateKeys.push(k);
             }
           }
-        } catch(e) {}
-      });
+        }
+        ALL_BACKUP_KEYS.forEach(k => {
+          if (!candidateKeys.includes(k)) candidateKeys.push(k);
+        });
 
-      // Synchronize back to both V6 and V5
+        candidateKeys.forEach(k => {
+          try {
+            const raw = localStorage.getItem(k);
+            if (!raw) return;
+            const data = JSON.parse(raw);
+            if (!data || typeof data !== 'object') return;
+            for (const id in data) {
+              const item = data[id];
+              if (!item || typeof item !== 'object') continue;
+              if (!customKPIState[id]) {
+                customKPIState[id] = { ...item };
+              } else {
+                const p1 = parseFloat(item.points1);
+                const curP1 = parseFloat(customKPIState[id].points1);
+                if (!isNaN(p1) && p1 > 0 && (isNaN(curP1) || curP1 === 0)) {
+                  customKPIState[id].points1 = p1;
+                }
+
+                const p2 = parseFloat(item.points2);
+                const curP2 = parseFloat(customKPIState[id].points2);
+                if (!isNaN(p2) && p2 > 0 && (isNaN(curP2) || curP2 === 0)) {
+                  customKPIState[id].points2 = p2;
+                }
+
+                if (item.month1 && !customKPIState[id].month1) customKPIState[id].month1 = item.month1;
+                if (item.month2 && item.month2 !== 'NONE' && (!customKPIState[id].month2 || customKPIState[id].month2 === 'NONE')) {
+                  customKPIState[id].month2 = item.month2;
+                }
+                if (item.note && !customKPIState[id].note) customKPIState[id].note = item.note;
+                if (item.selected !== undefined && customKPIState[id].selected === undefined) {
+                  customKPIState[id].selected = item.selected;
+                }
+              }
+            }
+          } catch(e) {}
+        });
+      } catch(e) {}
+
+      // 3. Synchronize permanently to both V6 and V5
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(customKPIState));
         localStorage.setItem(BACKUP_STORAGE_KEY, JSON.stringify(customKPIState));
@@ -1791,6 +1815,8 @@
     }
 
     // Update row display without rerendering entire table (seamless input typing)
+    function formatVND(num) { return (num || 0).toLocaleString("vi-VN") + " đ"; }
+
     function updateMonthlyRowDisplay(candidateId) {
       const state = customKPIState[candidateId];
       if (!state) return;
@@ -1829,7 +1855,8 @@
 
       const bonusCell = document.getElementById(`bonus-cell-${candidateId}`);
       if (bonusCell) {
-        const unitPrice = parseFloat(document.getElementById('monthly-unit-price') ? document.getElementById('monthly-unit-price').value : 200000) || 200000;
+        const upEl = document.getElementById('monthly-kpi-unit-price') || document.getElementById('monthly-unit-price');
+        const unitPrice = parseFloat(upEl ? upEl.value : 200000) || 200000;
         const bonus = ptsThisMonth * unitPrice;
         bonusCell.innerHTML = `<span style="color:#10b981; font-weight:800; font-family:var(--font-mono); font-size:12px;">${formatVND(bonus)}</span>`;
       }
@@ -2718,6 +2745,111 @@ function renderMonthlyTab() {
 
       calculateMonthlyTotals();
     }
+
+    // ==========================================
+    // POINT & CANDIDATE ACTION HANDLERS
+    // ==========================================
+    function handleCandidateToggle(candidateId, isChecked) {
+      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
+      customKPIState[candidateId].selected = isChecked;
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function handleMonth1Change(candidateId, monthVal) {
+      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
+      customKPIState[candidateId].month1 = monthVal;
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function handlePoint1Change(candidateId, val) {
+      let num = parseFloat(val);
+      if (isNaN(num) || num < 0) num = 0;
+      num = Math.round(num * 100) / 100;
+      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
+      customKPIState[candidateId].points1 = num;
+      saveKPIState();
+      updateMonthlyRowDisplay(candidateId);
+    }
+
+    function handleMonth2Change(candidateId, monthVal) {
+      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
+      customKPIState[candidateId].month2 = monthVal;
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function handlePoint2Change(candidateId, val) {
+      let num = parseFloat(val);
+      if (isNaN(num) || num < 0) num = 0;
+      num = Math.round(num * 100) / 100;
+      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
+      customKPIState[candidateId].points2 = num;
+
+      if (num > 0 && (!customKPIState[candidateId].month2 || customKPIState[candidateId].month2 === 'NONE')) {
+        customKPIState[candidateId].month2 = getNextMonth(customKPIState[candidateId].month1 || '2026-10');
+        renderMonthlyTab();
+        return;
+      }
+      saveKPIState();
+      updateMonthlyRowDisplay(candidateId);
+    }
+
+    function handleNoteChange(candidateId, val) {
+      if (!customKPIState[candidateId]) customKPIState[candidateId] = {};
+      customKPIState[candidateId].note = val;
+      saveKPIState();
+    }
+
+    function selectAllMonthly(checked) {
+      monthlyCandidatesList.forEach(c => {
+        if (!customKPIState[c.id]) customKPIState[c.id] = {};
+        customKPIState[c.id].selected = checked;
+      });
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function toggleCheckAllMonthly(checked) {
+      selectAllMonthly(checked);
+    }
+
+    function resetDefaultMultiPoints() {
+      if (!confirm('⚠️ CẢNH BÁO: Anh có chắc chắn muốn đặt lại toàn bộ điểm KPI về mặc định 0đ không? Mọi điểm số anh đã tự chỉnh sửa sẽ bị hoàn tác!')) return;
+      monthlyCandidatesList.forEach(c => {
+        const defM = getCandidateDefaultMonth(c);
+        customKPIState[c.id] = {
+          selected: true,
+          month1: defM,
+          points1: 0.0,
+          month2: 'NONE',
+          points2: 0.0,
+          note: ''
+        };
+      });
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function autoSplitAllToNextMonth() {
+      monthlyCandidatesList.forEach(c => {
+        if (!customKPIState[c.id]) customKPIState[c.id] = {};
+        const state = customKPIState[c.id];
+        state.selected = true;
+        if (!state.month1) state.month1 = getCandidateDefaultMonth(c);
+        if (state.points1 === undefined || state.points1 === 0) state.points1 = 1.0;
+        state.month2 = getNextMonth(state.month1);
+        state.points2 = state.points1;
+      });
+      saveKPIState();
+      renderMonthlyTab();
+    }
+
+    function autoAssignPeriod2() {
+      autoSplitAllToNextMonth();
+    }
+
     function calculateMonthlyTotals() {
       const selectMonthEl = document.getElementById('monthly-select-month');
       const selectedMonth = selectMonthEl ? selectMonthEl.value : '2026-11';
