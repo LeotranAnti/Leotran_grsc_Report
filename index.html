@@ -1367,18 +1367,36 @@
       
       <!-- 📅 BIỂU ĐỒ THEO DÕI LỊCH PV VÀ NHẬN VIỆC THEO TỪNG CTV (CỘT Y & Z) -->
       <div class="chart-card" style="margin-bottom: 24px; border: 1px solid rgba(139, 92, 246, 0.45); background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(15, 23, 42, 0.95) 100%);">
-        <div class="chart-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+        <div class="chart-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
           <div>
             <h3 style="color: #a78bfa; font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
               📅 BIỂU ĐỒ THEO DÕI LỊCH PV & NHẬN VIỆC THEO TỪNG CTV (CỘT Y & Z)
             </h3>
             <p style="color: #94a3b8; font-size: 12px; margin-top: 4px;">
-              Dữ liệu đối soát trực tiếp từ Cột Y (Note/Lịch hẹn PV: 172 UV) và Cột Z (Ngày OB/Nhận việc: 77 UV)
+              Dữ liệu đối soát trực tiếp từ Cột Y (Note/Lịch hẹn PV) và Cột Z (Ngày OB/Nhận việc) • Hiển thị trực tiếp số lượng trên các cột
             </p>
           </div>
-          <div style="display: flex; gap: 8px; align-items: center;">
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <span class="tag-badge tag-purple" id="ctv-chart-badge">Toàn bộ 172 Lịch PV & 77 Nhận Việc</span>
-            <button class="btn btn-secondary" style="padding: 5px 12px; font-size: 12px;" onclick="renderCtvPvObChart()">🔄 Cập nhật biểu đồ</button>
+            <button class="btn btn-secondary" style="padding: 5px 12px; font-size: 12px;" onclick="renderCtvPvObChart()">🔄 Tải lại biểu đồ</button>
+          </div>
+        </div>
+
+        <!-- ⏱️ BỘ LỌC THỜI GIAN TUỲ CHỈNH CHO BIỂU ĐỒ -->
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 16px; padding: 12px 16px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 10px;">
+          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <span style="color: #a78bfa; font-size: 12px; font-weight: 800; display: flex; align-items: center; gap: 4px;">⏱️ Chọn nhanh:</span>
+            <button type="button" class="pill-btn active" id="chart-preset-all" onclick="setChartDatePreset('ALL')">Toàn thời gian</button>
+            <button type="button" class="pill-btn" id="chart-preset-t11" onclick="setChartDatePreset('2026-11')">Tháng 11/2026</button>
+            <button type="button" class="pill-btn" id="chart-preset-t10" onclick="setChartDatePreset('2026-10')">Tháng 10/2026</button>
+            <button type="button" class="pill-btn" id="chart-preset-t9" onclick="setChartDatePreset('2026-09')">Tháng 09/2026</button>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <span style="color: #60a5fa; font-size: 12px; font-weight: 800;">📅 Khoảng ngày tuỳ chỉnh:</span>
+            <input type="date" id="chart-date-from" class="form-control-clean" style="padding: 5px 10px; font-size: 12px; width: auto; border-color: #3b82f6;" onchange="applyCustomChartDate()" title="Từ ngày">
+            <span style="color: #94a3b8; font-size: 12px; font-weight: 700;">➔</span>
+            <input type="date" id="chart-date-to" class="form-control-clean" style="padding: 5px 10px; font-size: 12px; width: auto; border-color: #3b82f6;" onchange="applyCustomChartDate()" title="Đến ngày">
+            <button type="button" class="btn btn-outline" style="padding: 5px 12px; font-size: 11px;" onclick="resetChartDateFilter()">Xóa lọc</button>
           </div>
         </div>
 
@@ -1917,7 +1935,70 @@
     }
 
     
-    // === RENDER CTV PV & OB CHART (CỘT Y & Z) ===
+    // === QUẢN LÝ THỜI GIAN TUỲ CHỈNH & VẼ BIỂU ĐỒ CTV CÓ SỐ LƯỢNG TRÊN CỘT ===
+    let chartDateFilter = {
+      mode: 'ALL',
+      from: '',
+      to: ''
+    };
+
+    function setChartDatePreset(preset) {
+      chartDateFilter.mode = preset;
+      const elFrom = document.getElementById('chart-date-from');
+      const elTo = document.getElementById('chart-date-to');
+
+      document.querySelectorAll('#chart-preset-all, #chart-preset-t11, #chart-preset-t10, #chart-preset-t9').forEach(btn => btn.classList.remove('active'));
+
+      if (preset === 'ALL') {
+        chartDateFilter.from = '';
+        chartDateFilter.to = '';
+        if (elFrom) elFrom.value = '';
+        if (elTo) elTo.value = '';
+        const b = document.getElementById('chart-preset-all');
+        if (b) b.classList.add('active');
+      } else if (preset === '2026-11') {
+        chartDateFilter.from = '2026-11-01';
+        chartDateFilter.to = '2026-11-30';
+        if (elFrom) elFrom.value = '2026-11-01';
+        if (elTo) elTo.value = '2026-11-30';
+        const b = document.getElementById('chart-preset-t11');
+        if (b) b.classList.add('active');
+      } else if (preset === '2026-10') {
+        chartDateFilter.from = '2026-10-01';
+        chartDateFilter.to = '2026-10-31';
+        if (elFrom) elFrom.value = '2026-10-01';
+        if (elTo) elTo.value = '2026-10-31';
+        const b = document.getElementById('chart-preset-t10');
+        if (b) b.classList.add('active');
+      } else if (preset === '2026-09') {
+        chartDateFilter.from = '2026-09-01';
+        chartDateFilter.to = '2026-09-30';
+        if (elFrom) elFrom.value = '2026-09-01';
+        if (elTo) elTo.value = '2026-09-30';
+        const b = document.getElementById('chart-preset-t9');
+        if (b) b.classList.add('active');
+      }
+      renderCtvPvObChart();
+    }
+
+    function applyCustomChartDate() {
+      const elFrom = document.getElementById('chart-date-from');
+      const elTo = document.getElementById('chart-date-to');
+      const fVal = elFrom ? elFrom.value : '';
+      const tVal = elTo ? elTo.value : '';
+
+      chartDateFilter.mode = 'CUSTOM';
+      chartDateFilter.from = fVal;
+      chartDateFilter.to = tVal;
+
+      document.querySelectorAll('#chart-preset-all, #chart-preset-t11, #chart-preset-t10, #chart-preset-t9').forEach(btn => btn.classList.remove('active'));
+      renderCtvPvObChart();
+    }
+
+    function resetChartDateFilter() {
+      setChartDatePreset('ALL');
+    }
+
     let ctvChartInstance = null;
     function renderCtvPvObChart() {
       const stats = {};
@@ -1932,14 +2013,35 @@
       let totalPv = 0;
       let totalOb = 0;
 
+      const fDate = chartDateFilter.from;
+      const tDate = chartDateFilter.to;
+
       RAW_CANDIDATES.forEach(c => {
         const realSrc = getCandidateRealSource(c.id);
         if (!stats[realSrc]) stats[realSrc] = { pv: 0, ob: 0 };
 
-        // Col Y: Note hẹn PV (or pv_date fallback)
-        const hasPv = !!(c.note_pv || c.pv_date);
+        // Col Y: Note hẹn PV (hoặc pv_date fallback)
+        const rawPv = c.note_pv || c.pv_date;
+        const pvIso = normalizeDateToISO(rawPv);
+
         // Col Z: Ngày OB
-        const hasOb = !!c.ob_date;
+        const rawOb = c.ob_date;
+        const obIso = normalizeDateToISO(rawOb);
+
+        // Kiểm tra thời gian tuỳ chỉnh
+        let hasPv = false;
+        if (pvIso) {
+          if ((!fDate || pvIso >= fDate) && (!tDate || pvIso <= tDate)) {
+            hasPv = true;
+          }
+        }
+
+        let hasOb = false;
+        if (obIso) {
+          if ((!fDate || obIso >= fDate) && (!tDate || obIso <= tDate)) {
+            hasOb = true;
+          }
+        }
 
         if (hasPv) {
           stats[realSrc].pv++;
@@ -1951,7 +2053,7 @@
         }
       });
 
-      // Update KPI Summary in Chart header
+      // Cập nhật thẻ tóm tắt KPI trên biểu đồ
       const elTotalPv = document.getElementById('chart-total-pv');
       if (elTotalPv) elTotalPv.innerHTML = `${totalPv} <span style="font-size: 12px; color: #a5b4fc; font-weight: 600;">UV</span>`;
       const elTotalOb = document.getElementById('chart-total-ob');
@@ -1962,7 +2064,25 @@
         elTotalRate.innerText = `${r}%`;
       }
 
-      // Sort sources: Tự tuyển first, then by PV count descending
+      // Cập nhật nhãn thời gian đang lọc
+      const badgeEl = document.getElementById('ctv-chart-badge');
+      if (badgeEl) {
+        if (chartDateFilter.mode === 'ALL') {
+          badgeEl.innerText = `Toàn bộ ${totalPv} Lịch PV & ${totalOb} Nhận Việc`;
+        } else if (chartDateFilter.mode === '2026-11') {
+          badgeEl.innerText = `Tháng 11/2026: ${totalPv} PV • ${totalOb} Nhận Việc`;
+        } else if (chartDateFilter.mode === '2026-10') {
+          badgeEl.innerText = `Tháng 10/2026: ${totalPv} PV • ${totalOb} Nhận Việc`;
+        } else if (chartDateFilter.mode === '2026-09') {
+          badgeEl.innerText = `Tháng 09/2026: ${totalPv} PV • ${totalOb} Nhận Việc`;
+        } else if (chartDateFilter.mode === 'CUSTOM') {
+          const fromTxt = fDate ? fDate.split('-').reverse().join('/') : 'Trước';
+          const toTxt = tDate ? tDate.split('-').reverse().join('/') : 'Nay';
+          badgeEl.innerText = `${fromTxt} ➔ ${toTxt}: ${totalPv} PV • ${totalOb} OB`;
+        }
+      }
+
+      // Sắp xếp các nguồn: Tự tuyển đầu tiên, sau đó theo số lượng PV giảm dần
       const sortedSources = Object.keys(stats).sort((a, b) => {
         if (a === 'Tự tuyển') return -1;
         if (b === 'Tự tuyển') return 1;
@@ -1983,6 +2103,30 @@
         if (ctvChartInstance) {
           try { ctvChartInstance.destroy(); } catch(e) {}
         }
+
+        // Custom Plugin: Vẽ số lượng trực tiếp trên đầu/thân mỗi cột bar
+        const barLabelsPlugin = {
+          id: 'barLabelsPlugin',
+          afterDatasetsDraw(chart) {
+            const { ctx } = chart;
+            chart.data.datasets.forEach((dataset, i) => {
+              const meta = chart.getDatasetMeta(i);
+              meta.data.forEach((bar, index) => {
+                const val = dataset.data[index];
+                if (val !== undefined && val !== null && val > 0) {
+                  ctx.save();
+                  ctx.fillStyle = i === 0 ? '#c7d2fe' : '#a7f3d0';
+                  ctx.font = 'bold 12px Inter, system-ui, sans-serif';
+                  ctx.textAlign = 'center';
+                  ctx.textBaseline = 'bottom';
+                  // Vẽ số lượng trực tiếp lên đỉnh cột
+                  ctx.fillText(String(val), bar.x, bar.y - 4);
+                  ctx.restore();
+                }
+              });
+            });
+          }
+        };
 
         const ctx = canvas.getContext('2d');
         ctvChartInstance = new Chart(ctx, {
@@ -2012,15 +2156,22 @@
               }
             ]
           },
+          plugins: [barLabelsPlugin],
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            layout: {
+              padding: {
+                top: 20
+              }
+            },
             plugins: {
               legend: {
                 position: 'top',
                 labels: {
                   color: '#e2e8f0',
-                  font: { weight: '700', size: 12 }
+                  font: { weight: '700', size: 12 },
+                  padding: 14
                 }
               },
               tooltip: {
@@ -2044,10 +2195,11 @@
             scales: {
               x: {
                 grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                ticks: { color: '#cbd5e1', font: { weight: '600' } }
+                ticks: { color: '#cbd5e1', font: { weight: '700', size: 11 } }
               },
               y: {
                 beginAtZero: true,
+                grace: '15%',
                 grid: { color: 'rgba(255, 255, 255, 0.05)' },
                 ticks: { color: '#94a3b8' }
               }
@@ -2055,7 +2207,7 @@
           }
         });
       } else if (fallbackBars) {
-        // Fallback interactive dual bars when Chart.js canvas is not active
+        // Fallback hiển thị thanh HTML kèm số lượng rõ ràng
         if (canvas) canvas.style.display = 'none';
         fallbackBars.style.display = 'flex';
         let htmlBars = '';
@@ -2064,19 +2216,19 @@
           const pv = stats[s].pv;
           const ob = stats[s].ob;
           const rate = pv > 0 ? ((ob / pv) * 100).toFixed(1) : '0.0';
-          const pvW = ((pv / maxVal) * 100).toFixed(1);
-          const obW = ((ob / maxVal) * 100).toFixed(1);
+          const pvW = Math.max(((pv / maxVal) * 100), pv > 0 ? 8 : 0).toFixed(1);
+          const obW = Math.max(((ob / maxVal) * 100), ob > 0 ? 8 : 0).toFixed(1);
           htmlBars += `
             <div>
               <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; font-weight:700;">
                 <span style="color:#ffffff;">${s}</span>
-                <span style="color:#f59e0b;">Tỷ lệ: ${rate}% (${ob} OB / ${pv} PV)</span>
+                <span style="color:#f59e0b;">Tỷ lệ: ${rate}% • Số lượng: <strong style="color:#a5b4fc;">${pv} PV</strong> / <strong style="color:#6ee7b7;">${ob} OB</strong></span>
               </div>
-              <div style="background:rgba(255,255,255,0.06); height:22px; border-radius:4px; display:flex; gap:4px; padding:2px; overflow:hidden;">
-                <div style="background:#818cf8; width:${pvW}%; height:100%; border-radius:3px; display:flex; align-items:center; padding-left:6px; font-size:11px; font-weight:800; color:#ffffff;">
+              <div style="background:rgba(255,255,255,0.06); height:24px; border-radius:4px; display:flex; gap:4px; padding:2px; overflow:hidden;">
+                <div style="background:#6366f1; width:${pvW}%; height:100%; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:900; color:#ffffff;">
                   ${pv > 0 ? pv + ' PV' : ''}
                 </div>
-                <div style="background:#34d399; width:${obW}%; height:100%; border-radius:3px; display:flex; align-items:center; padding-left:6px; font-size:11px; font-weight:800; color:#0f172a;">
+                <div style="background:#10b981; width:${obW}%; height:100%; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:900; color:#0f172a;">
                   ${ob > 0 ? ob + ' OB' : ''}
                 </div>
               </div>
