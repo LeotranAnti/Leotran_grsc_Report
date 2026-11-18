@@ -1433,22 +1433,34 @@
           </div>
         </div>
 
-        <!-- KPI SUMMARY CHIPS FOR CHART -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
+        <!-- KPI SUMMARY CHIPS FOR CHART (CỘT Y, CỘT P, CỘT Z) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 16px;">
+          <!-- 1. Tổng Lịch PV (Cột Y) -->
           <div style="background: rgba(129, 140, 248, 0.12); border: 1px solid rgba(129, 140, 248, 0.35); border-radius: 8px; padding: 12px 14px;">
             <div style="color: #a5b4fc; font-size: 11px; font-weight: 700; text-transform: uppercase;">📅 Tổng Lịch Hẹn PV (Cột Y)</div>
             <div style="color: #ffffff; font-size: 22px; font-weight: 900; margin-top: 4px;" id="chart-total-pv">172 <span style="font-size: 12px; color: #a5b4fc; font-weight: 600;">UV</span></div>
-            <div style="color: #94a3b8; font-size: 11px; margin-top: 2px;">Cột Y trên Google Sheet</div>
+            <div style="color: #94a3b8; font-size: 11px; margin-top: 2px;">Tính từ Cột Y (Note hẹn PV)</div>
           </div>
+
+          <!-- 2. PV Thành Công (Cột Y + Cột P Tham Gia) -->
+          <div style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 8px; padding: 12px 14px;">
+            <div style="color: #7dd3fc; font-size: 11px; font-weight: 700; text-transform: uppercase;">🎯 Lịch PV Thành Công (Cột Y & P)</div>
+            <div style="color: #ffffff; font-size: 22px; font-weight: 900; margin-top: 4px;" id="chart-total-pv-success">122 <span style="font-size: 12px; color: #7dd3fc; font-weight: 600;">UV</span></div>
+            <div style="color: #94a3b8; font-size: 11px; margin-top: 2px;" id="chart-sub-pv-success">Tỷ lệ tham gia: 70.9%</div>
+          </div>
+
+          <!-- 3. Số Lượng Nhận Việc (Cột Z) -->
           <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 12px 14px;">
-            <div style="color: #6ee7b7; font-size: 11px; font-weight: 700; text-transform: uppercase;">🎯 Tổng Nhận Việc / OB (Cột Z)</div>
+            <div style="color: #6ee7b7; font-size: 11px; font-weight: 700; text-transform: uppercase;">🚀 Số Lượng OB (Cột Z)</div>
             <div style="color: #ffffff; font-size: 22px; font-weight: 900; margin-top: 4px;" id="chart-total-ob">77 <span style="font-size: 12px; color: #6ee7b7; font-weight: 600;">UV</span></div>
-            <div style="color: #94a3b8; font-size: 11px; margin-top: 2px;">Cột Z trên Google Sheet</div>
+            <div style="color: #94a3b8; font-size: 11px; margin-top: 2px;" id="chart-sub-ob">Tính từ Cột Z (Ngày OB)</div>
           </div>
+
+          <!-- 4. Tỷ Lệ Chốt Thực Tế -->
           <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 8px; padding: 12px 14px;">
-            <div style="color: #fcd34d; font-size: 11px; font-weight: 700; text-transform: uppercase;">⚡ Tỷ Lệ Chốt OB / PV</div>
-            <div style="color: #ffffff; font-size: 22px; font-weight: 900; margin-top: 4px;" id="chart-total-rate">44.8%</div>
-            <div style="color: #94a3b8; font-size: 11px; margin-top: 2px;">Hiệu suất chung toàn hệ thống</div>
+            <div style="color: #fcd34d; font-size: 11px; font-weight: 700; text-transform: uppercase;">⚡ Tỷ Lệ Chốt / PV Thành Công</div>
+            <div style="color: #ffffff; font-size: 22px; font-weight: 900; margin-top: 4px;" id="chart-total-rate">63.1%</div>
+            <div style="color: #94a3b8; font-size: 11px; margin-top: 2px;" id="chart-sub-rate">Toàn diện OB / Lịch PV: 44.8%</div>
           </div>
         </div>
 
@@ -2080,10 +2092,11 @@
         : ['Tự tuyển', 'CTV Dương Thảo', 'CTV Hồng Ngọc', 'CTV Thanh Thanh', 'CTV Xuân Khánh'];
         
       allSources.forEach(s => {
-        stats[s] = { pv: 0, ob: 0 };
+        stats[s] = { pv: 0, pv_success: 0, ob: 0 };
       });
 
       let totalPv = 0;
+      let totalPvSuccess = 0;
       let totalOb = 0;
 
       const mode = globalTimeFilter.mode;
@@ -2092,38 +2105,43 @@
       const fDate = globalTimeFilter.from;
       const tDate = globalTimeFilter.to;
 
+      function matchDate(dateIso) {
+        if (!dateIso) return false;
+        if (mode === 'ALL') return true;
+        if (mode === 'MONTH') return dateIso.startsWith(selMonth);
+        if (mode === 'DAY') return dateIso === selDay;
+        if (mode === 'RANGE') return (!fDate || dateIso >= fDate) && (!tDate || dateIso <= tDate);
+        return true;
+      }
+
       RAW_CANDIDATES.forEach(c => {
         const realSrc = getCandidateRealSource(c.id);
-        if (!stats[realSrc]) stats[realSrc] = { pv: 0, ob: 0 };
+        if (!stats[realSrc]) stats[realSrc] = { pv: 0, pv_success: 0, ob: 0 };
 
-        // Col Y: Note hẹn PV (hoặc pv_date fallback)
+        // 1. Số lịch PV tính bằng Cột Y (Note hẹn PV hoặc fallback Cột X)
         const rawPv = c.note_pv || c.pv_date;
         const pvIso = normalizeDateToISO(rawPv);
 
-        // Col Z: Ngày OB
+        // 2. Trạng thái tham gia PV ở Cột P (c.pv_status)
+        const pvStatus = (c.pv_status || '').toUpperCase().trim();
+        const isPvSuccess = pvStatus.includes('THAM GIA');
+
+        // 3. Số lượng OB tính bằng ngày OB ở Cột Z
         const rawOb = c.ob_date;
         const obIso = normalizeDateToISO(rawOb);
 
-        let hasPv = false;
-        let hasOb = false;
-
-        if (mode === 'ALL') {
-          hasPv = !!pvIso;
-          hasOb = !!obIso;
-        } else if (mode === 'MONTH') {
-          hasPv = !!pvIso && pvIso.startsWith(selMonth);
-          hasOb = !!obIso && obIso.startsWith(selMonth);
-        } else if (mode === 'DAY') {
-          hasPv = !!pvIso && (pvIso === selDay);
-          hasOb = !!obIso && (obIso === selDay);
-        } else if (mode === 'RANGE') {
-          hasPv = !!pvIso && (!fDate || pvIso >= fDate) && (!tDate || pvIso <= tDate);
-          hasOb = !!obIso && (!fDate || obIso >= fDate) && (!tDate || obIso <= tDate);
-        }
+        // Kiểm tra điều kiện theo thời gian
+        const hasPv = !!pvIso && matchDate(pvIso);
+        const hasPvSuccess = hasPv && isPvSuccess;
+        const hasOb = !!obIso && matchDate(obIso);
 
         if (hasPv) {
           stats[realSrc].pv++;
           totalPv++;
+        }
+        if (hasPvSuccess) {
+          stats[realSrc].pv_success++;
+          totalPvSuccess++;
         }
         if (hasOb) {
           stats[realSrc].ob++;
@@ -2131,33 +2149,53 @@
         }
       });
 
-      // Cập nhật thẻ tóm tắt KPI trên biểu đồ
+      // Cập nhật 4 thẻ chỉ số KPI trên biểu đồ
       const elTotalPv = document.getElementById('chart-total-pv');
       if (elTotalPv) elTotalPv.innerHTML = `${totalPv} <span style="font-size: 12px; color: #a5b4fc; font-weight: 600;">UV</span>`;
+      
+      const elTotalPvSucc = document.getElementById('chart-total-pv-success');
+      if (elTotalPvSucc) elTotalPvSucc.innerHTML = `${totalPvSuccess} <span style="font-size: 12px; color: #7dd3fc; font-weight: 600;">UV</span>`;
+      const elSubPvSucc = document.getElementById('chart-sub-pv-success');
+      if (elSubPvSucc) {
+        const rSucc = totalPv > 0 ? ((totalPvSuccess / totalPv) * 100).toFixed(1) : '0.0';
+        elSubPvSucc.innerText = `Tỷ lệ tham gia: ${rSucc}%`;
+      }
+
       const elTotalOb = document.getElementById('chart-total-ob');
       if (elTotalOb) elTotalOb.innerHTML = `${totalOb} <span style="font-size: 12px; color: #6ee7b7; font-weight: 600;">UV</span>`;
+      const elSubOb = document.getElementById('chart-sub-ob');
+      if (elSubOb) {
+        const rObSucc = totalPvSuccess > 0 ? ((totalOb / totalPvSuccess) * 100).toFixed(1) : '0.0';
+        elSubOb.innerText = `Chốt ${rObSucc}% từ PV thành công`;
+      }
+
       const elTotalRate = document.getElementById('chart-total-rate');
       if (elTotalRate) {
-        const r = totalPv > 0 ? ((totalOb / totalPv) * 100).toFixed(1) : '0.0';
-        elTotalRate.innerText = `${r}%`;
+        const rObSucc = totalPvSuccess > 0 ? ((totalOb / totalPvSuccess) * 100).toFixed(1) : '0.0';
+        elTotalRate.innerText = `${rObSucc}%`;
+      }
+      const elSubRate = document.getElementById('chart-sub-rate');
+      if (elSubRate) {
+        const rOverall = totalPv > 0 ? ((totalOb / totalPv) * 100).toFixed(1) : '0.0';
+        elSubRate.innerText = `Toàn diện OB / Lịch PV: ${rOverall}%`;
       }
 
       // Cập nhật badge mô tả bộ lọc thời gian
       const badgeEl = document.getElementById('ctv-chart-badge');
       if (badgeEl) {
         if (mode === 'ALL') {
-          badgeEl.innerText = `Toàn bộ ${totalPv} Lịch PV & ${totalOb} Nhận Việc`;
+          badgeEl.innerText = `Toàn bộ ${totalPv} Lịch PV • ${totalPvSuccess} PV Thành Công • ${totalOb} OB`;
         } else if (mode === 'MONTH') {
           const mParts = selMonth.split('-');
-          badgeEl.innerText = `Tháng ${mParts[1]}/${mParts[0]}: ${totalPv} PV • ${totalOb} Nhận Việc`;
+          badgeEl.innerText = `Tháng ${mParts[1]}/${mParts[0]}: ${totalPv} PV • ${totalPvSuccess} PV Thành Công • ${totalOb} OB`;
         } else if (mode === 'DAY') {
           const dParts = (selDay || '').split('-');
           const dFmt = dParts.length === 3 ? `${dParts[2]}/${dParts[1]}/${dParts[0]}` : selDay;
-          badgeEl.innerText = `📅 Ngày ${dFmt}: ${totalPv} PV • ${totalOb} Nhận Việc`;
+          badgeEl.innerText = `📅 Ngày ${dFmt}: ${totalPv} PV • ${totalPvSuccess} PV Thành Công • ${totalOb} OB`;
         } else if (mode === 'RANGE') {
           const fromTxt = fDate ? fDate.split('-').reverse().join('/') : 'Trước';
           const toTxt = tDate ? tDate.split('-').reverse().join('/') : 'Nay';
-          badgeEl.innerText = `📆 ${fromTxt} ➔ ${toTxt}: ${totalPv} PV • ${totalOb} OB`;
+          badgeEl.innerText = `📆 ${fromTxt} ➔ ${toTxt}: ${totalPv} PV • ${totalPvSuccess} PV Thành Công • ${totalOb} OB`;
         }
       }
 
@@ -2170,6 +2208,7 @@
 
       const labels = sortedSources;
       const pvData = sortedSources.map(s => stats[s].pv);
+      const pvSuccessData = sortedSources.map(s => stats[s].pv_success);
       const obData = sortedSources.map(s => stats[s].ob);
 
       const canvas = document.getElementById('ctvPvObChart');
@@ -2183,22 +2222,22 @@
           try { ctvChartInstance.destroy(); } catch(e) {}
         }
 
-        // Custom Plugin: Vẽ số lượng trực tiếp lên đầu mỗi cột (Data Labels)
+        // Custom Plugin: Vẽ số lượng trực tiếp lên đỉnh mỗi cột (Data Labels)
         const barLabelsPlugin = {
           id: 'barLabelsPlugin',
           afterDatasetsDraw(chart) {
             const { ctx } = chart;
+            const colors = ['#c7d2fe', '#bae6fd', '#a7f3d0'];
             chart.data.datasets.forEach((dataset, i) => {
               const meta = chart.getDatasetMeta(i);
               meta.data.forEach((bar, index) => {
                 const val = dataset.data[index];
                 if (val !== undefined && val !== null && val > 0) {
                   ctx.save();
-                  ctx.fillStyle = i === 0 ? '#c7d2fe' : '#a7f3d0';
-                  ctx.font = 'bold 12px Inter, system-ui, sans-serif';
+                  ctx.fillStyle = colors[i] || '#ffffff';
+                  ctx.font = 'bold 11px Inter, system-ui, sans-serif';
                   ctx.textAlign = 'center';
                   ctx.textBaseline = 'bottom';
-                  // Vẽ số lượng trực tiếp lên đỉnh cột
                   ctx.fillText(String(val), bar.x, bar.y - 4);
                   ctx.restore();
                 }
@@ -2219,19 +2258,29 @@
                 backgroundColor: 'rgba(129, 140, 248, 0.85)',
                 borderColor: '#818cf8',
                 borderWidth: 1.5,
-                borderRadius: 6,
-                barPercentage: 0.75,
-                categoryPercentage: 0.65
+                borderRadius: 5,
+                barPercentage: 0.8,
+                categoryPercentage: 0.7
               },
               {
-                label: '🎯 Nhận Việc / OB (Cột Z)',
+                label: '🎯 PV Thành Công (Cột Y & P)',
+                data: pvSuccessData,
+                backgroundColor: 'rgba(56, 189, 248, 0.85)',
+                borderColor: '#38bdf8',
+                borderWidth: 1.5,
+                borderRadius: 5,
+                barPercentage: 0.8,
+                categoryPercentage: 0.7
+              },
+              {
+                label: '🚀 Nhận Việc / OB (Cột Z)',
                 data: obData,
                 backgroundColor: 'rgba(16, 185, 129, 0.85)',
                 borderColor: '#34d399',
                 borderWidth: 1.5,
-                borderRadius: 6,
-                barPercentage: 0.75,
-                categoryPercentage: 0.65
+                borderRadius: 5,
+                barPercentage: 0.8,
+                categoryPercentage: 0.7
               }
             ]
           },
@@ -2264,9 +2313,11 @@
                   afterBody: function(context) {
                     const idx = context[0].dataIndex;
                     const pv = pvData[idx];
+                    const pvs = pvSuccessData[idx];
                     const ob = obData[idx];
-                    const rate = pv > 0 ? ((ob / pv) * 100).toFixed(1) : '0.0';
-                    return `⚡ Tỷ lệ chốt OB / PV: ${rate}%`;
+                    const rParticipate = pv > 0 ? ((pvs / pv) * 100).toFixed(1) : '0.0';
+                    const rObFromSuccess = pvs > 0 ? ((ob / pvs) * 100).toFixed(1) : '0.0';
+                    return `📊 Tỷ lệ tham gia PV: ${rParticipate}%\n⚡ Tỷ lệ chốt từ PV thành công: ${rObFromSuccess}%`;
                   }
                 }
               }
@@ -2286,26 +2337,34 @@
           }
         });
       } else if (fallbackBars) {
-        // Fallback HTML bars với số lượng rõ ràng
+        // Fallback HTML bars với 3 cột đầy đủ
         if (canvas) canvas.style.display = 'none';
         fallbackBars.style.display = 'flex';
         let htmlBars = '';
-        const maxVal = Math.max(...pvData, ...obData, 1);
+        const maxVal = Math.max(...pvData, ...pvSuccessData, ...obData, 1);
         sortedSources.forEach(s => {
           const pv = stats[s].pv;
+          const pvs = stats[s].pv_success;
           const ob = stats[s].ob;
-          const rate = pv > 0 ? ((ob / pv) * 100).toFixed(1) : '0.0';
+          const rP = pv > 0 ? ((pvs / pv) * 100).toFixed(1) : '0.0';
+          const rOb = pvs > 0 ? ((ob / pvs) * 100).toFixed(1) : '0.0';
+
           const pvW = Math.max(((pv / maxVal) * 100), pv > 0 ? 8 : 0).toFixed(1);
+          const pvsW = Math.max(((pvs / maxVal) * 100), pvs > 0 ? 8 : 0).toFixed(1);
           const obW = Math.max(((ob / maxVal) * 100), ob > 0 ? 8 : 0).toFixed(1);
+
           htmlBars += `
             <div>
               <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; font-weight:700;">
                 <span style="color:#ffffff;">${s}</span>
-                <span style="color:#f59e0b;">Tỷ lệ: ${rate}% • Số lượng: <strong style="color:#a5b4fc;">${pv} PV</strong> / <strong style="color:#6ee7b7;">${ob} OB</strong></span>
+                <span style="color:#f59e0b;">Tham gia: ${rP}% (${pvs}/${pv}) • Chốt: ${rOb}% (${ob}/${pvs})</span>
               </div>
               <div style="background:rgba(255,255,255,0.06); height:24px; border-radius:4px; display:flex; gap:4px; padding:2px; overflow:hidden;">
                 <div style="background:#6366f1; width:${pvW}%; height:100%; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:900; color:#ffffff;">
-                  ${pv > 0 ? pv + ' PV' : ''}
+                  ${pv > 0 ? pv + ' Hẹn' : ''}
+                </div>
+                <div style="background:#0284c7; width:${pvsW}%; height:100%; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:900; color:#ffffff;">
+                  ${pvs > 0 ? pvs + ' Tham gia' : ''}
                 </div>
                 <div style="background:#10b981; width:${obW}%; height:100%; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:900; color:#0f172a;">
                   ${ob > 0 ? ob + ' OB' : ''}
