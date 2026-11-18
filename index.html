@@ -2775,7 +2775,8 @@
               booking_code: getCell(r, 19),
               overall_status: getCell(r, 20),
               source: getCell(r, 22),
-              pv_date: getCell(r, 23),
+              pv_date: getCell(r, 24) || getCell(r, 23),
+              note_pv: getCell(r, 24),
               ob_date: getCell(r, 25),
               mnv: getCell(r, 26)
             });
